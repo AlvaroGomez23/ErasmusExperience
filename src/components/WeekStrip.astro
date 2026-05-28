@@ -1,0 +1,21 @@
+---
+import { weeks } from '../data/weeks';
+
+interface Props {
+  currentWeek?: number;
+}
+const { currentWeek } = Astro.props;
+---
+
+<div class="week-strip" role="navigation" aria-label="Navegació per setmanes">
+  {weeks.map((w) => (
+    <a
+      href={`/${w.slug}`}
+      class={`week-dot${currentWeek === w.week ? ' active' : ''}`}
+      style={`--dot-color:${w.primaryColor}`}
+      aria-current={currentWeek === w.week ? 'page' : undefined}
+    >
+      {String(w.week).padStart(2, '0')}
+    </a>
+  ))}
+</div>

@@ -1,0 +1,66 @@
+---
+import WeekLayout from '../layouts/WeekLayout.astro';
+---
+
+<WeekLayout
+  week={3}
+  title="03"
+  subtitle="Cultura i tradició"
+  dates="Setmana 3"
+  primaryColor="#E91E8C"
+  accentColor="#FF6B35"
+  bgColor="#fff0f7"
+  prevSlug="week-02"
+  prevTitle="Setmana 02"
+  nextSlug="week-04"
+  nextTitle="Setmana 04"
+>
+  <section class="content-section">
+    <span class="section-tag">Patrimoni</span>
+    <h2>Amarante té història</h2>
+    <p>
+      Museus, esglésies, tradicions. Aquesta setmana ens submergim en la història
+      d'Amarante i del nord de Portugal.
+    </p>
+  </section>
+
+  <section class="content-section">
+    <span class="section-tag">Moments clau</span>
+    <h2>Highlights</h2>
+    <div class="highlights">
+      <div class="highlight-card">
+        <span class="h-icon">🎨</span>
+        <div class="h-title">Art local</div>
+        <div class="h-desc">Museu Amadeo de Souza-Cardoso</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">⛪</span>
+        <div class="h-title">São Gonçalo</div>
+        <div class="h-desc">L'església i la seva història</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">🎵</span>
+        <div class="h-title">Música</div>
+        <div class="h-desc">Fado en viu</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">🍷</span>
+        <div class="h-title">Vinho Verde</div>
+        <div class="h-desc">Tast en una quinta local</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <span class="section-tag">Fotos</span>
+    <h2>La setmana en imatges</h2>
+    <div class="photo-grid">
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+    </div>
+  </section>
+</WeekLayout>

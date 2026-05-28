@@ -1,0 +1,66 @@
+---
+import WeekLayout from '../layouts/WeekLayout.astro';
+---
+
+<WeekLayout
+  week={5}
+  title="05"
+  subtitle="El riu Tâmega"
+  dates="Setmana 5"
+  primaryColor="#00BCD4"
+  accentColor="#88CE02"
+  bgColor="#f0fbff"
+  prevSlug="week-04"
+  prevTitle="Setmana 04"
+  nextSlug="week-06"
+  nextTitle="Setmana 06"
+>
+  <section class="content-section">
+    <span class="section-tag">Aigua</span>
+    <h2>El Tâmega corre lent</h2>
+    <p>
+      El riu Tâmega defineix Amarante. Aquesta setmana l'explorem des de les seves ribes,
+      els seus ponts i les seves aigües fredes del nord.
+    </p>
+  </section>
+
+  <section class="content-section">
+    <span class="section-tag">Moments clau</span>
+    <h2>Highlights</h2>
+    <div class="highlights">
+      <div class="highlight-card">
+        <span class="h-icon">🚣</span>
+        <div class="h-title">Al riu</div>
+        <div class="h-desc">Caiac o barca pel Tâmega</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">🌅</span>
+        <div class="h-title">Posta de sol</div>
+        <div class="h-desc">Les millors vistes del pont</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">🏊</span>
+        <div class="h-title">Bany</div>
+        <div class="h-desc">Aigues fredes del nord de Portugal</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">🎣</span>
+        <div class="h-title">La riba</div>
+        <div class="h-desc">Pícnic vora el riu</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <span class="section-tag">Fotos</span>
+    <h2>La setmana en imatges</h2>
+    <div class="photo-grid">
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+    </div>
+  </section>
+</WeekLayout>

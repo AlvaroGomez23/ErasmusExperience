@@ -1,0 +1,66 @@
+---
+import WeekLayout from '../layouts/WeekLayout.astro';
+---
+
+<WeekLayout
+  week={7}
+  title="07"
+  subtitle="Art i creativitat"
+  dates="Setmana 7"
+  primaryColor="#FF4444"
+  accentColor="#FFD700"
+  bgColor="#fff0f0"
+  prevSlug="week-06"
+  prevTitle="Setmana 06"
+  nextSlug="week-08"
+  nextTitle="Setmana 08"
+>
+  <section class="content-section">
+    <span class="section-tag">Creativitat</span>
+    <h2>Amarante i l'art</h2>
+    <p>
+      Amadeo de Souza-Cardoso va néixer aquí. L'art és en l'ADN d'aquesta ciutat.
+      Aquesta setmana ho veiem tot amb ulls d'artista.
+    </p>
+  </section>
+
+  <section class="content-section">
+    <span class="section-tag">Moments clau</span>
+    <h2>Highlights</h2>
+    <div class="highlights">
+      <div class="highlight-card">
+        <span class="h-icon">🖼️</span>
+        <div class="h-title">Museus</div>
+        <div class="h-desc">Art contemporani local</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">🎭</span>
+        <div class="h-title">Performance</div>
+        <div class="h-desc">Art al carrer</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">📷</span>
+        <div class="h-title">Fotografia</div>
+        <div class="h-desc">El nostre propi projecte visual</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">🎨</span>
+        <div class="h-title">Taller</div>
+        <div class="h-desc">Workshop d'art local</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <span class="section-tag">Fotos</span>
+    <h2>La setmana en imatges</h2>
+    <div class="photo-grid">
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+    </div>
+  </section>
+</WeekLayout>

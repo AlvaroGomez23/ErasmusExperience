@@ -1,0 +1,78 @@
+---
+import WeekLayout from '../layouts/WeekLayout.astro';
+---
+
+<WeekLayout
+  week={10}
+  title="10"
+  subtitle="Últims dies, records eterns"
+  dates="Setmana 10"
+  primaryColor="#2196F3"
+  accentColor="#00BCD4"
+  bgColor="#f0f7ff"
+  prevSlug="week-09"
+  prevTitle="Setmana 09"
+  nextSlug={null}
+  nextTitle={null}
+>
+  <section class="content-section">
+    <span class="section-tag">Comiat</span>
+    <h2>Tot té un final</h2>
+    <p>
+      L'última setmana sempre arriba massa aviat. Maletes fetes, adéus,
+      i aquella sensació estranya de deixar un lloc que ja sents teu.
+    </p>
+    <p>
+      Deu setmanes a Amarante. No les canviem per res.
+    </p>
+  </section>
+
+  <section class="content-section">
+    <span class="section-tag">Moments clau</span>
+    <h2>Highlights</h2>
+    <div class="highlights">
+      <div class="highlight-card">
+        <span class="h-icon">🎊</span>
+        <div class="h-title">Festa de comiat</div>
+        <div class="h-desc">L'última nit amb tothom</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">📝</span>
+        <div class="h-title">Cartes</div>
+        <div class="h-desc">El que ens emportem escrit</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">🤗</span>
+        <div class="h-title">Abraçades</div>
+        <div class="h-desc">Les que més costen de donar</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">✈️</span>
+        <div class="h-title">El vol de tornada</div>
+        <div class="h-desc">Portugal des de l'aire</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <span class="section-tag">Reflexió</span>
+    <h2>El que vam aprendre</h2>
+    <p>
+      Escriu aquí la reflexió final de l'Erasmus — què us endporteu, què
+      va canviar, què repetiríeu i què no.
+    </p>
+  </section>
+
+  <section class="content-section">
+    <span class="section-tag">Fotos</span>
+    <h2>La setmana en imatges</h2>
+    <div class="photo-grid">
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+    </div>
+  </section>
+</WeekLayout>

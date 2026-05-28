@@ -1,0 +1,71 @@
+---
+import WeekLayout from '../layouts/WeekLayout.astro';
+---
+
+<WeekLayout
+  week={1}
+  title="01"
+  subtitle="Landing Week"
+  dates="Setmana 1"
+  primaryColor="#88CE02"
+  accentColor="#ffffff"
+  bgColor="#f0f7e6"
+  prevSlug={null}
+  prevTitle={null}
+  nextSlug="week-02"
+  nextTitle="Setmana 02"
+  modelPath="/models/boeing_737-300.glb"
+>
+  <section class="content-section">
+    <span class="section-tag">Benvinguda</span>
+    <h2>Arribem a Amarante</h2>
+    <p>
+      El primer dia a Portugal. Maletes, nervis i l'emoció de veure per primera vegada
+      els carrers empedrats d'Amarante. Aquí comença tot.
+    </p>
+    <p>
+      Escriu aquí el que va passar aquesta setmana — primeres impressions, l'allotjament,
+      el barri, els primers passeigs.
+    </p>
+  </section>
+
+  <section class="content-section">
+    <span class="section-tag">Moments clau</span>
+    <h2>Highlights</h2>
+    <div class="highlights">
+      <div class="highlight-card">
+        <span class="h-icon">✈️</span>
+        <div class="h-title">El viatge</div>
+        <div class="h-desc">Afegeix aquí el highlight del viatge</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">🏠</span>
+        <div class="h-title">L'allotjament</div>
+        <div class="h-desc">Primera nit a Amarante</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">🌉</span>
+        <div class="h-title">El pont</div>
+        <div class="h-desc">Ponte de São Gonçalo</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">🍽️</span>
+        <div class="h-title">Primer sopar</div>
+        <div class="h-desc">Menjar portuguès per primera vegada</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <span class="section-tag">Fotos</span>
+    <h2>La setmana en imatges</h2>
+    <div class="photo-grid">
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+    </div>
+  </section>
+</WeekLayout>

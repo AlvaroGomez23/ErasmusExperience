@@ -1,0 +1,66 @@
+---
+import WeekLayout from '../layouts/WeekLayout.astro';
+---
+
+<WeekLayout
+  week={8}
+  title="08"
+  subtitle="Cuina portuguesa"
+  dates="Setmana 8"
+  primaryColor="#FF9800"
+  accentColor="#FF6B35"
+  bgColor="#fff8f0"
+  prevSlug="week-07"
+  prevTitle="Setmana 07"
+  nextSlug="week-09"
+  nextTitle="Setmana 09"
+>
+  <section class="content-section">
+    <span class="section-tag">Gastronomia</span>
+    <h2>Menjar a Portugal</h2>
+    <p>
+      Bacallà de mil maneres, francesinha, pastel de nata, vinho verde.
+      Aquesta setmana la dediquem a menjar bé (i sense culpa).
+    </p>
+  </section>
+
+  <section class="content-section">
+    <span class="section-tag">Moments clau</span>
+    <h2>Highlights</h2>
+    <div class="highlights">
+      <div class="highlight-card">
+        <span class="h-icon">🐟</span>
+        <div class="h-title">Bacallà</div>
+        <div class="h-desc">El plat nacional portuguès</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">🥐</span>
+        <div class="h-title">Pastéis</div>
+        <div class="h-desc">Pastel de nata al millor lloc</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">🍷</span>
+        <div class="h-title">Vinho Verde</div>
+        <div class="h-desc">El vi del nord</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">👨‍🍳</span>
+        <div class="h-title">Cuinem</div>
+        <div class="h-desc">Recepta portuguesa feta per nosaltres</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <span class="section-tag">Fotos</span>
+    <h2>La setmana en imatges</h2>
+    <div class="photo-grid">
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+    </div>
+  </section>
+</WeekLayout>

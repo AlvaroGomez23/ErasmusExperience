@@ -1,0 +1,66 @@
+---
+import WeekLayout from '../layouts/WeekLayout.astro';
+---
+
+<WeekLayout
+  week={9}
+  title="09"
+  subtitle="Natura i muntanyes"
+  dates="Setmana 9"
+  primaryColor="#4CAF50"
+  accentColor="#88CE02"
+  bgColor="#f0fff4"
+  prevSlug="week-08"
+  prevTitle="Setmana 08"
+  nextSlug="week-10"
+  nextTitle="Setmana 10"
+>
+  <section class="content-section">
+    <span class="section-tag">Terra</span>
+    <h2>El nord verd</h2>
+    <p>
+      Portugal del nord és verd i salvatge. Aquesta setmana ens perdem en
+      la natura — senders, cascades i vistes que no s'obliden.
+    </p>
+  </section>
+
+  <section class="content-section">
+    <span class="section-tag">Moments clau</span>
+    <h2>Highlights</h2>
+    <div class="highlights">
+      <div class="highlight-card">
+        <span class="h-icon">🌿</span>
+        <div class="h-title">Sender</div>
+        <div class="h-desc">Ruta pel bosc</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">💧</span>
+        <div class="h-title">Cascada</div>
+        <div class="h-desc">Aigua freda del nord</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">🏔️</span>
+        <div class="h-title">Cim</div>
+        <div class="h-desc">Les vistes des de dalt</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">🌾</span>
+        <div class="h-title">Camp</div>
+        <div class="h-desc">La vida rural portuguesa</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <span class="section-tag">Fotos</span>
+    <h2>La setmana en imatges</h2>
+    <div class="photo-grid">
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+    </div>
+  </section>
+</WeekLayout>

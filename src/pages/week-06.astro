@@ -1,0 +1,66 @@
+---
+import WeekLayout from '../layouts/WeekLayout.astro';
+---
+
+<WeekLayout
+  week={6}
+  title="06"
+  subtitle="Aventura pels voltants"
+  dates="Setmana 6"
+  primaryColor="#9C27B0"
+  accentColor="#E91E8C"
+  bgColor="#f9f0ff"
+  prevSlug="week-05"
+  prevTitle="Setmana 05"
+  nextSlug="week-07"
+  nextTitle="Setmana 07"
+>
+  <section class="content-section">
+    <span class="section-tag">Rutes</span>
+    <h2>Més enllà d'Amarante</h2>
+    <p>
+      Porto a una hora, el Douro a mitja hora. Aquesta setmana sortim a explorar
+      els voltants del nord de Portugal.
+    </p>
+  </section>
+
+  <section class="content-section">
+    <span class="section-tag">Moments clau</span>
+    <h2>Highlights</h2>
+    <div class="highlights">
+      <div class="highlight-card">
+        <span class="h-icon">🚂</span>
+        <div class="h-title">Escapada</div>
+        <div class="h-desc">Dia a Porto o Guimarães</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">🍇</span>
+        <div class="h-title">El Douro</div>
+        <div class="h-desc">Vinyes en terrasses</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">🥾</span>
+        <div class="h-title">Senderisme</div>
+        <div class="h-desc">Rutes per les muntanyes</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">🌄</span>
+        <div class="h-title">Paisatges</div>
+        <div class="h-desc">El verd del nord de Portugal</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <span class="section-tag">Fotos</span>
+    <h2>La setmana en imatges</h2>
+    <div class="photo-grid">
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+    </div>
+  </section>
+</WeekLayout>

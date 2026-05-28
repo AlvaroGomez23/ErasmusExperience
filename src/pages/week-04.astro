@@ -1,0 +1,66 @@
+---
+import WeekLayout from '../layouts/WeekLayout.astro';
+---
+
+<WeekLayout
+  week={4}
+  title="04"
+  subtitle="Nova gent, nous amics"
+  dates="Setmana 4"
+  primaryColor="#FFD700"
+  accentColor="#FF6B35"
+  bgColor="#fffbf0"
+  prevSlug="week-03"
+  prevTitle="Setmana 03"
+  nextSlug="week-05"
+  nextTitle="Setmana 05"
+>
+  <section class="content-section">
+    <span class="section-tag">Persones</span>
+    <h2>Els que fan el viatge</h2>
+    <p>
+      Un Erasmus no és només els llocs. És la gent que coneixes, les converses
+      a les 2 de la matinada, els companys d'aventura inesperats.
+    </p>
+  </section>
+
+  <section class="content-section">
+    <span class="section-tag">Moments clau</span>
+    <h2>Highlights</h2>
+    <div class="highlights">
+      <div class="highlight-card">
+        <span class="h-icon">🤝</span>
+        <div class="h-title">Nous amics</div>
+        <div class="h-desc">Erasmus d'altres països</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">🎉</span>
+        <div class="h-title">Festa</div>
+        <div class="h-desc">Nit amb els locals</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">🗣️</span>
+        <div class="h-title">Idiomes</div>
+        <div class="h-desc">Català, portuguès, anglès barrejats</div>
+      </div>
+      <div class="highlight-card">
+        <span class="h-icon">🏠</span>
+        <div class="h-title">Casa aliena</div>
+        <div class="h-desc">Sopar a casa d'una família local</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <span class="section-tag">Fotos</span>
+    <h2>La setmana en imatges</h2>
+    <div class="photo-grid">
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+    </div>
+  </section>
+</WeekLayout>
