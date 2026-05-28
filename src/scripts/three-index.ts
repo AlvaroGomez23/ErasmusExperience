@@ -16,17 +16,22 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 const GREEN = new THREE.Color('#88CE02');
 
-const knotMesh = new THREE.Mesh(
-  new THREE.TorusKnotGeometry(2, 0.5, 120, 18),
-  new THREE.MeshBasicMaterial({ color: GREEN, wireframe: true, transparent: true, opacity: 0.11 })
-);
-scene.add(knotMesh);
+const globeGroup = new THREE.Group();
+globeGroup.rotation.z = 0.41;
+scene.add(globeGroup);
 
-const icoMesh = new THREE.Mesh(
-  new THREE.IcosahedronGeometry(1.2, 1),
-  new THREE.MeshBasicMaterial({ color: GREEN, wireframe: true, transparent: true, opacity: 0.2 })
+const texture = new THREE.TextureLoader().load('/photos/globe_texture.jpg');
+const globeMesh = new THREE.Mesh(
+  new THREE.SphereGeometry(2.8, 64, 40),
+  new THREE.MeshStandardMaterial({ map: texture, roughness: 0.8, metalness: 0.1 })
 );
-scene.add(icoMesh);
+globeGroup.add(globeMesh);
+
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+scene.add(ambientLight);
+const sunLight = new THREE.DirectionalLight(0xfff4e0, 1.4);
+sunLight.position.set(5, 3, 5);
+scene.add(sunLight);
 
 const COUNT = 2500;
 const pos = new Float32Array(COUNT * 3);
@@ -52,10 +57,7 @@ const clock = new THREE.Clock();
 (function tick() {
   requestAnimationFrame(tick);
   const t = clock.getElapsedTime();
-  knotMesh.rotation.x = t * 0.08;
-  knotMesh.rotation.y = t * 0.13;
-  icoMesh.rotation.x  = -t * 0.15;
-  icoMesh.rotation.y  = t * 0.22;
+  globeMesh.rotation.y = t * 0.07;
   camera.position.x += (tx - camera.position.x) * 0.04;
   camera.position.y += (ty - camera.position.y) * 0.04;
   camera.lookAt(0, 0, 0);

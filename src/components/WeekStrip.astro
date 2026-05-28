@@ -1,5 +1,6 @@
 ---
 import { weeks } from '../data/weeks';
+import { PUBLISHED_WEEKS } from '../config/routes';
 
 interface Props {
   currentWeek?: number;
@@ -8,7 +9,7 @@ const { currentWeek } = Astro.props;
 ---
 
 <div class="week-strip" role="navigation" aria-label="Navegació per setmanes">
-  {weeks.map((w) => (
+  {weeks.filter((w) => PUBLISHED_WEEKS.includes(w.week)).map((w) => (
     <a
       href={`/${w.slug}`}
       class={`week-dot${currentWeek === w.week ? ' active' : ''}`}

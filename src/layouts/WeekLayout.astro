@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import WeekStrip from '../components/WeekStrip.astro';
+import { PUBLISHED_WEEKS } from '../config/routes';
 
 interface Props {
   week: number;
@@ -102,7 +103,7 @@ const weekNum = String(week).padStart(2, '0');
     <!-- WEEK NAV FOOTER -->
     <footer class="week-footer">
       {
-        prevSlug ? (
+        prevSlug && PUBLISHED_WEEKS.includes(parseInt(prevSlug.replace('week-', ''))) ? (
           <a href={`/${prevSlug}`} class="week-nav-link prev">
             <span class="nav-dir">← Anterior</span>
             <span class="nav-link-title">{prevTitle}</span>
@@ -113,7 +114,7 @@ const weekNum = String(week).padStart(2, '0');
       }
       <span class="week-footer-center">Jose × Alvaro · Erasmus Amarante '26</span>
       {
-        nextSlug ? (
+        nextSlug && PUBLISHED_WEEKS.includes(parseInt(nextSlug.replace('week-', ''))) ? (
           <a href={`/${nextSlug}`} class="week-nav-link next">
             <span class="nav-dir">Següent →</span>
             <span class="nav-link-title">{nextTitle}</span>
@@ -126,6 +127,9 @@ const weekNum = String(week).padStart(2, '0');
 
     <script>
       import '../scripts/three-week.ts';
+    </script>
+    <script>
+      import '../scripts/cursor.ts';
     </script>
     <script>
       const nav = document.querySelector('.site-nav');

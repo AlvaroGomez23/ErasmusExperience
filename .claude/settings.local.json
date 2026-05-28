@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "PowerShell(Get-ChildItem *)"
+      "PowerShell(Get-ChildItem *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Alvaro\\\\Desktop\\\\AmaranteWeb\" -Recurse -Depth 2 -Name)",
+      "Bash(Select-Object -First 50)"
     ]
   }
 }

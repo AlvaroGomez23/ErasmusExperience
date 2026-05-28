@@ -1,5 +1,6 @@
 ---
 import { weeks } from '../data/weeks';
+import { PUBLISHED_WEEKS } from '../config/routes';
 import '../styles/global.css';
 import WeekStrip from '../components/WeekStrip.astro';
 ---
@@ -48,6 +49,8 @@ import WeekStrip from '../components/WeekStrip.astro';
         <div><strong>Jose & Álvaro</strong></div>
         <div>10 setmanes</div>
         <div>Nord de Portugal</div>
+        <div>LAT: 41.5928° N</div>
+        <div>LON: 8.0285° W</div>
         <div>Erasmus+</div>
       </div>
       <div class="scroll-hint" style="margin-top:2rem" aria-hidden="true">
@@ -65,7 +68,7 @@ import WeekStrip from '../components/WeekStrip.astro';
 
       <div class="weeks-grid">
         {
-          weeks.map((w, i) => (
+          weeks.filter((w) => PUBLISHED_WEEKS.includes(w.week)).map((w, i) => (
             <a
               href={`/${w.slug}`}
               class="week-card"
@@ -111,6 +114,9 @@ import WeekStrip from '../components/WeekStrip.astro';
 
     <script>
       import '../scripts/three-index.ts';
+    </script>
+    <script>
+      import '../scripts/cursor.ts';
     </script>
     <script>
       const nav = document.querySelector('.site-nav');

@@ -1,5 +1,7 @@
 ---
 import WeekLayout from '../layouts/WeekLayout.astro';
+import { PUBLISHED_WEEKS } from '../config/routes';
+if (!PUBLISHED_WEEKS.includes(10)) return Astro.redirect('/');
 ---
 
 <WeekLayout
@@ -28,33 +30,6 @@ import WeekLayout from '../layouts/WeekLayout.astro';
   </section>
 
   <section class="content-section">
-    <span class="section-tag">Moments clau</span>
-    <h2>Highlights</h2>
-    <div class="highlights">
-      <div class="highlight-card">
-        <span class="h-icon">🎊</span>
-        <div class="h-title">Festa de comiat</div>
-        <div class="h-desc">L'última nit amb tothom</div>
-      </div>
-      <div class="highlight-card">
-        <span class="h-icon">📝</span>
-        <div class="h-title">Cartes</div>
-        <div class="h-desc">El que ens emportem escrit</div>
-      </div>
-      <div class="highlight-card">
-        <span class="h-icon">🤗</span>
-        <div class="h-title">Abraçades</div>
-        <div class="h-desc">Les que més costen de donar</div>
-      </div>
-      <div class="highlight-card">
-        <span class="h-icon">✈️</span>
-        <div class="h-title">El vol de tornada</div>
-        <div class="h-desc">Portugal des de l'aire</div>
-      </div>
-    </div>
-  </section>
-
-  <section class="content-section">
     <span class="section-tag">Reflexió</span>
     <h2>El que vam aprendre</h2>
     <p>
@@ -75,4 +50,7 @@ import WeekLayout from '../layouts/WeekLayout.astro';
       <div class="photo-item">📸</div>
     </div>
   </section>
+  <script>
+    import '../scripts/three-week-10.ts';
+  </script>
 </WeekLayout>

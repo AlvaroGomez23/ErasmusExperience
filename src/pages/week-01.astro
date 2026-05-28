@@ -16,6 +16,16 @@ import WeekLayout from '../layouts/WeekLayout.astro';
   nextTitle="Setmana 02"
   modelPath="/models/boeing_737-300.glb"
 >
+  <canvas
+    id="path-plane-canvas"
+    aria-hidden="true"
+    style="position:fixed;inset:0;width:100%;height:100%;z-index:50;pointer-events:none;"
+  ></canvas>
+
+  <script>
+    import '../scripts/three-week-01.ts';
+  </script>
+
   <section class="content-section">
     <span class="section-tag">Benvinguda</span>
     <h2>Arribem a Amarante</h2>
@@ -24,36 +34,17 @@ import WeekLayout from '../layouts/WeekLayout.astro';
       els carrers empedrats d'Amarante. Aquí comença tot.
     </p>
     <p>
-      Escriu aquí el que va passar aquesta setmana — primeres impressions, l'allotjament,
-      el barri, els primers passeigs.
+      El viatge va començar a les 3 de la matinada, hora de sortida des-de Blanes per agafar l'avió a Barcelona. L'hora de sortida de l'avió cap a Porto era a les 7:00, així que ens vam agafar amb calma tot el trajecte ja que al arribar a l'aeroport només era deixar maletes i pujar a l'avió.
     </p>
-  </section>
-
-  <section class="content-section">
-    <span class="section-tag">Moments clau</span>
-    <h2>Highlights</h2>
-    <div class="highlights">
-      <div class="highlight-card">
-        <span class="h-icon">✈️</span>
-        <div class="h-title">El viatge</div>
-        <div class="h-desc">Afegeix aquí el highlight del viatge</div>
-      </div>
-      <div class="highlight-card">
-        <span class="h-icon">🏠</span>
-        <div class="h-title">L'allotjament</div>
-        <div class="h-desc">Primera nit a Amarante</div>
-      </div>
-      <div class="highlight-card">
-        <span class="h-icon">🌉</span>
-        <div class="h-title">El pont</div>
-        <div class="h-desc">Ponte de São Gonçalo</div>
-      </div>
-      <div class="highlight-card">
-        <span class="h-icon">🍽️</span>
-        <div class="h-title">Primer sopar</div>
-        <div class="h-desc">Menjar portuguès per primera vegada</div>
-      </div>
-    </div>
+    <p>
+      Al arribar a Oporto, Tânia va venir a recollir-nos i vam fer el trajecte cap a CJ (Casa de Juventude) per conèixer on ens allotjaríem els següents 2 mesos a Amarante.
+    </p>
+    <p>
+      El primer dia ja vam conèixer a molta gent de diferents països que estaven de voluntariat o fent practiques a Amarante. Parlant en tots els idiomes que coneixem i fins i tot aprenent una mica de nous.
+    </p>
+    <p>
+      I el primer cap de setmana, més concretament el diumenge, ja vam anar a visitar la ciutat de Oporto! Fa pinta que en farem moltísimes activitats amb els demés participans. Començem a conèixer la cultura dels portuguesos i provant el menjar típic, com la famosa francesinha.
+    </p>
   </section>
 
   <section class="content-section">

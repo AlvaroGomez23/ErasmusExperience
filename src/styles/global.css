@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Raleway:wght@300;400&family=Bebas+Neue&family=Montserrat:wght@300;400&family=Cormorant+Garamond:wght@300;400;700&display=swap');
 
 :root {
   --green: #88CE02;
@@ -27,6 +27,26 @@ body {
   color: var(--black);
   overflow-x: hidden;
   min-height: 100vh;
+}
+
+/* ─── CURSOR ─────────────────────────────────────── */
+@media (pointer: fine) {
+  .cursor-ring {
+    position: fixed;
+    top: 0; left: 0;
+    width: 36px; height: 36px;
+    margin: -18px 0 0 -18px;
+    background: white;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    will-change: transform;
+    mix-blend-mode: difference;
+  }
+}
+
+@media (pointer: coarse) {
+  .cursor-ring { display: none; }
 }
 
 /* ─── CANVAS ─────────────────────────────────────── */

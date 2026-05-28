@@ -15,12 +15,6 @@ import WeekLayout from '../layouts/WeekLayout.astro';
   nextSlug="week-03"
   nextTitle="Setmana 03"
 >
-  <canvas
-    id="float-canvas"
-    aria-hidden="true"
-    style="position:fixed;inset:0;width:100%;height:100%;z-index:11;pointer-events:none;"
-  ></canvas>
-
   <section class="content-section">
     <span class="section-tag">Descoberta</span>
     <h2>La ciutat s'obre</h2>
@@ -31,40 +25,24 @@ import WeekLayout from '../layouts/WeekLayout.astro';
     <p>
       Aquesta mateixa setmana, van començar les pràctiques a l'empresa anomenada CodeAhead. Una empresa local que es dedica al desenvolupament de software, on vam tenir l'oportunitat d'aplicar els nostres coneixements, apendre del nostre tutor, aplicant models 3D i animacions modernes sense deixar els temps lliures per explorar la ciutat.
     </p>
-  </section>
+    <p id="typing-text"></p>
+    <p>Aquesta segona setmana vam millorar moltísim els nostres coneixements sobre disseny web i manipulació de l'espai 3D. Com podreu veure més endavant amb models interactuables.Coneixements molt útils per crear pàgines web "inmersives" deixant de banda l'estil tradicional</p>
 
-  <section class="content-section">
-    <span class="section-tag">Moments clau</span>
-    <h2>Highlights</h2>
-    <div class="highlights">
-      <div class="highlight-card">
-        <span class="h-icon">🗺️</span>
-        <div class="h-title">Mapa a la mà</div>
-        <div class="h-desc">Perduts i trobats</div>
-      </div>
-      <div class="highlight-card">
-        <span class="h-icon">☕</span>
-        <div class="h-title">Les cafeteries</div>
-        <div class="h-desc">Pastel de nata i cafè</div>
-      </div>
-      <div class="highlight-card">
-        <span class="h-icon">🏔️</span>
-        <div class="h-title">Les vistes</div>
-        <div class="h-desc">El Tâmega des de dalt</div>
-      </div>
-      <div class="highlight-card">
-        <span class="h-icon">🛍️</span>
-        <div class="h-title">El mercat</div>
-        <div class="h-desc">Dissabte al mercat local</div>
-      </div>
+    <div class="draw-svg-wrapper">
+      <svg class="draw-svg" viewBox="0 0 1000 110" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+        <text class="draw-text" x="500" y="85" text-anchor="middle">Aprenent i disfrutant</text>
+      </svg>
     </div>
+
+    <p class="interact-hint">☞ Interactua amb aquests objectes!</p>
+    <canvas id="interact-canvas" aria-hidden="true"></canvas>
   </section>
 
   <section class="content-section">
     <span class="section-tag">Fotos</span>
     <h2>La setmana en imatges</h2>
     <div class="photo-grid">
-      <div class="photo-item">📸</div>
+      <div class="photo-item"><img src="/photos/test_img.jpeg" alt="Foto 1"></div>
       <div class="photo-item">📸</div>
       <div class="photo-item">📸</div>
       <div class="photo-item">📸</div>
@@ -74,6 +52,51 @@ import WeekLayout from '../layouts/WeekLayout.astro';
   </section>
 
   <script>
-    import '../scripts/models-week02.ts';
+    import '../scripts/three-week-02.ts';
   </script>
+
+  <style>
+    .content-section {
+      position: relative;
+      z-index: 2;
+    }
+    .draw-svg-wrapper {
+      margin-top: 2.5rem;
+      overflow: visible;
+    }
+    .draw-svg {
+      width: 100%;
+      overflow: visible;
+    }
+    .draw-text {
+      font-family: 'Arial', sans-serif;
+      font-size: 80px;
+      font-weight: 900;
+      fill: none;
+      stroke: #FF6B35;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      letter-spacing: -2px;
+    }
+    .interact-hint {
+      margin-top: 2rem;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #FF6B35;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    #interact-canvas {
+      display: block;
+      width: 100%;
+      height: 420px;
+      border-radius: 1rem;
+      cursor: grab;
+    }
+    #interact-canvas:active {
+      cursor: grabbing;
+    }
+  </style>
 </WeekLayout>

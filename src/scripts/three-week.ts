@@ -1,94 +1,27 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const canvas = document.getElementById('three-canvas') as HTMLCanvasElement;
+const canvas     = document.getElementById('three-canvas') as HTMLCanvasElement;
 const primaryColor = canvas.dataset.primary as string;
-const weekNum = parseInt(canvas.dataset.week as string);
-const modelPath = canvas.dataset.model ?? null;
-
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 500);
-camera.position.z = 8;
-
-const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.outputColorSpace = THREE.SRGBColorSpace;
+const weekNum    = parseInt(canvas.dataset.week as string);
+const modelPath  = canvas.dataset.model ?? null;
 
 const color = new THREE.Color(primaryColor);
 
-// ─── MODE GLB ────────────────────────────────────────
-if (modelPath) {
-  const ambient = new THREE.AmbientLight(0xffffff, 0.8);
-  scene.add(ambient);
-  const sun = new THREE.DirectionalLight(0xffffff, 1.8);
-  sun.position.set(5, 8, 6);
-  scene.add(sun);
-  const fill = new THREE.DirectionalLight(color, 0.5);
-  fill.position.set(-5, -3, -4);
-  scene.add(fill);
+// ─── WIREFRAME (weeks without a dedicated GLB script) ─
+if (!modelPath) {
+  const scene  = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 500);
+  camera.position.z = 8;
 
-  let plane: THREE.Group | null = null;
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
 
-  new GLTFLoader().load(modelPath, (gltf) => {
-    plane = gltf.scene;
-
-    const box = new THREE.Box3().setFromObject(plane);
-    const center = box.getCenter(new THREE.Vector3());
-    plane.position.sub(center);
-
-    const size = box.getSize(new THREE.Vector3());
-    const maxDim = Math.max(size.x, size.y, size.z);
-    plane.scale.setScalar(5 / maxDim);
-
-    plane.rotation.x = 0.08;
-    plane.rotation.y = 0.3;
-    scene.add(plane);
-  });
-
-  const PARTICLE_COUNT = 1800;
-  const positions = new Float32Array(PARTICLE_COUNT * 3);
-  for (let i = 0; i < PARTICLE_COUNT; i++) {
-    const r = 4 + Math.random() * 8;
-    const theta = Math.random() * Math.PI * 2;
-    const phi = Math.acos(2 * Math.random() - 1);
-    positions[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
-    positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-    positions[i * 3 + 2] = r * Math.cos(phi);
-  }
-  const pGeo = new THREE.BufferGeometry();
-  pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  const particles = new THREE.Points(pGeo, new THREE.PointsMaterial({ size: 0.035, color, transparent: true, opacity: 0.4 }));
-  scene.add(particles);
-
-  let tx = 0, ty = 0;
-  window.addEventListener('mousemove', (e) => {
-    tx =  (e.clientX / window.innerWidth  - 0.5) * 1.5;
-    ty = -(e.clientY / window.innerHeight - 0.5) * 1.5;
-  });
-
-  const clock = new THREE.Clock();
-  (function tick() {
-    requestAnimationFrame(tick);
-    const t = clock.getElapsedTime();
-    particles.rotation.y = t * 0.04;
-    if (plane) {
-      plane.position.y = Math.sin(t * 0.6) * 0.08;
-      plane.rotation.y = 0.3 + Math.sin(t * 0.3) * 0.06;
-      plane.rotation.z = Math.sin(t * 0.4) * 0.015;
-    }
-    camera.position.x += (tx - camera.position.x) * 0.05;
-    camera.position.y += (ty - camera.position.y) * 0.05;
-    camera.lookAt(0, 0, 0);
-    renderer.render(scene, camera);
-  })();
-
-// ─── MODE WIREFRAME (resta de setmanes) ──────────────
-} else {
   function makeCentralGeo(n: number): THREE.BufferGeometry {
     switch (n) {
       case 1:  return new THREE.IcosahedronGeometry(2, 0);
@@ -114,9 +47,9 @@ if (modelPath) {
   const PARTICLE_COUNT = 1800;
   const positions = new Float32Array(PARTICLE_COUNT * 3);
   for (let i = 0; i < PARTICLE_COUNT; i++) {
-    const r = 4 + Math.random() * 8;
+    const r     = 4 + Math.random() * 8;
     const theta = Math.random() * Math.PI * 2;
-    const phi = Math.acos(2 * Math.random() - 1);
+    const phi   = Math.acos(2 * Math.random() - 1);
     positions[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
     positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
     positions[i * 3 + 2] = r * Math.cos(phi);
@@ -145,21 +78,21 @@ if (modelPath) {
     camera.lookAt(0, 0, 0);
     renderer.render(scene, camera);
   })();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  });
 }
 
-window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-});
-
-// GSAP animations (iguals per a tots)
+// ─── SHARED GSAP ANIMATIONS (all weeks) ──────────────
 const heroTl = gsap.timeline({ delay: 0.1 });
 heroTl
   .fromTo('.hero-label',    { y: -40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' })
   .fromTo('.hero-title',    { y: 100, opacity: 0, skewY: 4 }, { y: 0, opacity: 1, skewY: 0, duration: 1.1, ease: 'power3.out' }, '-=0.4')
-  .fromTo('.hero-subtitle', { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out' }, '-=0.5')
+  .fromTo('.hero-subtitle', { y: 50,  opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out' }, '-=0.5')
   .fromTo('.scroll-hint',   { opacity: 0 }, { opacity: 1, duration: 0.6 }, '-=0.3');
 
 gsap.utils.toArray<HTMLElement>('.content-section').forEach((section) => {
