@@ -6,11 +6,11 @@ import WeekStrip from '../components/WeekStrip.astro';
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Erasmus a Amarante, Portugal 2026 — Jose i Álvaro. 10 setmanes, mil records." />
+    <meta name="description" content="Erasmus in Amarante, Portugal 2026 — Jose & Álvaro. 10 weeks, a thousand memories." />
     <title>Amarante Erasmus '26 — Jose & Álvaro</title>
     <style>
       :root {
@@ -47,14 +47,14 @@ import WeekStrip from '../components/WeekStrip.astro';
       </h1>
       <div class="site-meta">
         <div><strong>Jose & Álvaro</strong></div>
-        <div>10 setmanes</div>
-        <div>Nord de Portugal</div>
+        <div>10 weeks</div>
+        <div>Northern Portugal</div>
         <div>LAT: 41.5928° N</div>
         <div>LON: 8.0285° W</div>
         <div>Erasmus+</div>
       </div>
       <div class="scroll-hint" style="margin-top:2rem" aria-hidden="true">
-        <span>Explorar</span>
+        <span>Explore</span>
         <div class="scroll-line"></div>
       </div>
     </section>
@@ -62,8 +62,8 @@ import WeekStrip from '../components/WeekStrip.astro';
     <!-- WEEKS GRID -->
     <section class="weeks-section">
       <div class="weeks-section-header content-section">
-        <span class="section-tag">El viatge</span>
-        <h2>10 setmanes a Portugal</h2>
+        <span class="section-tag">The journey</span>
+        <h2>10 weeks in Portugal</h2>
       </div>
 
       <div class="weeks-grid">
@@ -75,7 +75,7 @@ import WeekStrip from '../components/WeekStrip.astro';
               style={`background-color:${w.bgColor}; border: 2px solid ${w.primaryColor}20;`}
               data-index={i}
             >
-              <span class="card-num">Setmana {String(w.week).padStart(2, '0')}</span>
+              <span class="card-num">Week {String(w.week).padStart(2, '0')}</span>
               <div>
                 <div
                   class="card-week-title"
@@ -101,12 +101,12 @@ import WeekStrip from '../components/WeekStrip.astro';
         </div>
         <div class="about-text">
           <p>
-            Dos germans, una ciutat petita al nord de Portugal, i deu setmanes per
-            explorar-ho tot. Aquest és el nostre diari d'Erasmus a Amarante.
+            Two brothers, a small city in northern Portugal, and ten weeks to
+            explore it all. This is our Erasmus diary in Amarante.
           </p>
           <p>
-            Cada setmana té la seva pròpia història: llocs, persones, menjar, aventures
-            i els moments que no teníem planejats.
+            Each week has its own story: places, people, food, adventures
+            and the moments we never planned.
           </p>
         </div>
       </div>

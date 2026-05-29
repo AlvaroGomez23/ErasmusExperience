@@ -39,12 +39,12 @@ const weekNum = String(week).padStart(2, '0');
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={`Setmana ${weekNum} | Erasmus a Amarante, Portugal. Jose & Álvaro.`} />
-    <title>Setmana {weekNum} | Amarante Erasmus</title>
+    <meta name="description" content={`Week ${weekNum} | Erasmus in Amarante, Portugal. Jose & Álvaro.`} />
+    <title>Week {weekNum} | Amarante Erasmus</title>
     <style define:vars={{ primaryColor, accentColor, bgColor }}>
       :root {
         --week-primary: var(--primaryColor);
@@ -62,7 +62,7 @@ const weekNum = String(week).padStart(2, '0');
     <nav class="site-nav">
       <div class="nav-bar">
         <a href="/" class="nav-home">Amarante '26</a>
-        <span class="nav-week">Setmana {weekNum}</span>
+        <span class="nav-week">Week {weekNum}</span>
         <div class="nav-names">
           <span>Jose</span>
           <span class="sep">×</span>
@@ -84,7 +84,7 @@ const weekNum = String(week).padStart(2, '0');
     <!-- HERO -->
     <section class="hero">
       <div class="hero-label">
-        <span class="week-badge">Setmana {weekNum}</span>
+        <span class="week-badge">Week {weekNum}</span>
         <span class="hero-dates">{dates}</span>
       </div>
       <h1 class="hero-title">{title}</h1>
@@ -105,7 +105,7 @@ const weekNum = String(week).padStart(2, '0');
       {
         prevSlug && PUBLISHED_WEEKS.includes(parseInt(prevSlug.replace('week-', ''))) ? (
           <a href={`/${prevSlug}`} class="week-nav-link prev">
-            <span class="nav-dir">← Anterior</span>
+            <span class="nav-dir">← Previous</span>
             <span class="nav-link-title">{prevTitle}</span>
           </a>
         ) : (
@@ -116,7 +116,7 @@ const weekNum = String(week).padStart(2, '0');
       {
         nextSlug && PUBLISHED_WEEKS.includes(parseInt(nextSlug.replace('week-', ''))) ? (
           <a href={`/${nextSlug}`} class="week-nav-link next">
-            <span class="nav-dir">Següent →</span>
+            <span class="nav-dir">Next →</span>
             <span class="nav-link-title">{nextTitle}</span>
           </a>
         ) : (

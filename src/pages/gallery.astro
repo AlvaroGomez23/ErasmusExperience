@@ -1,0 +1,349 @@
+﻿---
+import '../styles/global.css';
+import WeekStrip from '../components/WeekStrip.astro';
+import { weekMeta } from '../data/gallery';
+import { PUBLISHED_WEEKS } from '../config/routes';
+
+const supabaseConfig = JSON.stringify({
+  url: import.meta.env.SUPABASE_URL,
+  key: import.meta.env.SUPABASE_KEY,
+});
+
+const weeks = PUBLISHED_WEEKS.map((num) => ({
+  num,
+  numStr: String(num).padStart(2, '0'),
+  ...weekMeta[num],
+}));
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gallery | Amarante Erasmus '26</title>
+    <style>
+      :root {
+        --week-primary: #88CE02;
+        --week-bg: #f0f7e6;
+      }
+      body { background-color: #f8f5ee; }
+
+      /*  ”€ ”€ Skeletons  ”€ ”€ */
+      .photo-skeleton {
+        aspect-ratio: 4 / 3;
+        border-radius: 1.2rem;
+        background: linear-gradient(90deg, #e4e4e4 25%, #eeeeee 50%, #e4e4e4 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.4s infinite;
+      }
+      @keyframes shimmer {
+        0%   { background-position:  200% 0; }
+        100% { background-position: -200% 0; }
+      }
+
+      /*  ”€ ”€ Week section divider  ”€ ”€ */
+      .gallery-week + .gallery-week {
+        border-top: 1px solid rgba(0, 0, 0, 0.06);
+        margin-top: 1rem;
+        padding-top: 5rem;
+      }
+
+      /*  ”€ ”€ No photos state  ”€ ”€ */
+      .no-photos {
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        opacity: 0.35;
+        grid-column: 1 / -1;
+        padding: 1.5rem 0;
+      }
+
+      /*  ”€ ”€ Lightbox  ”€ ”€ */
+      #lightbox {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        background: rgba(10, 10, 10, 0.95);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s;
+        cursor: zoom-out;
+      }
+      #lightbox.visible {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      #lightbox img {
+        max-width: 90vw;
+        max-height: 90vh;
+        object-fit: contain;
+        border-radius: 6px;
+        display: block;
+        cursor: default;
+      }
+      #lightbox-close {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: none;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+      }
+      #lightbox-close:hover {
+        border-color: rgba(255, 255, 255, 0.6);
+        color: #fff;
+      }
+
+
+    </style>
+
+    <style is:global>
+      .photo-item { cursor: zoom-in; }
+
+      .grid-fade {
+        height: 160px;
+        margin-top: -160px;
+        background: linear-gradient(to bottom, transparent, #f8f5ee);
+        pointer-events: none;
+        position: relative;
+        z-index: 1;
+      }
+
+      .show-more-btn {
+        display: block;
+        margin: 1.5rem auto 0;
+        padding: 0.75rem 2rem;
+        border: none;
+        border-radius: 999px;
+        background: var(--week-primary, #88CE02);
+        color: #fff;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        cursor: pointer;
+        transition: opacity 0.2s, transform 0.2s;
+      }
+      .show-more-btn:hover {
+        opacity: 0.85;
+        transform: translateY(2px);
+      }
+    </style>
+  </head>
+
+  <body>
+    <script id="sb-config" type="application/json" set:html={supabaseConfig}></script>
+    <script id="published-weeks" type="application/json" set:html={JSON.stringify(PUBLISHED_WEEKS)}></script>
+
+    <!-- THREE.JS CANVAS -->
+    <canvas id="three-canvas" aria-hidden="true"></canvas>
+
+    <!-- NAV -->
+    <nav class="site-nav">
+      <div class="nav-bar">
+        <a href="/" class="nav-home">Amarante '26</a>
+        <span class="nav-week">Gallery</span>
+        <div class="nav-names">
+          <span>Jose</span>
+          <span class="sep">—</span>
+          <span>Alvaro</span>
+        </div>
+      </div>
+      <WeekStrip />
+    </nav>
+
+    <!-- HERO -->
+    <section class="site-hero">
+      <p class="site-tagline">All weeks  · All moments</p>
+      <h1 class="site-title">GALLERY</h1>
+      <div class="site-meta">
+        <div><strong>10 weeks</strong></div>
+        <div>Amarante, Portugal</div>
+        <div>2026</div>
+      </div>
+      <div class="scroll-hint" style="margin-top:2rem" aria-hidden="true">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+    <!-- GALLERY CONTENT -->
+    <main class="weeks-section">
+      {weeks.map((w) => (
+        <section
+          class="gallery-week content-section"
+          id={`week-${w.numStr}`}
+          style={`--week-primary: ${w.color}`}
+        >
+          <span class="section-tag">Week {w.numStr}</span>
+          <h2 style={`color: ${w.color}`}>{w.subtitle}</h2>
+          <div class="photo-grid" id={`photos-${w.num}`} style="margin-top: 2rem">
+            <div class="photo-skeleton"></div>
+            <div class="photo-skeleton"></div>
+            <div class="photo-skeleton"></div>
+            <div class="photo-skeleton"></div>
+          </div>
+        </section>
+      ))}
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="week-footer">
+      <div class="week-nav-placeholder"></div>
+      <span class="week-footer-center">Jose × Alvaro · Erasmus Amarante '26</span>
+      <div class="week-nav-placeholder"></div>
+    </footer>
+
+    <!-- LIGHTBOX -->
+    <div id="lightbox">
+      <img id="lightbox-img" src="" alt="" />
+      <button id="lightbox-close" aria-label="Close">✕</button>
+    </div>
+
+    <script>
+      import { createClient } from '@supabase/supabase-js';
+      import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+      const config = JSON.parse(document.getElementById('sb-config')!.textContent!);
+      const supabase = createClient(config.url, config.key);
+      const BUCKET = 'Photos';
+      const PHOTO_EXT_RE = /\.(jpe?g|webp|png)$/i;
+
+      function openLightbox(url: string, alt: string) {
+        const lb = document.getElementById('lightbox')!;
+        const img = document.getElementById('lightbox-img') as HTMLImageElement;
+        img.src = url;
+        img.alt = alt;
+        lb.classList.add('visible');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLightbox() {
+        document.getElementById('lightbox')!.classList.remove('visible');
+        document.body.style.overflow = '';
+      }
+
+      document.getElementById('lightbox')!.addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) closeLightbox();
+      });
+      document.getElementById('lightbox-close')!.addEventListener('click', closeLightbox);
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+
+      async function loadWeek(weekNum: number) {
+        const gridEl = document.getElementById(`photos-${weekNum}`);
+        if (!gridEl) return;
+
+        const folderCandidates = [`week${weekNum}`, `week${String(weekNum).padStart(2, '0')}`];
+        let photos: Array<{ name: string }> = [];
+        let resolvedFolder = folderCandidates[0];
+        let hasError = false;
+
+        for (const folder of folderCandidates) {
+          const { data, error } = await supabase.storage.from(BUCKET).list(folder, {
+            limit: 200,
+            sortBy: { column: 'name', order: 'asc' },
+          });
+
+          if (error) {
+            console.error(`[gallery] week ${weekNum}: error for folder "${folder}":`, error);
+            hasError = true;
+            continue;
+          }
+
+          const filtered = data.filter((f) => PHOTO_EXT_RE.test(f.name));
+
+          if (filtered.length > 0) {
+            photos = filtered;
+            resolvedFolder = folder;
+            hasError = false;
+            break;
+          }
+
+          hasError = false;
+        }
+
+        if (hasError) {
+          gridEl.innerHTML = '<p class="no-photos">Could not load photos.</p>';
+          return;
+        }
+
+        if (photos.length === 0) {
+          gridEl.innerHTML = '<p class="no-photos">Coming soon.</p>';
+          return;
+        }
+
+        const INITIAL = 6;
+        gridEl.innerHTML = '';
+
+        const section = gridEl.closest('section')!;
+
+        function renderPhotos(list: Array<{ name: string }>) {
+          list.forEach((file, i) => {
+            const { data: { publicUrl } } = supabase.storage.from(BUCKET).getPublicUrl(`${resolvedFolder}/${file.name}`);
+            const alt = `Week ${weekNum} · Photo ${i + 1}`;
+            const item = document.createElement('div');
+            item.className = 'photo-item';
+            const img = document.createElement('img');
+            img.src = publicUrl;
+            img.alt = alt;
+            img.loading = 'lazy';
+            item.addEventListener('click', () => openLightbox(publicUrl, alt));
+            item.appendChild(img);
+            gridEl.appendChild(item);
+          });
+        }
+
+        renderPhotos(photos.slice(0, INITIAL));
+
+        if (photos.length > INITIAL) {
+          const fade = document.createElement('div');
+          fade.className = 'grid-fade';
+          gridEl.after(fade);
+
+          const btn = document.createElement('button');
+          btn.className = 'show-more-btn';
+          btn.textContent = `↓  ${photos.length - INITIAL} more`;
+          btn.addEventListener('click', () => {
+            renderPhotos(photos.slice(INITIAL));
+            fade.remove();
+            btn.remove();
+            ScrollTrigger.refresh();
+          });
+          fade.after(btn);
+        }
+      }
+
+      const published: number[] = JSON.parse(document.getElementById('published-weeks')!.textContent!);
+      await Promise.all(published.map(loadWeek));
+      ScrollTrigger.refresh();
+    </script>
+
+    <script>
+      import '../scripts/three-gallery.ts';
+    </script>
+    <script>
+      import '../scripts/cursor.ts';
+    </script>
+    <script>
+      const nav = document.querySelector('.site-nav');
+      window.addEventListener('scroll', () => {
+        nav?.classList.toggle('is-scrolled', window.scrollY > 20);
+      }, { passive: true });
+    </script>
+  </body>
+</html>
+

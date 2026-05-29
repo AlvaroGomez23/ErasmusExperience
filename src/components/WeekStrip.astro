@@ -8,7 +8,7 @@ interface Props {
 const { currentWeek } = Astro.props;
 ---
 
-<div class="week-strip" role="navigation" aria-label="Navegació per setmanes">
+<div class="week-strip" role="navigation" aria-label="Week navigation">
   {weeks.filter((w) => PUBLISHED_WEEKS.includes(w.week)).map((w) => (
     <a
       href={`/${w.slug}`}
@@ -19,4 +19,11 @@ const { currentWeek } = Astro.props;
       {String(w.week).padStart(2, '0')}
     </a>
   ))}
+  <a
+    href="/gallery"
+    class={`week-dot${Astro.url?.pathname === '/gallery' ? ' active' : ''}`}
+    style="--dot-color:#88CE02"
+  >
+    Gallery
+  </a>
 </div>
