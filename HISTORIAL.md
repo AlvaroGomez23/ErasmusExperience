@@ -13,4 +13,6 @@
 [2026-05-29] — Supabase Storage fixed: added RLS SELECT policy for anon role on bucket Photos + enabled public bucket. Photos now load in gallery. Removed debug console.logs.
 [2026-05-29] — Gallery: show first 6 photos, gradient fade overlay on grid bottom, minimal "↓ N more" text trigger reveals rest.
 [2026-05-29] — three-gallery.ts: new script for gallery page with photo_cam.glb (Draco), material transparency fix, green particles. three-index.ts restored to globe for main page.
+[2026-05-29] — Week-01 and Week-02: corrected English grammar and phrasing (quantifiers, tense consistency, word order, subject omissions).
+[2026-05-29] — Added EU flag favicon (/photos/Flag_of_Europe.svg.webp) to all pages (index, WeekLayout, gallery).
 [2026-05-29] — Translated entire site to English: html lang attributes, meta descriptions, nav/hero/footer labels, all page content (weeks 01–10), weeks.ts subtitles and dates.

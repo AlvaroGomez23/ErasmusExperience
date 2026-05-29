@@ -117,7 +117,7 @@ if (drawText) {
 
 // ─── TYPING TEXT ─────────────────────────────────────
 const typingText = document.getElementById('typing-text') as HTMLElement;
-const frase = 'També vam apendre a animar textos, com ara aquesta animació de tipus "typing", moure, fer aparèixer i desaparèixer elements entre d\'altres . Aquests coneixements adquirits, ens permetran crear pàgines web més atractives com aquesta.';
+const frase = 'We also learnt how to animate text, such as this “typing” animation, move, and make elements appear and disappear, among other things. This knowledge will allow us to create more attractive web pages like this one.';
 const state = { n: 0 };
 
 typingText.style.color = '#FF6B35';
