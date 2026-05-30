@@ -1,19 +1,19 @@
 ---
 import WeekLayout from '../layouts/WeekLayout.astro';
 import { PUBLISHED_WEEKS } from '../config/routes';
-if (!PUBLISHED_WEEKS.includes(10)) return Astro.redirect('/');
+if (!PUBLISHED_WEEKS.includes(11)) return Astro.redirect('/');
 ---
 
 <WeekLayout
-  week={10}
-  title="10"
+  week={11}
+  title="11"
   subtitle="Last days, eternal memories"
-  dates="Week 10"
+  dates="Week 11"
   primaryColor="#2196F3"
   accentColor="#00BCD4"
   bgColor="#f0f7ff"
-  prevSlug="week-09"
-  prevTitle="Week 09"
+  prevSlug="week-10"
+  prevTitle="Week 10"
   nextSlug={null}
   nextTitle={null}
 >
@@ -51,6 +51,6 @@ if (!PUBLISHED_WEEKS.includes(10)) return Astro.redirect('/');
     </div>
   </section>
   <script>
-    import '../scripts/three-week-10.ts';
+    import '../scripts/three-week-11.ts';
   </script>
 </WeekLayout>

@@ -20,5 +20,6 @@ export const weekMeta: Record<number, { subtitle: string; color: string }> = {
   7:  { subtitle: 'Art & Creativity',            color: '#FF4444' },
   8:  { subtitle: 'Portuguese Cuisine',          color: '#FF9800' },
   9:  { subtitle: 'Nature & Mountains',          color: '#4CAF50' },
-  10: { subtitle: 'Last Days, Eternal Memories', color: '#2196F3' },
+  10: { subtitle: 'Almost There',                color: '#7C3AED' },
+  11: { subtitle: 'Last Days, Eternal Memories', color: '#2196F3' },
 };

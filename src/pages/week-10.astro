@@ -1,0 +1,43 @@
+---
+import WeekLayout from '../layouts/WeekLayout.astro';
+import { PUBLISHED_WEEKS } from '../config/routes';
+if (!PUBLISHED_WEEKS.includes(10)) return Astro.redirect('/');
+---
+
+<WeekLayout
+  week={10}
+  title="10"
+  subtitle="Almost there"
+  dates="Week 10"
+  primaryColor="#7C3AED"
+  accentColor="#A78BFA"
+  bgColor="#f5f0ff"
+  prevSlug="week-09"
+  prevTitle="Week 09"
+  nextSlug="week-11"
+  nextTitle="Week 11"
+>
+  <section class="content-section">
+    <span class="section-tag">Week 10</span>
+    <h2>Almost there</h2>
+    <p>
+      The penultimate week. Savoring every moment before the final stretch.
+    </p>
+  </section>
+
+  <section class="content-section">
+    <span class="section-tag">Photos</span>
+    <h2>The week in images</h2>
+    <div class="photo-grid">
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+      <div class="photo-item">📸</div>
+    </div>
+  </section>
+  <script>
+    import '../scripts/three-week-10.ts';
+  </script>
+</WeekLayout>

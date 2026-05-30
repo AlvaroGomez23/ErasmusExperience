@@ -24,3 +24,4 @@
 [2026-05-30] — Gallery: camera model lowered by 1.5 units (position.y offset in tick loop).
 [2026-05-30] — Added utils/convert-upload.mjs: converts raw photos to webp@75%, renames to weekXX-NN.webp, uploads to Supabase bucket Photos/weekXX/. Fixed .gitignore (was ignoring entire utils/, now only utils/output/).
 [2026-05-30] — Gallery: "↓ N more" expand now togglable — collapse button (↑ Show less) removes extra photos, restores fade + show-more, scrolls section into view.
+[2026-05-30] — Renamed week-10 → week-11 (11-week Erasmus); created new week-10 placeholder; fixed all data refs in weeks.ts, gallery.ts, routes.ts; fixed broken three-week-10.ts import in week-11.astro.
