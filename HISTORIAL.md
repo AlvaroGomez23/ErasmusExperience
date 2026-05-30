@@ -16,3 +16,11 @@
 [2026-05-29] — Week-01 and Week-02: corrected English grammar and phrasing (quantifiers, tense consistency, word order, subject omissions).
 [2026-05-29] — Added EU flag favicon (/photos/Flag_of_Europe.svg.webp) to all pages (index, WeekLayout, gallery).
 [2026-05-29] — Translated entire site to English: html lang attributes, meta descriptions, nav/hero/footer labels, all page content (weeks 01–10), weeks.ts subtitles and dates.
+[2026-05-30] — Week-02: full-screen water ripple shader background (WebGL, mouse + scroll spawn ripples); glassContent mode enabled so frosted sections let water show through.
+[2026-05-30] — Week-02: water shader alpha lowered to 0.55; hero lifted to z-index:3 so text/models stay above water; removed mouse-move ripple trigger (scroll only).
+[2026-05-30] — Week-02: water-canvas JS-moved to body before #three-canvas so z-index:-1 is root-context-relative (was trapped inside .week-content z-index:10 stacking context).
+[2026-05-30] — Week-02: temperature "40ºC!" blinks red forever via CSS step animation.
+[2026-05-30] — Week-02: added GLB loader to three-week-02.ts — Sun.glb loads on #three-canvas with golden lighting, slow rotation, particle field, mouse parallax.
+[2026-05-30] — Gallery: camera model lowered by 1.5 units (position.y offset in tick loop).
+[2026-05-30] — Added utils/convert-upload.mjs: converts raw photos to webp@75%, renames to weekXX-NN.webp, uploads to Supabase bucket Photos/weekXX/. Fixed .gitignore (was ignoring entire utils/, now only utils/output/).
+[2026-05-30] — Gallery: "↓ N more" expand now togglable — collapse button (↑ Show less) removes extra photos, restores fade + show-more, scrolls section into view.

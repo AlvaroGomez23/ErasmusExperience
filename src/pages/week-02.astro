@@ -6,7 +6,7 @@ import WeekLayout from '../layouts/WeekLayout.astro';
   week={2}
   title="02"
   subtitle="Exploring the city"
-  dates="Week 2"
+  dates="25 - 31 May"
   primaryColor="#FF6B35"
   accentColor="#FFD700"
   bgColor="#fff5f0"
@@ -14,7 +14,15 @@ import WeekLayout from '../layouts/WeekLayout.astro';
   prevTitle="Week 01"
   nextSlug="week-03"
   nextTitle="Week 03"
+  modelPath="/models/Sun.glb"
+  glassContent
 >
+  <canvas
+    id="water-canvas"
+    aria-hidden="true"
+    style="position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;"
+  ></canvas>
+
   <section class="content-section">
     <span class="section-tag">Discovery</span>
     <h2>The city opens up</h2>
@@ -23,10 +31,21 @@ import WeekLayout from '../layouts/WeekLayout.astro';
       The market, the viewpoints, the streets of the historic quarter.
     </p>
     <p>
+      These first days were so sunny, reaching temperatures of <a id="temperature">40ºC!</a> We took advantage of the Tâmega river to cool down, having a really fun time with our new friends. There's a lot of spots to discover around the river, at some of them, you can even jump from the rocks into the water, spots that we are going to use very often during the summer.
+    </p>
+    <p>
+      This week we moved out from the Aldeia, and came to live at the CJ. There's a lot more people living here, but we also miss the quiet and calm of the Aldeia. The CJ is located at 5 minutes of the city center.
+    </p>
+    <p>
+      May is already ending, and the "feria" is set up for the next week. Amarante is getting ready for their local festivals! We will stay tuned!
+    </p>
+    <p>
       That same week, our internships at a company called CodeAhead began. A local company focused on software development, where we had the chance to apply our knowledge and learn from our tutor — working with 3D models and modern animations without sacrificing free time to explore the city.
     </p>
     <p id="typing-text"></p>
     <p>This second week we improved our knowledge of web design and 3D space manipulation enormously. As you'll see with the interactive models below — very useful skills for building "immersive" web experiences that break away from the traditional approach.</p>
+
+    <p>For more photos of this week, check out the <a href="/gallery">gallery</a>!</p>
 
     <div class="draw-svg-wrapper">
       <svg class="draw-svg" viewBox="0 0 1000 110" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
@@ -42,12 +61,12 @@ import WeekLayout from '../layouts/WeekLayout.astro';
     <span class="section-tag">Photos</span>
     <h2>The week in images</h2>
     <div class="photo-grid">
-      <div class="photo-item"><img src="/photos/test_img.jpeg" alt="Photo 1"></div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
+      <div class="photo-item"><div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week2/week02-01.webp" alt="Photo 1"></div></div>
+      <div class="photo-item"><div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week2/week02-07.webp" alt="Photo 2"></div></div>
+      <div class="photo-item"><div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week2/week02-09.webp" alt="Photo 3"></div></div>
+      <div class="photo-item"><div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week2/week02-05.webp" alt="Photo 4"></div></div>
+      <div class="photo-item"><div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week2/week02-12.webp" alt="Photo 5"></div></div>
+      <div class="photo-item"><div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week2/week02-13.webp" alt="Photo 6"></div></div>
     </div>
   </section>
 
@@ -56,6 +75,15 @@ import WeekLayout from '../layouts/WeekLayout.astro';
   </script>
 
   <style>
+    #temperature {
+      color: #ff2222;
+      text-decoration: none;
+      cursor: default;
+      animation: tempBlink 0.9s step-start infinite;
+    }
+    @keyframes tempBlink {
+      50% { opacity: 0; }
+    }
     .content-section {
       position: relative;
       z-index: 2;

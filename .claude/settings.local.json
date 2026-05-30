@@ -5,7 +5,9 @@
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Alvaro\\\\Desktop\\\\AmaranteWeb\" -Recurse -Depth 2 -Name)",
       "Bash(Select-Object -First 50)",
       "Bash(del *)",
-      "Bash(npm install *)"
+      "Bash(npm install *)",
+      "Bash(npm list *)",
+      "Bash(echo \"exit: $?\")"
     ]
   }
 }

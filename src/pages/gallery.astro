@@ -172,7 +172,7 @@ const weeks = PUBLISHED_WEEKS.map((num) => ({
       <p class="site-tagline">All weeks  · All moments</p>
       <h1 class="site-title">GALLERY</h1>
       <div class="site-meta">
-        <div><strong>10 weeks</strong></div>
+        <div><strong>11 weeks</strong></div>
         <div>Amarante, Portugal</div>
         <div>2026</div>
       </div>
@@ -315,16 +315,31 @@ const weeks = PUBLISHED_WEEKS.map((num) => ({
           fade.className = 'grid-fade';
           gridEl.after(fade);
 
-          const btn = document.createElement('button');
-          btn.className = 'show-more-btn';
-          btn.textContent = `↓  ${photos.length - INITIAL} more`;
-          btn.addEventListener('click', () => {
+          const showMoreBtn = document.createElement('button');
+          showMoreBtn.className = 'show-more-btn';
+          showMoreBtn.textContent = `↓  ${photos.length - INITIAL} more`;
+          fade.after(showMoreBtn);
+
+          const collapseBtn = document.createElement('button');
+          collapseBtn.className = 'show-more-btn';
+          collapseBtn.textContent = '↑  Show less';
+
+          showMoreBtn.addEventListener('click', () => {
             renderPhotos(photos.slice(INITIAL));
             fade.remove();
-            btn.remove();
+            showMoreBtn.remove();
+            gridEl.after(collapseBtn);
             ScrollTrigger.refresh();
           });
-          fade.after(btn);
+
+          collapseBtn.addEventListener('click', () => {
+            Array.from(gridEl.querySelectorAll('.photo-item')).slice(INITIAL).forEach(el => el.remove());
+            collapseBtn.remove();
+            gridEl.after(fade);
+            fade.after(showMoreBtn);
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            ScrollTrigger.refresh();
+          });
         }
       }
 

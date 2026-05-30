@@ -30,7 +30,7 @@ draco.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
 const loader = new GLTFLoader();
 loader.setDRACOLoader(draco);
 
-loader.load('/models/photo_cam.glb', (gltf) => {
+loader.load('/models/Camera_poly.glb', (gltf) => {
   model = gltf.scene;
 
   // Force all materials opaque and visible
@@ -84,7 +84,7 @@ const clock = new THREE.Clock();
   particles.rotation.y = t * 0.04;
   if (model) {
     model.rotation.y = t * 0.12;
-    model.position.y = Math.sin(t * 0.6) * 0.15;
+    model.position.y = -1.5 + Math.sin(t * 0.6) * 0.15;
   }
   camera.position.x += (tx - camera.position.x) * 0.04;
   camera.position.y += (ty - camera.position.y) * 0.04;
