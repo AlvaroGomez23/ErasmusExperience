@@ -25,3 +25,12 @@
 [2026-05-30] — Added utils/convert-upload.mjs: converts raw photos to webp@75%, renames to weekXX-NN.webp, uploads to Supabase bucket Photos/weekXX/. Fixed .gitignore (was ignoring entire utils/, now only utils/output/).
 [2026-05-30] — Gallery: "↓ N more" expand now togglable — collapse button (↑ Show less) removes extra photos, restores fade + show-more, scrolls section into view.
 [2026-05-30] — Renamed week-10 → week-11 (11-week Erasmus); created new week-10 placeholder; fixed all data refs in weeks.ts, gallery.ts, routes.ts; fixed broken three-week-10.ts import in week-11.astro.
+[2026-05-31] — Added secret party page (/party): password-gated (FIESTA), dark neon theme, Three.js disco sphere + colored confetti particle clouds + orbiting lights, polaroid photo grid from Supabase Photos/party/ folder.
+[2026-05-31] — Party page: switched polaroid grid from fixed-column grid to CSS masonry (columns), removed forced 4:3 aspect ratio — photos now display at natural proportions.
+[2026-05-31] — Party page: fixed photo size (grid minmax 150-190px capped), restored 4:3 cover crop for uniform polaroids; replaced static lightbox with prev/next carousel (arrow keys + click buttons, fade transition, photo counter).
+[2026-05-31] — Party page: rewrote carousel with GSAP — overlay fade+scale open/close, slide-left/right between photos with busy guard; fixed position:fixed-inside-fixed bug by switching nav buttons to position:absolute.
+[2026-05-31] — Party page: full GSAP polaroid system — staggered chaos-drop entrance per card, perpetual independent float (y+rotation), hover lifts+straightens+neon-glow via paused float tween, resume float on mouseleave.
+[2026-05-31] — Party page: fixed oversized photos — switched polaroid grid from CSS grid (minmax not constraining) to flex-wrap with hard width:175px per item; shrank Three.js particles (0.07→0.032) and ring opacity (0.35→0.18).
+[2026-05-31] — Party page: reverted confetti/orbs GSAP experiment — restored Three.js 3D background (three-party.ts); kept GSAP carousel + polaroid animations.
+[2026-05-31] — Party page: fixed carousel (moved outside #party-content — was trapped in its stacking context/opacity:0); fixed photo size (grid repeat(auto-fill, 160px) strict fixed columns, no stretch).
+[2026-05-31] — Party page: replaced polaroid+carousel entirely with gallery.astro pattern — photo-grid, photo-item, simple lightbox (click to zoom, Escape/click-outside to close), show-more button. Same behaviour as weekly gallery pages.

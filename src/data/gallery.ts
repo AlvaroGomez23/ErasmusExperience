@@ -11,10 +11,10 @@ export interface GalleryWeek {
 }
 
 export const weekMeta: Record<number, { subtitle: string; color: string }> = {
-  1:  { subtitle: 'First Steps in Amarante',    color: '#88CE02' },
+  1:  { subtitle: 'First Steps in Amarante',     color: '#88CE02' },
   2:  { subtitle: 'Exploring the City',          color: '#FF6B35' },
-  3:  { subtitle: 'Culture & Tradition',         color: '#E91E8C' },
-  4:  { subtitle: 'New People, New Friends',     color: '#FFD700' },
+  3:  { subtitle: 'New People, New Friends',     color: '#E91E8C' },
+  4:  { subtitle: 'Cultural Immersion',          color: '#FFD700' },
   5:  { subtitle: 'The Tâmega River',            color: '#00BCD4' },
   6:  { subtitle: 'Adventures Around',           color: '#9C27B0' },
   7:  { subtitle: 'Art & Creativity',            color: '#FF4444' },
