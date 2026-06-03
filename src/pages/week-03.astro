@@ -7,24 +7,65 @@ if (!PUBLISHED_WEEKS.includes(3)) return Astro.redirect('/');
 <WeekLayout
   week={3}
   title="03"
-  subtitle="Culture and tradition"
-  dates="Week 3"
+  subtitle="Amarante local parties"
+  dates="1 – 7 JUN"
   primaryColor="#E91E8C"
   accentColor="#FF6B35"
-  bgColor="#fff0f7"
+  bgColor="#0e0014"
   prevSlug="week-02"
   prevTitle="Week 02"
   nextSlug="week-04"
   nextTitle="Week 04"
+  modelPath="skip"
+  glassContent
 >
   <section class="content-section">
-    <span class="section-tag">Heritage</span>
-    <h2>Amarante has history</h2>
-    <p>
-      Museums, churches, traditions. This week we dive into the history
-      of Amarante and northern Portugal.
+    <span class="section-tag">Festival</span>
+    <h2>Amarante local parties</h2>
+    <p>Adventures coming soon...</p>
+    <!-- <p>
+      Week three. The city had been building to this for days — scaffolding going up on the bridge,
+      food stalls appearing overnight, strings of lights suddenly everywhere. Then on Thursday evening
+      the Festa de São Gonçalo begins and Amarante remembers exactly who it is.
     </p>
+    <p>
+      São Gonçalo, patron saint of marriages, has been celebrated here since the 12th century.
+      The church that bears his name glows at night, and the processions that wind through the old streets
+      carry centuries of tradition. But the festa is also deeply alive — music until 4am, wine, dancing,
+      fireworks over the Tâmega that you feel in your chest.
+    </p>
+    <p>
+      We watched one night from the Roman bridge. The reflections in the river turned each burst into two.
+      There are things you don't forget.
+    </p> -->
+
+    <!-- <div class="festival-stats">
+      <div class="stat-card">
+        <span class="stat-num">3</span>
+        <span class="stat-label">Nights of festa</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">~4am</span>
+        <span class="stat-label">Average bedtime</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">∞</span>
+        <span class="stat-label">Fireworks over the river</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">XII</span>
+        <span class="stat-label">Centuries of tradition</span>
+      </div>
+    </div>
   </section>
+
+<section class="content-section draw-section">
+    <div class="draw-svg-wrapper">
+      <svg class="draw-svg" viewBox="0 0 1000 110" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+        <text class="draw-text" x="500" y="85" text-anchor="middle">São Gonçalo</text>
+      </svg>
+    </div>
+  </section> -->
 
   <section class="content-section">
     <span class="section-tag">Photos</span>
@@ -38,7 +79,108 @@ if (!PUBLISHED_WEEKS.includes(3)) return Astro.redirect('/');
       <div class="photo-item">📸</div>
     </div>
   </section>
+
   <script>
     import '../scripts/three-week-03.ts';
   </script>
+
+  <!-- Dark night theme: nav, hero text, week strip, footer -->
+  <style is:global>
+    .hero-subtitle,
+    .hero-dates,
+    .scroll-hint {
+      color: rgba(255, 255, 255, 0.8);
+    }
+    .nav-home              { color: #f0f0ff; }
+    .nav-home:hover        { color: #E91E8C; }
+    .nav-week, .nav-names  { color: #f0f0ff; }
+    .site-nav {
+      background:   rgba(14, 0, 20, 0.55);
+      border-color: rgba(233, 30, 140, 0.2);
+    }
+    .site-nav.is-scrolled {
+      background:   rgba(14, 0, 20, 0.85);
+      border-color: rgba(233, 30, 140, 0.45);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    /* Week strip dots on dark bg */
+    .week-dot {
+      color:        rgba(255, 255, 255, 0.65);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+    .week-dot:hover {
+      color:        var(--dot-color);
+      border-color: var(--dot-color);
+    }
+    .week-dot.active {
+      color:   #fff;
+      opacity: 1;
+    }
+    /* Footer */
+    .week-footer {
+      background:    #0e0014;
+      border-top-color: rgba(233, 30, 140, 0.15);
+    }
+    .week-footer-center,
+    .nav-dir,
+    .nav-link-title { color: rgba(255, 255, 255, 0.75); }
+    .week-nav-link:hover .nav-link-title { color: #E91E8C; }
+  </style>
+
+  <style>
+    .content-section {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Festival stat cards */
+    .festival-stats {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    .stat-card {
+      flex: 1;
+      min-width: 100px;
+      background: rgba(233, 30, 140, 0.1);
+      border: 1px solid rgba(233, 30, 140, 0.3);
+      border-radius: 1rem;
+      padding: 1.2rem 0.8rem;
+      text-align: center;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .stat-num {
+      display: block;
+      font-size: 2rem;
+      font-weight: 900;
+      color: #E91E8C;
+      line-height: 1;
+    }
+    .stat-label {
+      display: block;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.6;
+      margin-top: 0.4rem;
+    }
+
+    /* SVG draw */
+    .draw-section { padding-top: 0; }
+    .draw-svg-wrapper { overflow: visible; }
+    .draw-svg { width: 100%; overflow: visible; }
+    .draw-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 80px;
+      font-weight: 400;
+      fill: none;
+      stroke: #E91E8C;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      letter-spacing: 4px;
+    }
+  </style>
 </WeekLayout>

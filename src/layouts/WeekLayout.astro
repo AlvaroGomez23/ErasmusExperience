@@ -66,7 +66,7 @@ const weekNum = String(week).padStart(2, '0');
         <span class="nav-week">Week {weekNum}</span>
         <div class="nav-names">
           <span>Jose</span>
-          <span class="sep">×</span>
+          <a href="/party" class="sep party-secret">×</a>
           <span>Alvaro</span>
         </div>
       </div>
@@ -131,6 +131,9 @@ const weekNum = String(week).padStart(2, '0');
     </script>
     <script>
       import '../scripts/cursor.ts';
+    </script>
+    <script>
+      import '../scripts/party-egg.ts';
     </script>
     <script>
       const nav = document.querySelector('.site-nav');

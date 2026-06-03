@@ -160,7 +160,7 @@ const weeks = PUBLISHED_WEEKS.map((num) => ({
         <span class="nav-week">Gallery</span>
         <div class="nav-names">
           <span>Jose</span>
-          <span class="sep">—</span>
+          <a href="/party" class="sep party-secret">×</a>
           <span>Alvaro</span>
         </div>
       </div>
@@ -353,6 +353,9 @@ const weeks = PUBLISHED_WEEKS.map((num) => ({
     </script>
     <script>
       import '../scripts/cursor.ts';
+    </script>
+    <script>
+      import '../scripts/party-egg.ts';
     </script>
     <script>
       const nav = document.querySelector('.site-nav');

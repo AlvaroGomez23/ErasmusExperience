@@ -34,3 +34,11 @@
 [2026-05-31] — Party page: reverted confetti/orbs GSAP experiment — restored Three.js 3D background (three-party.ts); kept GSAP carousel + polaroid animations.
 [2026-05-31] — Party page: fixed carousel (moved outside #party-content — was trapped in its stacking context/opacity:0); fixed photo size (grid repeat(auto-fill, 160px) strict fixed columns, no stretch).
 [2026-05-31] — Party page: replaced polaroid+carousel entirely with gallery.astro pattern — photo-grid, photo-item, simple lightbox (click to zoom, Escape/click-outside to close), show-more button. Same behaviour as weekly gallery pages.
+[2026-06-01] — Party page: fixed gate title "PARTY" appearing shifted right — added text-indent:-0.04em to compensate letter-spacing optical centering offset.
+[2026-06-01] — Easter eggs: (1) type "party" on any page → redirect to /party; (2) the × between Jose and Álvaro in nav is a hidden link to /party (invisible, cursor:default, works on mobile tap).
+[2026-06-02] — Party gate: fixed PARTY title centering — translateX(-8%) scoped to min-width:769px so desktop centers correctly without breaking mobile.
+[2026-06-03] — Week-03: full festival theme (Festa de São Gonçalo) — dark night bg (#0e0014), scroll-triggered 3D fireworks on fixed canvas (rockets rise + burst in Three.js perspective with depth/flash sphere), inline interactive 3D fireworks launcher (click/tap to shoot), star field, GSAP SVG draw "São Gonçalo", stat cards, nav/weekstrip/hero/footer dark-mode overrides via is:global.
+[2026-06-03] — Week-03: restored rocket Line trails (20-point shift-history), restored central octahedron wireframe + orbital particle cloud, fixed burst double-creation bug (Points added to scene once), faster burst velocity + bigger flash for instant pop feel.
+[2026-06-03] — Week-03: fixed invisible trails in click-to-shoot canvas — swapped THREE.Line → THREE.Points (linewidth not supported in WebGL so lines were 1px invisible), raised rocket start from y=-8 to y=-6.5 so trail enters inline canvas viewport from frame 1.
+[2026-06-03] — Week-03: removed click-to-shoot inline canvas section (not adding value).
+[2026-06-03] — Week-03: added 42 spinning 3D confetti ribbons (BoxGeometry, festival colors, per-piece random rotation/drift, sine-wave sway, loop from bottom when exiting top).

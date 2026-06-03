@@ -196,7 +196,6 @@ const supabaseConfig = JSON.stringify({
           0 0 200px rgba(255, 0, 110, 0.15);
         will-change: transform;
         position: relative;
-        left: -2.5rem;
         width: calc(100% + 5rem);
       }
       .party-meta {
@@ -337,6 +336,9 @@ const supabaseConfig = JSON.stringify({
       }
 
       /* ── RESPONSIVE ───────────────────────────── */
+      @media (min-width: 769px) {
+        .gate-title { transform: translateX(-8%); }
+      }
       @media (max-width: 768px) {
         .party-hero { padding: 0 1.5rem 3.5rem; }
         .party-title { left: -1.5rem; width: calc(100% + 3rem); }
@@ -387,8 +389,8 @@ const supabaseConfig = JSON.stringify({
 
       <!-- HERO -->
       <section class="party-hero">
-        <p class="party-tagline">&#9733; Top Secret &#9733; Only the Coolest People Know</p>
-        <h1 class="party-title">PARTY</h1>
+        <p class="party-tagline">&#9733; Top Secret &#9733;</p>
+        <h1 class="party-title">THE NIGHTS</h1>
         <div class="party-meta">
           <div><strong>The Nights</strong></div>
           <div>Amarante, Portugal</div>
