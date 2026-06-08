@@ -3,6 +3,7 @@ import { weeks } from '../data/weeks';
 import { PUBLISHED_WEEKS } from '../config/routes';
 import '../styles/global.css';
 import WeekStrip from '../components/WeekStrip.astro';
+import Analytics from '@vercel/analytics/astro';
 ---
 
 <!doctype html>
@@ -128,5 +129,6 @@ import WeekStrip from '../components/WeekStrip.astro';
         nav?.classList.toggle('is-scrolled', window.scrollY > 20);
       }, { passive: true });
     </script>
+    <Analytics />
   </body>
 </html>

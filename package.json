@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.106.2",
+    "@vercel/analytics": "^2.0.1",
     "astro": "^4.16.0",
     "gsap": "^3.12.5",
     "three": "^0.169.0"

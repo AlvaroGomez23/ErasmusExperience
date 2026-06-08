@@ -1,1 +1,0 @@
-import"./cursor.CKzpKIq3.js";import"./three-index.zEMwIoat.js";const e=document.querySelector(".site-nav");window.addEventListener("scroll",()=>{e?.classList.toggle("is-scrolled",window.scrollY>20)},{passive:!0});

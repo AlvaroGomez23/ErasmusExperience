@@ -50,3 +50,5 @@
 [2026-06-08] — Party gate: escape link now a pill button with breathing pulse animation (opacity 0.45↔1 loop), pauses on hover with full white; text "← take me back home". Escape key still works too.
 [2026-06-08] — Week-04: full WIP construction page — 3D gold cubes fall+stack with bounce (GSAP), rotating scaffold wireframe, construction tape banners, pulsing warning lights, fake terminal typewriter with build logs, progress bar that never finishes.
 [2026-06-08] — Week-03: festival string lights (14 colored glowing bulbs strung across top of section, async flicker), neon flicker heading on "NIGTHS IN AMARANTE", sparkle cursor trail (pink/orange/gold dots float up from mouse while over content).
+
+[2026-06-08] — Analytics: added @vercel/analytics to all pages (WeekLayout, index, gallery, party) via default import from @vercel/analytics/astro.

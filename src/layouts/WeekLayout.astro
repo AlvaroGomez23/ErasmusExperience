@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import WeekStrip from '../components/WeekStrip.astro';
+import Analytics from '@vercel/analytics/astro';
 import { PUBLISHED_WEEKS } from '../config/routes';
 
 interface Props {
@@ -141,5 +142,6 @@ const weekNum = String(week).padStart(2, '0');
         nav?.classList.toggle('is-scrolled', window.scrollY > 20);
       }, { passive: true });
     </script>
+    <Analytics />
   </body>
 </html>
