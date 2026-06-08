@@ -20,63 +20,51 @@ if (!PUBLISHED_WEEKS.includes(3)) return Astro.redirect('/');
   glassContent
 >
   <section class="content-section">
+
+    <!-- Festival string lights -->
+    <div class="light-string" aria-hidden="true">
+      {['#E91E8C','#FF6B35','#FFD700','#fff','#E91E8C','#FF4081','#FFD700','#FF6B35','#E91E8C','#fff','#FF6B35','#FFD700','#E91E8C','#FF4081'].map((c, i) => (
+        <span class="bulb" style={`--c:${c};--i:${i}`}></span>
+      ))}
+    </div>
+
     <span class="section-tag">Festival</span>
-    <h2>Amarante local parties</h2>
-    <p>Adventures coming soon...</p>
-    <!-- <p>
-      Week three. The city had been building to this for days — scaffolding going up on the bridge,
-      food stalls appearing overnight, strings of lights suddenly everywhere. Then on Thursday evening
+    <h2 class="neon-heading">NIGTHS IN AMARANTE</h2>
+    <p>
+      Week three. The city had been building to this for days.
+      Food stalls appearing overnight, strings of lights suddenly everywhere. Then on Thursday evening
       the Festa de São Gonçalo begins and Amarante remembers exactly who it is.
     </p>
     <p>
       São Gonçalo, patron saint of marriages, has been celebrated here since the 12th century.
       The church that bears his name glows at night, and the processions that wind through the old streets
-      carry centuries of tradition. But the festa is also deeply alive — music until 4am, wine, dancing,
-      fireworks over the Tâmega that you feel in your chest.
+      carry centuries of tradition. But the festa is also deeply alive.
     </p>
     <p>
-      We watched one night from the Roman bridge. The reflections in the river turned each burst into two.
-      There are things you don't forget.
-    </p> -->
-
-    <!-- <div class="festival-stats">
-      <div class="stat-card">
-        <span class="stat-num">3</span>
-        <span class="stat-label">Nights of festa</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-num">~4am</span>
-        <span class="stat-label">Average bedtime</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-num">∞</span>
-        <span class="stat-label">Fireworks over the river</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-num">XII</span>
-        <span class="stat-label">Centuries of tradition</span>
-      </div>
-    </div>
+      This week, the city of Amarante becomes a city full of celebrations and parties. Every corner of the city is filled with music, laughter and a lot of tradition.
+    </p>
+    <p>
+      We watched the fireworks over the river, tried the local delicacies and stayed up until late. It was a week of pure joy and celebration, a week that showed us the true spirit of Amarante and its people.
+    </p>
+    <p>
+      Our bosses, Joana and João, gave us a free day on friday 5th, so we could enjoy the festivities without worying about work. So we had a long weekend to explore the city, meet the locals and enjoy this nights.
+    </p>
+    <p>
+      We strongly recommend checking out this week photos at the <a href="/gallery">gallery</a>!
+    </p>
   </section>
 
-<section class="content-section draw-section">
-    <div class="draw-svg-wrapper">
-      <svg class="draw-svg" viewBox="0 0 1000 110" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-        <text class="draw-text" x="500" y="85" text-anchor="middle">São Gonçalo</text>
-      </svg>
-    </div>
-  </section> -->
 
   <section class="content-section">
     <span class="section-tag">Photos</span>
     <h2>The week in images</h2>
     <div class="photo-grid">
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week3/week03-03.webp" alt="Photo 1"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week3/week03-04.webp" alt="Photo 2"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week3/week03-05.webp" alt="Photo 3"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week3/week03-06.webp" alt="Photo 4"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week3/week03-26.webp" alt="Photo 5"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week3/week03-08.webp" alt="Photo 6"></div>
     </div>
   </section>
 
@@ -131,6 +119,78 @@ if (!PUBLISHED_WEEKS.includes(3)) return Astro.redirect('/');
     .content-section {
       position: relative;
       z-index: 2;
+    }
+
+    /* ── FESTIVAL STRING LIGHTS ── */
+    .light-string {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 0 0.5rem;
+      margin-bottom: 2rem;
+      border-top: 2px solid rgba(255,255,255,0.15);
+      padding-top: 12px;
+      gap: 0;
+    }
+    .bulb {
+      display: block;
+      width: 13px;
+      height: 18px;
+      background: var(--c);
+      border-radius: 3px 3px 50% 50%;
+      box-shadow: 0 0 8px 3px var(--c), 0 0 18px 6px var(--c);
+      animation: bulbFlicker 1.8s ease-in-out infinite;
+      animation-delay: calc(var(--i) * 0.18s);
+      flex-shrink: 0;
+    }
+    @keyframes bulbFlicker {
+      0%, 100% { opacity: 1; }
+      45%       { opacity: 0.9; }
+      50%       { opacity: 0.2; }
+      55%       { opacity: 1; }
+      80%       { opacity: 0.85; }
+    }
+
+    /* ── NEON HEADING ── */
+    .neon-heading {
+      color: #fff;
+      text-shadow:
+        0 0 6px #fff,
+        0 0 14px #E91E8C,
+        0 0 40px #E91E8C,
+        0 0 80px rgba(233,30,140,0.5);
+      animation: neonFlicker 5s infinite;
+    }
+    @keyframes neonFlicker {
+      0%, 19%, 21%, 23%, 75%, 77%, 100% {
+        text-shadow:
+          0 0 6px #fff,
+          0 0 14px #E91E8C,
+          0 0 40px #E91E8C,
+          0 0 80px rgba(233,30,140,0.5);
+        opacity: 1;
+      }
+      20%, 76% {
+        text-shadow: none;
+        opacity: 0.6;
+      }
+      22% {
+        text-shadow: none;
+        opacity: 0.8;
+      }
+    }
+
+    /* ── SPARKLE (injected by JS) ── */
+    :global(.sparkle) {
+      position: fixed;
+      pointer-events: none;
+      border-radius: 50%;
+      animation: sparkleFade 0.7s ease-out forwards;
+      z-index: 9999;
+    }
+    @keyframes sparkleFade {
+      0%   { transform: scale(1) translateY(0);   opacity: 1; }
+      100% { transform: scale(0) translateY(-18px); opacity: 0; }
     }
 
     /* Festival stat cards */

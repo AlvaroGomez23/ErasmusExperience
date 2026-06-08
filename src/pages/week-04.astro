@@ -8,7 +8,7 @@ if (!PUBLISHED_WEEKS.includes(4)) return Astro.redirect('/');
   week={4}
   title="04"
   subtitle="New people, new friends"
-  dates="Week 4"
+  dates="8 - 14 JUN"
   primaryColor="#FFD700"
   accentColor="#FF6B35"
   bgColor="#fffbf0"
@@ -16,29 +16,189 @@ if (!PUBLISHED_WEEKS.includes(4)) return Astro.redirect('/');
   prevTitle="Week 03"
   nextSlug="week-05"
   nextTitle="Week 05"
+  modelPath="skip"
 >
-  <section class="content-section">
-    <span class="section-tag">People</span>
-    <h2>The ones who make the journey</h2>
-    <p>
-      An Erasmus isn't just about places. It's the people you meet, the conversations
-      at 2 in the morning, the unexpected adventure companions.
-    </p>
-  </section>
+  <section class="content-section wip-section">
 
-  <section class="content-section">
-    <span class="section-tag">Photos</span>
-    <h2>The week in images</h2>
-    <div class="photo-grid">
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
+    <div class="tape tape-top">
+      {Array.from({length: 12}).map(() => <span class="tape-cell">⚠ UNDER CONSTRUCTION ⚠</span>)}
+    </div>
+
+    <div class="wip-inner">
+      <div class="warning-lights">
+        <span class="light"></span>
+        <span class="light"></span>
+        <span class="light"></span>
+      </div>
+
+      <p class="wip-tag">WEEK 04</p>
+      <h2 class="wip-title">Building<br/>memories...</h2>
+      <p class="wip-sub">This week is still under construction.<br/>Check back soon — the scaffolding comes down eventually.</p>
+
+      <div class="progress-wrap">
+        <div class="progress-track">
+          <div id="wip-fill" class="progress-fill"></div>
+        </div>
+        <span class="progress-label">loading week_04 ...</span>
+      </div>
+
+      <div id="wip-terminal" class="terminal"></div>
+    </div>
+
+    <div class="tape tape-bot">
+      {Array.from({length: 12}).map(() => <span class="tape-cell">⚠ UNDER CONSTRUCTION ⚠</span>)}
     </div>
   </section>
+
   <script>
     import '../scripts/three-week-04.ts';
   </script>
+
+  <style is:global>
+    .hero-subtitle, .hero-dates, .scroll-hint { color: rgba(30,20,0,0.7); }
+  </style>
+
+  <style>
+    .wip-section {
+      padding: 0 !important;
+      overflow: hidden;
+      background: rgba(255, 251, 240, 0.85);
+      border-radius: 2rem;
+    }
+
+    /* ── TAPE ── */
+    .tape {
+      display: flex;
+      overflow: hidden;
+      background: #FFD700;
+      padding: 0.55rem 0;
+      gap: 0;
+    }
+    .tape-top { transform: rotate(-1deg) translateY(-4px); }
+    .tape-bot { transform: rotate(1deg) translateY(4px); }
+    .tape-cell {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #1a1000;
+      white-space: nowrap;
+      padding: 0 1.2rem;
+      flex-shrink: 0;
+      animation: tapeScroll 12s linear infinite;
+    }
+    .tape-bot .tape-cell { animation-direction: reverse; }
+    @keyframes tapeScroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-100%); }
+    }
+
+    /* ── INNER ── */
+    .wip-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 3rem 2rem 3.5rem;
+      gap: 1.2rem;
+    }
+
+    /* ── WARNING LIGHTS ── */
+    .warning-lights {
+      display: flex;
+      gap: 1rem;
+    }
+    .light {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #FFD700;
+      box-shadow: 0 0 12px 4px rgba(255, 215, 0, 0.6);
+      animation: blink 1.1s step-start infinite;
+    }
+    .light:nth-child(2) { animation-delay: 0.37s; }
+    .light:nth-child(3) { animation-delay: 0.74s; }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.1; }
+    }
+
+    /* ── TEXT ── */
+    .wip-tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #FF6B35;
+      margin: 0;
+    }
+    .wip-title {
+      font-size: clamp(2.8rem, 8vw, 5rem);
+      font-weight: 900;
+      line-height: 1;
+      color: #1a1000;
+      margin: 0;
+    }
+    .wip-sub {
+      font-size: 1rem;
+      color: rgba(30, 20, 0, 0.6);
+      max-width: 38ch;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* ── PROGRESS ── */
+    .progress-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
+      max-width: 360px;
+    }
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(0,0,0,0.08);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #FFD700, #FF6B35);
+      border-radius: 99px;
+    }
+    .progress-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      color: rgba(30,20,0,0.45);
+      text-transform: uppercase;
+    }
+
+    /* ── TERMINAL ── */
+    .terminal {
+      width: 100%;
+      max-width: 420px;
+      background: #0d0d0d;
+      border-radius: 0.75rem;
+      padding: 1.2rem 1.4rem;
+      text-align: left;
+      min-height: 9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      border: 1px solid rgba(255, 215, 0, 0.2);
+    }
+    :global(.term-line) {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: #FFD700;
+      letter-spacing: 0.04em;
+      line-height: 1.5;
+      white-space: pre;
+    }
+  </style>
 </WeekLayout>

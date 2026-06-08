@@ -42,3 +42,11 @@
 [2026-06-03] — Week-03: fixed invisible trails in click-to-shoot canvas — swapped THREE.Line → THREE.Points (linewidth not supported in WebGL so lines were 1px invisible), raised rocket start from y=-8 to y=-6.5 so trail enters inline canvas viewport from frame 1.
 [2026-06-03] — Week-03: removed click-to-shoot inline canvas section (not adding value).
 [2026-06-03] — Week-03: added 42 spinning 3D confetti ribbons (BoxGeometry, festival colors, per-piece random rotation/drift, sine-wave sway, loop from bottom when exiting top).
+[2026-06-08] — Week-03: replaced octahedron wireframe with Star.glb model (scale 3.8) as central 3D object; loaded via GLTFLoader with pink wireframe material matching week color.
+[2026-06-08] — Week-03: Star model now full solid mesh (MeshStandardMaterial, pink+emissive+metalness), Y-axis-only spin, three-point lighting (ambient + pink directional + orange fill).
+[2026-06-08] — Week-02: fixed double border on photos — each photo-item had a redundant nested photo-item div, removed inner wrapper.
+[2026-06-08] — Gallery: synced all week subtitles in gallery.ts to match weeks.ts (weeks 1, 3, 4, 6, 7, 8, 9, 10, 11 were stale or mismatched).
+[2026-06-08] — Party page: fixed week-dot styles not applying — moved .week-dot/.week-strip overrides from scoped <style> to <style is:global> so they reach inside WeekStrip child component. Now matches week-03 navbar exactly.
+[2026-06-08] — Party gate: escape link now a pill button with breathing pulse animation (opacity 0.45↔1 loop), pauses on hover with full white; text "← take me back home". Escape key still works too.
+[2026-06-08] — Week-04: full WIP construction page — 3D gold cubes fall+stack with bounce (GSAP), rotating scaffold wireframe, construction tape banners, pulsing warning lights, fake terminal typewriter with build logs, progress bar that never finishes.
+[2026-06-08] — Week-03: festival string lights (14 colored glowing bulbs strung across top of section, async flicker), neon flicker heading on "NIGTHS IN AMARANTE", sparkle cursor trail (pink/orange/gold dots float up from mouse while over content).

@@ -26,4 +26,7 @@ const { currentWeek } = Astro.props;
   >
     Gallery
   </a>
+  {Astro.url?.pathname === '/party' && (
+    <a href="/party" class="week-dot active" style="--dot-color:#ff006e">???</a>
+  )}
 </div>

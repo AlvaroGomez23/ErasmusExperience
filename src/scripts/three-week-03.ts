@@ -1,6 +1,7 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -156,13 +157,36 @@ function makeFireworks(scene: THREE.Scene) {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
 
-  // Week-3 central geometry: octahedron wireframe
   const wColor = new THREE.Color('#E91E8C');
-  const centralMesh = new THREE.Mesh(
-    new THREE.OctahedronGeometry(2.2),
-    new THREE.MeshBasicMaterial({ color: wColor, wireframe: true, transparent: true, opacity: 0.13 })
-  );
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+  const dirLight = new THREE.DirectionalLight(0xff88cc, 2.5);
+  dirLight.position.set(5, 8, 6);
+  scene.add(dirLight);
+  const fillLight = new THREE.DirectionalLight(0xff6b35, 1.0);
+  fillLight.position.set(-5, -3, 4);
+  scene.add(fillLight);
+
+  // Star GLB model as central object
+  let centralMesh: THREE.Object3D = new THREE.Object3D();
   scene.add(centralMesh);
+
+  new GLTFLoader().load('/models/Star.glb', (gltf) => {
+    const star = gltf.scene;
+    star.scale.setScalar(3.8);
+    star.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        mesh.material = new THREE.MeshStandardMaterial({
+          color: wColor,
+          emissive: new THREE.Color('#7a0040'),
+          metalness: 0.4,
+          roughness: 0.35,
+        });
+      }
+    });
+    centralMesh.add(star);
+  });
 
   // Orbital particle cloud around the octahedron
   const PART = 1500;
@@ -290,7 +314,6 @@ function makeFireworks(scene: THREE.Scene) {
     const dt = Math.min(bgClock.getDelta(), 0.05);
     bgT += dt;
 
-    centralMesh.rotation.x = bgT * 0.12;
     centralMesh.rotation.y = bgT * 0.18;
     orbitParticles.rotation.y = bgT * 0.04;
     orbitParticles.rotation.x = bgT * 0.02;
@@ -309,6 +332,29 @@ function makeFireworks(scene: THREE.Scene) {
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  });
+}
+
+// ─── SPARKLE CURSOR TRAIL ─────────────────────────────
+{
+  const SPARK_COLORS = ['#E91E8C','#FF6B35','#FFD700','#FF4081','#ffffff'];
+  const content = document.querySelector('.week-content');
+  let last = 0;
+  document.addEventListener('mousemove', (e) => {
+    if (!content?.contains(e.target as Node)) return;
+    const now = Date.now();
+    if (now - last < 40) return;
+    last = now;
+    const el = document.createElement('span');
+    el.className = 'sparkle';
+    const size = 5 + Math.random() * 7;
+    el.style.cssText = `
+      width:${size}px;height:${size}px;
+      left:${e.clientX - size/2}px;top:${e.clientY - size/2}px;
+      background:${SPARK_COLORS[Math.floor(Math.random()*SPARK_COLORS.length)]};
+    `;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 700);
   });
 }
 
