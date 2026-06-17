@@ -52,3 +52,30 @@
 [2026-06-08] — Week-03: festival string lights (14 colored glowing bulbs strung across top of section, async flicker), neon flicker heading on "NIGTHS IN AMARANTE", sparkle cursor trail (pink/orange/gold dots float up from mouse while over content).
 
 [2026-06-08] — Analytics: added @vercel/analytics to all pages (WeekLayout, index, gallery, party) via default import from @vercel/analytics/astro.
+
+[2026-06-09] — Week-04: full zen redesign — dark forest night sky (bgColor #0b1a12), layered mountain silhouette scene (6 PlaneGeometry ranges with displaced vertices + fog), moon with pulsing PointLight, drifting mist particles, stars; content replaced with frosted-dark-glass sections: kanji intro (友), serif haiku, Ma emptiness placeholder.
+[2026-06-09] — Week-04: zen scene updated to original warm gold/orange palette (#FFD700/#FF6B35/#fffbf0) — golden-hour mountains with sun sphere, warm-earth silhouettes, golden dust particles; added photos section (6 Supabase week4 images); removed dark overrides.
+[2026-06-09] — Week-04: added zen bird — 5-vertex line-art silhouette flies across sky randomly (12-18s crossing, 7-19s pause between), asymmetric wing flap (harder up, softer down), CatmullRom arc path, faces direction of travel.
+[2026-06-09] — Week-04: replaced line-art bird with Bird.glb (GLTFLoader + AnimationMixer for wing flap), bird spawns at z=9-11 (in front of all mountains), faces direction of travel via curve tangent.
+[2026-06-11] — Week-04: bird scale reduced 0.25→0.015; replaced time-based random flight with scroll-driven path (ScrollTrigger); two barrel rolls (yaw*pitch*roll quaternion composition) smoothstep-eased at ~25-48% and ~60-83% scroll; S-curve flight path with altitude swoops.
+[2026-06-11] — Week-04: fixed bird y-position — was flying at y=6.8–9.2 (above camera frustum, off-screen); moved to y=3.8–5.2 to land within visible band at z≈10.
+[2026-06-11] — Week-04: fixed bird orientation — model exported with body along +Y (spinning like helicopter); wrapped in pivot group, baked rotation.x=-π/2 on raw model so body aligns with +Z forward axis; barrel rolls now spin correctly around nose-to-tail axis.
+[2026-06-11] — Week-04: fixed bird flying backwards (showing tail to camera) — changed rotation.x correction from -π/2 to +π/2 so nose maps to +Z and yaw drives it in correct flight direction.
+[2026-06-11] — Week-04: fixed bird orientation definitively — raw model has forward=+X, up=+Z; applied quaternion(-0.5,-0.5,-0.5,0.5) (120° around (1,1,1)/√3) to remap forward→+Z and up→+Y in pivot-local space.
+[2026-06-11] — Week-04: removed barrel rolls; bird now glides straight top-left to bottom-right (y 5.2→2.0, x -28→28) across scroll.
+[2026-06-11] — Week-04: content revision — battery charging animation (CSS fill + JS counter, orange→gold colour shift), Tâmega river section (shorter/punchier copy, darker readable text), 3 tilted vibe cards (💤🏊🌅, rotate-on-hover CSS), removed daily log and numbers sections.
+[2026-06-11] — Week-04: readability pass — removed 友 kanji + gold glow animations; all font-weight:300 headings → 500; all low-opacity faint text boosted to 0.55–0.82; active bat-line orange darkened to #c85000.
+[2026-06-11] — Week-04: removed river wave SVGs, marquee strip, and "The river" section-tag; centered battery section content in frame.
+[2026-06-11] — Index: added "journey home" countdown — live days/hours/min/sec to departure (Jul 31 22:00 +01:00), progress bar with ✈ marker showing % of adventure lived, weeks-lived/weeks-left/days-to-go stats. Self-contained section + inline script.
+[2026-06-11] — Index countdown: START date corrected to 2026-05-20; added frosted-glass backdrop panel (blur+saturate, semi-opaque bg, green border) behind countdown for readability over globe canvas — globe left untouched to preserve hero composition.
+[2026-06-11] — Index countdown: added finished state at departure — clock hidden, "✈ Home. / 11 weeks, lived." message, copy flips to past tense, bar locks 100%, panel gets celebratory green glow pulse, interval cleared. Tested via temp past DEPART then reverted to 2026-07-31.
+[2026-06-11] — Index countdown bugfix: .cd-done/.cd-clock display:flex was overriding the [hidden] attribute (class beats [hidden] specificity), so "Home." finished-state showed permanently. Added .cd-clock[hidden],.cd-done[hidden]{display:none}.
+
+[2026-06-12] — Made progress-bar plane (index) bigger (1.1rem→2rem) so green fill reads as a trail behind it.
+[2026-06-12] — Week-04 section titles (zen/battery/tamega) now match other weeks: weight 900, UPPERCASE, solid color, removed gradient.
+[2026-06-12] — Week-04 titles now exact-match global h2 size/line-height: clamp(2rem,5vw,4rem), line-height 0.95.
+[2026-06-12] — Week-04 prose paragraphs (.tamega-body p) now match global .content-section p: 1.1rem, line-height 1.75, opacity 0.65.
+[2026-06-12] — Week-04 vibes: added 4th card "Until late" (talking by river past midnight); grid 3→4 cols, 2-col at <=880px.
+[2026-06-12] — Week-04 vibes grid back to 3 cols (user kept 3 cards).
+[2026-06-12] — Week-04: replaced haiku/Iku section with 3D incense scene (incense-week04.ts): vertical stick + flickering ember + shader-based smoke particles rising/swaying/fading. New #incense-canvas; removed haiku CSS.
+[2026-06-12] — Removed leftover incense import (was throwing on missing #incense-canvas → broke battery script) + deleted incense-week04.ts and incense CSS.

@@ -52,7 +52,7 @@ export const weeks: WeekData[] = [
     week: 4,
     slug: 'week-04',
     title: '04',
-    subtitle: 'New people, new friends',
+    subtitle: 'Calm after the noise',
     dates: 'Week 4',
     primaryColor: '#FFD700',
     accentColor: '#FF6B35',

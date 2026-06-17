@@ -1,108 +1,204 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// ─── BACKGROUND: falling cube construction scene ──────
+// ─── ZEN MOUNTAIN — GOLDEN HOUR ───────────────────────
 {
-  const canvas  = document.getElementById('three-canvas') as HTMLCanvasElement;
-  const scene   = new THREE.Scene();
-  const camera  = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 100);
-  camera.position.set(6, 5, 12);
-  camera.lookAt(0, 2, 0);
+  const canvas = document.getElementById('three-canvas') as HTMLCanvasElement;
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xfffbf0);
+  scene.fog = new THREE.Fog(0xfffbf0, 16, 46);
 
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  const camera = new THREE.PerspectiveCamera(62, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera.position.set(0, 3.5, 14);
+  camera.lookAt(0, 2.5, 0);
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
 
-  scene.add(new THREE.AmbientLight(0xffffff, 0.5));
-  const sun = new THREE.DirectionalLight(0xffe066, 3);
-  sun.position.set(5, 10, 7);
-  scene.add(sun);
-  const fill = new THREE.DirectionalLight(0xff6b35, 1);
-  fill.position.set(-6, -2, 4);
-  scene.add(fill);
+  // Warm golden lighting
+  scene.add(new THREE.AmbientLight(0xffe4c0, 3.0));
+  const sunRay = new THREE.DirectionalLight(0xffc840, 1.8);
+  sunRay.position.set(4, 9, 3);
+  scene.add(sunRay);
 
-  // Grid of cubes to stack — layout is a rough pyramid
-  const GRID: [number, number, number][] = [];
-  for (let x = -2; x <= 2; x++) {
-    for (let z = -2; z <= 2; z++) {
-      GRID.push([x, 0, z]);
-    }
-  }
-  for (let x = -1; x <= 1; x++) {
-    for (let z = -1; z <= 1; z++) {
-      GRID.push([x, 1, z]);
-    }
-  }
-  GRID.push([0, 2, 0], [-1, 2, 0], [1, 2, 0], [0, 2, -1], [0, 2, 1]);
-  GRID.push([0, 3, 0]);
-
-  const GOLD_SHADES = ['#FFD700', '#FFC200', '#FFAA00', '#FFE566', '#FF9800'];
-  const cubeGeo = new THREE.BoxGeometry(0.88, 0.88, 0.88);
-
-  const group = new THREE.Group();
-  scene.add(group);
-
-  const cubes: THREE.Mesh[] = [];
-
-  GRID.forEach(([x, y, z], i) => {
-    const col = GOLD_SHADES[i % GOLD_SHADES.length];
-    const mat = new THREE.MeshStandardMaterial({ color: new THREE.Color(col), metalness: 0.3, roughness: 0.5 });
-    const cube = new THREE.Mesh(cubeGeo, mat);
-    cube.position.set(x, 18 + i * 0.4, z); // start high above
-    group.add(cube);
-    cubes.push(cube);
-
-    gsap.to(cube.position, {
-      y,
-      duration: 0.7,
-      delay: 0.3 + i * 0.08,
-      ease: 'bounce.out',
-    });
-  });
-
-  // Wire scaffolding box around the structure
-  const scaffoldGeo = new THREE.BoxGeometry(6, 5, 6);
-  const scaffoldEdges = new THREE.EdgesGeometry(scaffoldGeo);
-  const scaffold = new THREE.LineSegments(
-    scaffoldEdges,
-    new THREE.LineBasicMaterial({ color: 0xffd700, transparent: true, opacity: 0.18 })
+  // Sun
+  const sunMesh = new THREE.Mesh(
+    new THREE.SphereGeometry(1.0, 24, 24),
+    new THREE.MeshBasicMaterial({ color: 0xffe566 })
   );
-  scaffold.position.set(0, 2, 0);
-  scene.add(scaffold);
+  sunMesh.position.set(6, 11, -7);
+  scene.add(sunMesh);
 
-  // Particles
-  const pPos = new Float32Array(800 * 3);
-  for (let i = 0; i < 800; i++) {
-    pPos[i*3]   = (Math.random() - 0.5) * 28;
-    pPos[i*3+1] = (Math.random() - 0.5) * 20;
-    pPos[i*3+2] = (Math.random() - 0.5) * 14;
+  const haloGeo = new THREE.CircleGeometry(2.8, 32);
+  const halo = new THREE.Mesh(haloGeo, new THREE.MeshBasicMaterial({
+    color: 0xffd700, transparent: true, opacity: 0.07, side: THREE.DoubleSide,
+  }));
+  halo.position.set(6, 11, -7.1);
+  scene.add(halo);
+
+  const sunGlow = new THREE.PointLight(0xff8820, 4, 26);
+  sunGlow.position.copy(sunMesh.position);
+  scene.add(sunGlow);
+
+  // Mountain ranges
+  function makeMountainRange(maxPeak: number, zPos: number, color: number, seed: number): THREE.Mesh {
+    const planeH = maxPeak + 6;
+    const geo = new THREE.PlaneGeometry(55, planeH, 120, 1);
+    const pos = geo.attributes.position as THREE.BufferAttribute;
+
+    for (let i = 0; i < pos.count; i++) {
+      if (pos.getY(i) > 0) {
+        const x = pos.getX(i);
+        const h =
+          (Math.sin(x * 0.14 + seed)        + 1) * 0.30 +
+          (Math.sin(x * 0.35 + seed * 1.7)  + 1) * 0.22 +
+          (Math.sin(x * 0.71 + seed * 0.8)  + 1) * 0.18 +
+          (Math.sin(x * 1.42 + seed * 2.3)  + 1) * 0.10 +
+          (Math.sin(x * 2.84 + seed * 1.1)  + 1) * 0.05 +
+          (Math.sin(x * 5.68 + seed * 3.2)  + 1) * 0.02;
+        pos.setY(i, (h / 1.74) * maxPeak);
+      }
+    }
+    pos.needsUpdate = true;
+    geo.computeVertexNormals();
+
+    const mesh = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({ color, fog: true }));
+    mesh.position.set(0, -4 + planeH / 2, zPos);
+    return mesh;
   }
-  const pGeo = new THREE.BufferGeometry();
-  pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-  scene.add(new THREE.Points(pGeo, new THREE.PointsMaterial({
-    size: 0.04, color: 0xffd700, transparent: true, opacity: 0.35, sizeAttenuation: true,
+
+  scene.add(makeMountainRange(3.0,  8,  0x2a1a08, 1.10));
+  scene.add(makeMountainRange(4.5,  5,  0x3d2810, 2.55));
+  scene.add(makeMountainRange(6.0,  2,  0x5a3c18, 3.92));
+  scene.add(makeMountainRange(7.5, -2,  0x784e20, 5.41));
+  scene.add(makeMountainRange(8.0, -7,  0x966228, 7.03));
+  scene.add(makeMountainRange(7.0, -13, 0xb47830, 8.77));
+
+  // Golden dust
+  const DUST = 900;
+  const dustArr = new Float32Array(DUST * 3);
+  for (let i = 0; i < DUST; i++) {
+    dustArr[i * 3]     = (Math.random() - 0.5) * 50;
+    dustArr[i * 3 + 1] = Math.random() * 8;
+    dustArr[i * 3 + 2] = (Math.random() - 0.5) * 30 + 5;
+  }
+  const dustGeo = new THREE.BufferGeometry();
+  dustGeo.setAttribute('position', new THREE.BufferAttribute(dustArr, 3));
+  scene.add(new THREE.Points(dustGeo, new THREE.PointsMaterial({
+    size: 0.10, color: 0xffc840, transparent: true, opacity: 0.25, sizeAttenuation: true, fog: true,
   })));
 
+  // ─── SCROLL-DRIVEN BIRD ───────────────────────────────
+  const flightPath = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(-28,  5.2, 10.5),
+    new THREE.Vector3(-14,  4.4, 10.0),
+    new THREE.Vector3(  0,  3.6,  9.5),
+    new THREE.Vector3( 14,  2.8, 10.0),
+    new THREE.Vector3( 28,  2.0, 10.5),
+  ]);
+
+  let birdPivot: THREE.Group | null = null;
+  let birdMixer: THREE.AnimationMixer | null = null;
+  let scrollProg = 0;
+
+  // Pre-allocated quaternion/vector scratch objects — no per-frame allocation
+  const _qYaw   = new THREE.Quaternion();
+  const _qPitch = new THREE.Quaternion();
+  const _axisY  = new THREE.Vector3(0, 1, 0);
+  const _axisX  = new THREE.Vector3(1, 0, 0);
+
+  new GLTFLoader().load('/models/Bird.glb', (gltf) => {
+    const birdModel = gltf.scene;
+    birdModel.scale.setScalar(0.015);
+    // Raw model: forward=+X, up=+Z — need forward=+Z, up=+Y in pivot-local space.
+    // 120° rotation around (1,1,1)/√3 achieves both: q=(-0.5,-0.5,-0.5, 0.5)
+    birdModel.quaternion.set(-0.5, -0.5, -0.5, 0.5);
+
+    birdPivot = new THREE.Group();
+    birdPivot.add(birdModel);
+    birdPivot.visible = false;
+    scene.add(birdPivot);
+
+    if (gltf.animations.length > 0) {
+      birdMixer = new THREE.AnimationMixer(birdModel);
+      birdMixer.clipAction(gltf.animations[0]).play();
+    }
+  });
+
+  ScrollTrigger.create({
+    trigger: document.body,
+    start: 'top top',
+    end: 'bottom bottom',
+    onUpdate: (self) => { scrollProg = self.progress; },
+  });
+
   // Mouse parallax
-  let tx = 0, ty = 0;
+  let mx = 0, my = 0;
   window.addEventListener('mousemove', (e) => {
-    tx =  (e.clientX / window.innerWidth  - 0.5) * 2;
-    ty = -(e.clientY / window.innerHeight - 0.5) * 1.2;
+    mx = (e.clientX / window.innerWidth  - 0.5) * 2;
+    my = -(e.clientY / window.innerHeight - 0.5) * 2;
   });
 
   const clock = new THREE.Clock();
+  let prevT = 0;
+
   (function tick() {
     requestAnimationFrame(tick);
-    const t = clock.getElapsedTime();
-    group.rotation.y = t * 0.12;
-    scaffold.rotation.y = t * 0.08;
-    camera.position.x += (tx - camera.position.x) * 0.04;
-    camera.position.y += (ty + 5 - camera.position.y) * 0.04;
-    camera.lookAt(0, 2, 0);
+    const t  = clock.getElapsedTime();
+    const dt = t - prevT;
+    prevT = t;
+
+    // Camera parallax
+    camera.position.x += (mx * 2.0 - camera.position.x) * 0.016;
+    camera.position.y += (my * 0.8 + 3.5 - camera.position.y) * 0.016;
+    camera.lookAt(0, 2.5, 0);
+
+    // Sun breathe
+    sunGlow.intensity = 3.5 + Math.sin(t * 0.4) * 0.8;
+
+    // Dust drift
+    const dp = dustGeo.attributes.position as THREE.BufferAttribute;
+    for (let i = 0; i < DUST; i++) {
+      const nx = dp.getX(i) + 0.002;
+      const ny = dp.getY(i) + 0.001;
+      dp.setX(i, nx > 25 ? -25 : nx);
+      dp.setY(i, ny > 9  ? 0   : ny);
+    }
+    dp.needsUpdate = true;
+
+    if (birdMixer) birdMixer.update(dt);
+
+    // ── Bird scroll-driven flight ──────────────────────
+    if (birdPivot) {
+      const BIRD_START = 0.02;
+      const BIRD_END   = 0.98;
+
+      if (scrollProg < BIRD_START || scrollProg > BIRD_END) {
+        birdPivot.visible = false;
+      } else {
+        birdPivot.visible = true;
+        const p = (scrollProg - BIRD_START) / (BIRD_END - BIRD_START);
+
+        const pos     = flightPath.getPoint(p);
+        const tangent = flightPath.getTangent(p);
+        birdPivot.position.copy(pos);
+
+        const yaw   = Math.atan2(tangent.x, tangent.z);
+        const pitch = -Math.asin(Math.max(-0.9, Math.min(0.9, tangent.y)));
+
+        _qYaw.setFromAxisAngle(_axisY, yaw);
+        _qPitch.setFromAxisAngle(_axisX, pitch);
+
+        birdPivot.quaternion.copy(_qYaw).multiply(_qPitch);
+      }
+    }
+
     renderer.render(scene, camera);
   })();
 
@@ -114,49 +210,10 @@ gsap.registerPlugin(ScrollTrigger);
   });
 }
 
-// ─── TERMINAL TYPEWRITER ──────────────────────────────
-const LOGS = [
-  '> initializing week_04.md ...',
-  '> scanning photos/ directory ...',
-  '> found 0 memories. retrying ...',
-  '> compiling inside_jokes.ts ...',
-  '> WARNING: content not ready',
-  '> uploading laughs ... 12%',
-  '> build failed. check back soon.',
-];
-
-const terminal = document.getElementById('wip-terminal');
-if (terminal) {
-  let logI = 0;
-  function typeLog() {
-    if (logI >= LOGS.length) { logI = 0; terminal!.innerHTML = ''; }
-    const line = document.createElement('div');
-    line.className = 'term-line';
-    terminal!.appendChild(line);
-    const txt = LOGS[logI++];
-    let ci = 0;
-    const iv = setInterval(() => {
-      line.textContent = txt.slice(0, ++ci);
-      if (ci >= txt.length) { clearInterval(iv); setTimeout(typeLog, 700); }
-    }, 38);
-  }
-  typeLog();
-}
-
-// ─── PROGRESS BAR (never finishes) ───────────────────
-const fill = document.getElementById('wip-fill');
-if (fill) {
-  gsap.to(fill, { width: '73%', duration: 6, ease: 'power1.inOut', onComplete: () => {
-    gsap.to(fill, { width: '0%', duration: 0.4, delay: 0.8, onComplete: () => {
-      gsap.to(fill, { width: '73%', duration: 6, ease: 'power1.inOut', repeat: -1, yoyo: true });
-    }});
-  }});
-}
-
-// ─── SHARED GSAP (section reveals) ───────────────────
+// Section fade-ins
 gsap.utils.toArray<HTMLElement>('.content-section').forEach((s) => {
-  gsap.fromTo(s, { y: 60, opacity: 0 }, {
-    y: 0, opacity: 1, duration: 1, ease: 'power2.out',
+  gsap.fromTo(s, { y: 40, opacity: 0 }, {
+    y: 0, opacity: 1, duration: 1.4, ease: 'power2.out',
     scrollTrigger: { trigger: s, start: 'top 82%' },
   });
 });

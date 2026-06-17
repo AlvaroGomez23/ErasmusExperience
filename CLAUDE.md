@@ -59,6 +59,7 @@ Every week page has **two** independent Three.js canvases:
 `[YYYY-MM-DD]  — brief summary`
 - Read this file at the start of every session
 REMEMBER TO ADD THE ENTRIES AT THE END OF THE FILE.
+- It's not needed to do npm run, unless it's specifically said.
 
 ## 1. Think Before Coding
 

@@ -61,6 +61,43 @@ import Analytics from '@vercel/analytics/astro';
       </div>
     </section>
 
+    <!-- COUNTDOWN -->
+    <section class="countdown-section content-section" id="countdown">
+      <span class="section-tag">The journey home</span>
+      <h2 class="cd-title">Our time left for<br> <span>August&nbsp;1st</span></h2>
+      <p class="cd-sub">We leave Portugal on July&nbsp;31 · 22:00 — home by the 1st.</p>
+
+      <div class="cd-clock" data-clock>
+        <div class="cd-unit"><span class="cd-num" data-days>00</span><span class="cd-lbl">days</span></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-unit"><span class="cd-num" data-hrs>00</span><span class="cd-lbl">hours</span></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-unit"><span class="cd-num" data-min>00</span><span class="cd-lbl">min</span></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-unit"><span class="cd-num" data-sec>00</span><span class="cd-lbl">sec</span></div>
+      </div>
+
+      <div class="cd-done" data-done hidden>
+        <span class="cd-done-icon">✈</span>
+        <p class="cd-done-line">Home.</p>
+        <p class="cd-done-sub">11 weeks, lived.</p>
+      </div>
+
+      <div class="cd-progress">
+        <div class="cd-bar"><div class="cd-fill" data-fill><span class="cd-plane">✈</span></div></div>
+        <div class="cd-progress-meta">
+          <span class="cd-pct" data-pct>0%</span>
+          <span>of the adventure lived</span>
+        </div>
+      </div>
+
+      <div class="cd-stats">
+        <div><strong data-weeks-done>0</strong><span>weeks lived</span></div>
+        <div><strong data-weeks-left>11</strong><span>weeks left</span></div>
+        <div><strong data-days-left>0</strong><span>days to go</span></div>
+      </div>
+    </section>
+
     <!-- WEEKS GRID -->
     <section class="weeks-section">
       <div class="weeks-section-header content-section">
@@ -129,6 +166,211 @@ import Analytics from '@vercel/analytics/astro';
         nav?.classList.toggle('is-scrolled', window.scrollY > 20);
       }, { passive: true });
     </script>
+    <script>
+      // ── COUNTDOWN to departure (Portugal WEST = UTC+1) ──
+      const START  = new Date('2026-05-20T00:00:00+01:00').getTime(); // week 01 begins
+      const DEPART = new Date('2026-07-31T22:00:00+01:00').getTime(); // wheels up
+      const TOTAL_WEEKS = 11;
+      const DAY = 86400000;
+
+      const $ = (sel: string) => document.querySelector<HTMLElement>(sel);
+      const section = $('#countdown');
+      const elClock = $('[data-clock]');
+      const elDone  = $('[data-done]');
+      const elSub   = $('.cd-sub');
+      const elMeta  = document.querySelector<HTMLElement>('.cd-progress-meta span:last-child');
+      const elDays  = $('[data-days]');
+      const elHrs   = $('[data-hrs]');
+      const elMin   = $('[data-min]');
+      const elSec   = $('[data-sec]');
+      const elFill  = $('[data-fill]');
+      const elPct   = $('[data-pct]');
+      const elWDone = $('[data-weeks-done]');
+      const elWLeft = $('[data-weeks-left]');
+      const elDLeft = $('[data-days-left]');
+      const pad = (n: number) => String(n).padStart(2, '0');
+
+      let timer = 0;
+
+      function finish() {
+        if (section?.classList.contains('is-complete')) return;
+        section?.classList.add('is-complete');
+        elClock?.setAttribute('hidden', '');
+        elDone?.removeAttribute('hidden');
+        if (elSub)  elSub.textContent  = 'July 31 · 22:00 — we made it home.';
+        if (elMeta) elMeta.textContent = 'adventure complete';
+        if (elFill) elFill.style.width = '100%';
+        if (elPct)  elPct.textContent  = '100%';
+        if (elWDone) elWDone.textContent = String(TOTAL_WEEKS);
+        if (elWLeft) elWLeft.textContent = '0';
+        if (elDLeft) elDLeft.textContent = '0';
+        clearInterval(timer);
+      }
+
+      function update() {
+        const now = Date.now();
+        const left = Math.max(0, DEPART - now);
+
+        if (left <= 0) { finish(); return; }
+
+        const d = Math.floor(left / DAY);
+        const h = Math.floor((left % DAY) / 3600000);
+        const m = Math.floor((left % 3600000) / 60000);
+        const s = Math.floor((left % 60000) / 1000);
+        if (elDays) elDays.textContent = pad(d);
+        if (elHrs)  elHrs.textContent  = pad(h);
+        if (elMin)  elMin.textContent  = pad(m);
+        if (elSec)  elSec.textContent  = pad(s);
+
+        const prog = Math.min(1, Math.max(0, (now - START) / (DEPART - START)));
+        const pct = Math.round(prog * 100);
+        if (elFill) elFill.style.width = (prog * 100) + '%';
+        if (elPct)  elPct.textContent  = pct + '%';
+
+        const elapsedDays = Math.max(0, (now - START) / DAY);
+        const wDone = Math.min(TOTAL_WEEKS, Math.floor(elapsedDays / 7));
+        if (elWDone) elWDone.textContent = String(wDone);
+        if (elWLeft) elWLeft.textContent = String(TOTAL_WEEKS - wDone);
+        if (elDLeft) elDLeft.textContent = String(Math.ceil(left / DAY));
+      }
+
+      update();
+      timer = window.setInterval(update, 1000);
+    </script>
     <Analytics />
+
+    <style>
+      .countdown-section {
+        position: relative; z-index: 1;
+        max-width: 760px; margin: 4rem auto; padding: 3.5rem 2.5rem;
+        text-align: center;
+        background: rgba(248, 245, 238, 0.72);
+        backdrop-filter: blur(14px) saturate(1.1);
+        -webkit-backdrop-filter: blur(14px) saturate(1.1);
+        border: 1px solid rgba(136,206,2,0.22);
+        border-radius: 1.5rem;
+        box-shadow: 0 18px 50px rgba(30,50,10,0.12);
+      }
+      .cd-title {
+        font-size: clamp(1.8rem, 4.5vw, 2.8rem); font-weight: 600;
+        line-height: 1.15; margin: 0.8rem 0 0.5rem; color: #1f2a12;
+      }
+      .cd-title span {
+        background: linear-gradient(120deg, #88CE02, #4CAF50);
+        -webkit-background-clip: text; background-clip: text; color: transparent;
+      }
+      .cd-sub {
+        font-family: var(--font-mono); font-size: 0.8rem;
+        letter-spacing: 0.04em; color: rgba(40,60,20,0.7);
+        margin: 0 auto 2.5rem; max-width: 38ch; text-align: center;
+      }
+
+      .cd-clock {
+        display: flex; align-items: flex-start; justify-content: center;
+        gap: 0.6rem; margin-bottom: 2.6rem;
+      }
+      .cd-unit {
+        display: flex; flex-direction: column; align-items: center;
+        min-width: 78px;
+        background: rgba(136,206,2,0.08);
+        border: 1px solid rgba(136,206,2,0.28);
+        border-radius: 0.9rem; padding: 1rem 0.6rem;
+      }
+      .cd-num {
+        font-family: var(--font-mono); font-weight: 700;
+        font-size: clamp(1.8rem, 5vw, 2.8rem); line-height: 1;
+        color: #2e7d12; font-variant-numeric: tabular-nums;
+      }
+      .cd-lbl {
+        font-family: var(--font-mono); font-size: 0.6rem;
+        letter-spacing: 0.22em; text-transform: uppercase;
+        color: rgba(40,60,20,0.6); margin-top: 0.55rem;
+      }
+      .cd-sep {
+        font-size: clamp(1.4rem, 4vw, 2.2rem); font-weight: 700;
+        color: rgba(136,206,2,0.5); align-self: center; margin-top: -0.6rem;
+      }
+      @media (max-width: 480px) {
+        .cd-unit { min-width: 0; flex: 1; padding: 0.7rem 0.3rem; }
+        .cd-sep { display: none; }
+      }
+
+      .cd-progress { margin-bottom: 2.4rem; }
+      .cd-bar {
+        position: relative; height: 12px; border-radius: 999px;
+        background: rgba(40,60,20,0.1); overflow: visible;
+      }
+      .cd-fill {
+        position: absolute; inset: 0 auto 0 0; width: 0%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #88CE02, #4CAF50);
+        transition: width 0.8s ease;
+      }
+      .cd-plane {
+        position: absolute; right: -16px; top: 50%;
+        transform: translateY(-50%); font-size: 2rem;
+        line-height: 1; display: block;
+        filter: drop-shadow(0 2px 4px rgba(40,80,0,0.4));
+      }
+      .cd-progress-meta {
+        display: flex; align-items: baseline; justify-content: center;
+        gap: 0.5rem; margin-top: 1rem;
+      }
+      .cd-pct {
+        font-family: var(--font-mono); font-weight: 700;
+        font-size: 1.4rem; color: #2e7d12;
+      }
+      .cd-progress-meta span:last-child {
+        font-family: var(--font-mono); font-size: 0.72rem;
+        letter-spacing: 0.05em; color: rgba(40,60,20,0.65);
+      }
+
+      .cd-stats {
+        display: grid; grid-template-columns: repeat(3, 1fr);
+        gap: 1rem; max-width: 460px; margin: 0 auto;
+      }
+      .cd-stats div { display: flex; flex-direction: column; align-items: center; }
+      .cd-stats strong {
+        font-family: var(--font-mono); font-size: 1.5rem;
+        color: #1f2a12; font-variant-numeric: tabular-nums;
+      }
+      .cd-stats span {
+        font-family: var(--font-mono); font-size: 0.62rem;
+        letter-spacing: 0.16em; text-transform: uppercase;
+        color: rgba(40,60,20,0.6); margin-top: 0.3rem;
+      }
+
+      /* ── FINISHED STATE ── */
+      .cd-clock[hidden], .cd-done[hidden] { display: none; }
+      .cd-done {
+        display: flex; flex-direction: column; align-items: center;
+        margin-bottom: 2.6rem;
+      }
+      .cd-done-icon {
+        font-size: clamp(2.6rem, 7vw, 3.6rem); line-height: 1;
+        animation: cd-land 3s ease-in-out infinite;
+        filter: drop-shadow(0 3px 6px rgba(40,80,0,0.3));
+      }
+      @keyframes cd-land {
+        0%, 100% { transform: translateY(0) rotate(-4deg); }
+        50%      { transform: translateY(-8px) rotate(4deg); }
+      }
+      .cd-done-line {
+        font-size: clamp(2rem, 6vw, 3rem); font-weight: 700;
+        margin: 0.6rem 0 0; color: #2e7d12; letter-spacing: -0.01em;
+      }
+      .cd-done-sub {
+        font-family: var(--font-mono); font-size: 0.85rem;
+        letter-spacing: 0.05em; color: rgba(40,60,20,0.7); margin: 0.4rem 0 0;
+      }
+      .countdown-section.is-complete {
+        border-color: rgba(136,206,2,0.5);
+        animation: cd-celebrate 2.4s ease-in-out infinite;
+      }
+      @keyframes cd-celebrate {
+        0%, 100% { box-shadow: 0 18px 50px rgba(30,50,10,0.12); }
+        50%      { box-shadow: 0 18px 60px rgba(136,206,2,0.35); }
+      }
+    </style>
   </body>
 </html>

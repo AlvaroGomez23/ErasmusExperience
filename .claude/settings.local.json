@@ -10,7 +10,8 @@
       "Bash(echo \"exit: $?\")",
       "Bash(Select-String -Path \"src\\\\pages\\\\gallery.astro\",\"src\\\\pages\\\\party.astro\" -Pattern \"WeekLayout|<!doctype|<html\")",
       "Bash(Select-Object -First 10)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Skill(run)"
     ]
   }
 }
