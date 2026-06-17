@@ -64,7 +64,7 @@ export const weeks: WeekData[] = [
     week: 5,
     slug: 'week-05',
     title: '05',
-    subtitle: 'The Tâmega River',
+    subtitle: 'Better together',
     dates: 'Week 5',
     primaryColor: '#00BCD4',
     accentColor: '#88CE02',

@@ -7,8 +7,8 @@ if (!PUBLISHED_WEEKS.includes(5)) return Astro.redirect('/');
 <WeekLayout
   week={5}
   title="05"
-  subtitle="The Tâmega River"
-  dates="Week 5"
+  subtitle="Better together"
+  dates="15 — 21 JUN"
   primaryColor="#00BCD4"
   accentColor="#88CE02"
   bgColor="#f0fbff"
@@ -16,16 +16,71 @@ if (!PUBLISHED_WEEKS.includes(5)) return Astro.redirect('/');
   prevTitle="Week 04"
   nextSlug="week-06"
   nextTitle="Week 06"
+  modelPath="skip"
+  glassContent={true}
 >
-  <section class="content-section">
-    <span class="section-tag">Water</span>
-    <h2>The Tâmega runs slow</h2>
-    <p>
-      The Tâmega river defines Amarante. This week we explore it from its banks,
-      its bridges, and its cold northern waters.
-    </p>
+
+  <!-- ── HEADLINE ── -->
+  <section class="content-section bond-section">
+    <p class="bond-label">THE CREW</p>
+    <h2 class="bond-headline">
+      <span class="bond-word">Alone</span>
+      <span class="bond-word">you</span>
+      <span class="bond-word">explore.</span><br/>
+      <span class="bond-word bond-word--accent">Together</span>
+      <span class="bond-word bond-word--accent">you</span>
+      <span class="bond-word bond-word--accent">belong.</span>
+    </h2>
   </section>
 
+  <!-- ── STORY ── -->
+  <section class="content-section bond-story">
+    <h2 class="story-title" aria-label="A week of good company.">
+      <span class="story-word">A</span>
+      <span class="story-word">week</span>
+      <span class="story-word">of</span><br/>
+      <span class="story-word story-word--accent">good</span>
+      <span class="story-word story-word--accent">company.</span>
+    </h2>
+    <div class="story-body">
+      <p>
+        This week wasn't about one big event. It was about the people. Kayaking down the river, shooting hoops on the court, and a hundred small moments in between — none of it would have meant anything alone.
+      </p>
+      <p>
+        On the water, a kayak only goes straight if everyone paddles in sync. On the court, the best shot is the one you pass. Funny how the activities kept teaching us the same lesson: we're better together.
+      </p>
+      <p>
+        We arrived in Amarante as strangers from different countries. Five weeks in, we finish each other's jokes, share every meal, and never have to ask twice for someone to come along. That's the part we'll miss the most.
+      </p>
+      <p>
+        The city, the river, the courts — they're just the backdrop. The crew is the story.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── BONDS ── -->
+  <section class="content-section bonds-section">
+    <span class="section-tag">What made it</span>
+    <div class="bond-cards">
+      <div class="bond-card" style="--rot:-2deg;--delay:0.1s;">
+        <span class="bond-icon">🛶</span>
+        <h3 class="bond-card-title">In sync</h3>
+        <p class="bond-card-text">A kayak goes nowhere if you paddle alone. We learned to move as one — eventually.</p>
+      </div>
+      <div class="bond-card" style="--rot:1.5deg;--delay:0.25s;">
+        <span class="bond-icon">🏀</span>
+        <h3 class="bond-card-title">Pass it on</h3>
+        <p class="bond-card-text">No solo plays on this court. The best moments were the assists, not the points.</p>
+      </div>
+      <div class="bond-card" style="--rot:-1deg;--delay:0.4s;">
+        <span class="bond-icon">🤝</span>
+        <h3 class="bond-card-title">The crew</h3>
+        <p class="bond-card-text">Different countries, one table. Strangers in week one, family by week five.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PHOTOS ── -->
   <section class="content-section">
     <span class="section-tag">Photos</span>
     <h2>The week in images</h2>
@@ -38,7 +93,97 @@ if (!PUBLISHED_WEEKS.includes(5)) return Astro.redirect('/');
       <div class="photo-item">📸</div>
     </div>
   </section>
+
   <script>
     import '../scripts/three-week-05.ts';
   </script>
+
+  <style is:global>
+    .hero-subtitle, .hero-dates, .scroll-hint {
+      color: #053a44;
+      text-shadow: 0 1px 8px rgba(0,160,190,0.35);
+    }
+  </style>
+
+  <style>
+    /* ── HEADLINE ── */
+    .bond-section { text-align: center; padding: 4rem 2.5rem !important; }
+    .bond-label {
+      font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.32em;
+      color: rgba(5,58,68,0.6); text-transform: uppercase; margin: 0 0 1.4rem;
+    }
+    .bond-headline {
+      font-size: clamp(2rem,5.5vw,4.2rem); font-weight: 900;
+      line-height: 0.98; letter-spacing: -0.02em; margin: 0;
+      text-transform: uppercase; color: #053a44; perspective: 600px;
+    }
+    .bond-word { display: inline-block; transform-origin: bottom center; }
+    .bond-word--accent { color: #00a5bd; }
+
+    /* ── STORY ── */
+    .bond-story { padding: 3.5rem 2.5rem !important; overflow: hidden; }
+    .story-title {
+      font-size: clamp(2rem,5vw,3.6rem); font-weight: 900;
+      line-height: 0.95; color: #053a44; margin: 0 0 2rem;
+      text-transform: uppercase; letter-spacing: -0.02em;
+    }
+    .story-word { display: inline-block; will-change: transform, filter, opacity; }
+    .story-word--accent { color: #00a5bd; }
+    .story-body p {
+      font-size: 1.1rem; line-height: 1.75;
+      color: rgba(5,58,68,0.72); margin-bottom: 1.1rem;
+    }
+
+    /* ── BONDS CARDS ── */
+    .bonds-section { padding: 3rem 2.5rem !important; }
+    .bond-cards {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1.2rem; margin-top: 1.5rem;
+    }
+    @media (max-width: 580px) { .bond-cards { grid-template-columns: 1fr; } }
+    .bond-card {
+      background: rgba(240,251,255,0.9);
+      border: 1px solid rgba(0,188,212,0.3);
+      border-radius: 1.2rem; padding: 1.8rem 1.4rem;
+      transform: rotate(var(--rot,0deg));
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
+      box-shadow: 0 4px 20px rgba(0,120,140,0.1);
+      position: relative; overflow: hidden;
+    }
+    .bond-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, #00BCD4, #88CE02);
+      transform: scaleX(0); transform-origin: left; transition: transform 0.35s ease;
+    }
+    .bond-card:hover {
+      transform: rotate(0deg) translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,120,140,0.2);
+    }
+    .bond-card:hover::before { transform: scaleX(1); }
+    .bond-icon {
+      font-size: 2.2rem; display: block; margin-bottom: 0.9rem;
+      animation: icon-bob 3.2s ease-in-out var(--delay,0s) infinite;
+    }
+    @keyframes icon-bob {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-5px); }
+    }
+    .bond-card-title {
+      font-size: 1.1rem; font-weight: 600; color: #053a44;
+      margin: 0 0 0.6rem; letter-spacing: -0.01em;
+    }
+    .bond-card-text {
+      font-size: 0.88rem; line-height: 1.65; color: rgba(5,58,68,0.8); margin: 0;
+    }
+
+    /* ── PHOTOS ── */
+    .photo-item {
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.35s;
+    }
+    .photo-item:hover {
+      transform: scale(1.04);
+      box-shadow: 0 14px 36px rgba(0,120,140,0.25);
+      z-index: 3;
+    }
+  </style>
 </WeekLayout>

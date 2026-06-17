@@ -78,4 +78,7 @@
 [2026-06-12] — Week-04 vibes: added 4th card "Until late" (talking by river past midnight); grid 3→4 cols, 2-col at <=880px.
 [2026-06-12] — Week-04 vibes grid back to 3 cols (user kept 3 cards).
 [2026-06-12] — Week-04: replaced haiku/Iku section with 3D incense scene (incense-week04.ts): vertical stick + flickering ember + shader-based smoke particles rising/swaying/fading. New #incense-canvas; removed haiku CSS.
-[2026-06-12] — Removed leftover incense import (was throwing on missing #incense-canvas → broke battery script) + deleted incense-week04.ts and incense CSS.
+[2026-06-12] — Removed leftover incense import (was throwing on missing #incense-canvas → broke battery script) + deleted incense-week04.ts and incense CSS.[2026-06-17] — Week-05 theme set to "Better together" (friendship). New connection-network bg scene (three-week-05.ts): cyan/green nodes drift + draw bonds when near + cursor pull + parallax. Page: word-by-word headline reveal, friendship story, bond cards (kayak/basketball/crew), tilt photos. modelPath=skip, glass content. weeks.ts subtitle updated.
+[2026-06-17] — Week-05: removed cursor node-pull (parallax kept); photos no longer tilted (straight, hover scale only).
+[2026-06-17] — Week-05: replaced dot nodes with Star.glb clones (30, normalized + tinted cyan/green, gentle spin) = friendship constellation; bonds/lines + parallax kept. Added lights, GLTFLoader.
+[2026-06-17] — Week-05: "A week of good company" headline now GSAP scatter→gather (words blur in from random dirs/rotation, converge on scroll); split into .story-word spans, "good company" accent cyan.
