@@ -7,38 +7,237 @@ if (!PUBLISHED_WEEKS.includes(6)) return Astro.redirect('/');
 <WeekLayout
   week={6}
   title="06"
-  subtitle="Adventures around the area"
-  dates="Week 6"
-  primaryColor="#9C27B0"
-  accentColor="#E91E8C"
-  bgColor="#f9f0ff"
+  subtitle="São João in Porto"
+  dates="22 — 28 JUN"
+  primaryColor="#FFB02E"
+  accentColor="#FF5470"
+  bgColor="#0a0612"
   prevSlug="week-05"
   prevTitle="Week 05"
   nextSlug="week-07"
   nextTitle="Week 07"
+  modelPath="skip"
+  glassContent
 >
+  <!-- ── STORY ── -->
   <section class="content-section">
-    <span class="section-tag">Routes</span>
-    <h2>Beyond Amarante</h2>
+    <span class="section-tag">A noite</span>
+    <h2 class="glow-title">Porto lets a thousand<br/><span>lanterns go.</span></h2>
     <p>
-      Porto one hour away, the Douro half an hour. This week we head out to explore
-      the surroundings of northern Portugal.
+      The whole north of Portugal waits all year for one night. On the 23rd of June the
+      sky over the Douro fills with sky lanterns, the streets smell of grilled sardines,
+      and at midnight the city stays up until the river goes quiet. São João — the maddest,
+      warmest, loudest party of the year.
+    </p>
+    <p>
+      The rules are simple and gloriously silly. You carry a little pot of basil
+      (<em>manjerico</em>), you bonk every stranger you meet on the head with a squeaky
+      plastic hammer, and nobody minds. By the early hours the bridges over the river are
+      packed shoulder to shoulder, everyone watching the same lanterns climb.
+    </p>
+    <p>
+      We weren't going to miss it. This week we trade the quiet of Amarante for the chaos
+      of the city — and on Sunday we finally cross the Douro into Porto itself.
+    </p>
+
+    <blockquote class="quadra">
+      <p>“No São João bailam todos,<br/>bailam velhos e meninos…”</p>
+      <span class="quadra-trans">On São João everyone dances — the old and the young alike.</span>
+    </blockquote>
+  </section>
+
+  <!-- ── TRADITIONS ── -->
+  <section class="content-section traditions-section">
+    <span class="section-tag">How it's done</span>
+    <h2>The rules of the night</h2>
+    <div class="trad-cards">
+      <div class="trad-card" style="--rot:-2deg;--delay:0.1s;">
+        <span class="trad-icon">🎈</span>
+        <h3 class="trad-title">Sky lanterns</h3>
+        <p class="trad-text">Light a paper balloon, make a wish, and let it rise over the river with a thousand others.</p>
+      </div>
+      <div class="trad-card" style="--rot:1.5deg;--delay:0.22s;">
+        <span class="trad-icon">🔨</span>
+        <h3 class="trad-title">Martelinho</h3>
+        <p class="trad-text">The squeaky plastic hammer. Bonk a stranger, get bonked back. It means good luck — honestly.</p>
+      </div>
+      <div class="trad-card" style="--rot:-1deg;--delay:0.34s;">
+        <span class="trad-icon">🐟</span>
+        <h3 class="trad-title">Sardinhas</h3>
+        <p class="trad-text">Grilled sardines on bread, eaten standing in the street. The smell is the festival itself.</p>
+      </div>
+      <div class="trad-card" style="--rot:2deg;--delay:0.46s;">
+        <span class="trad-icon">🌿</span>
+        <h3 class="trad-title">Manjerico</h3>
+        <p class="trad-text">A pot of basil with a tiny love poem stuck in it. You don't touch the leaves — you smell your hand instead.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PORTO BRIDGES ── -->
+  <section class="content-section bridges-section">
+    <span class="section-tag">Sunday</span>
+    <h2 class="bridges-title">Six bridges, one river</h2>
+    <p>
+      Porto and Gaia face each other across the Douro, stitched together by bridges — and
+      the queen of them is the <strong>Ponte Dom Luís I</strong>, Eiffel's school of iron,
+      two decks of arches with the city's metro humming across the top.
+    </p>
+    <p>
+      We crossed it on foot, high above the river, the old Ribeira glowing on one side and
+      the port wine cellars on the other. Below us: Ponte da Arrábida, Ponte do Infante,
+      Ponte Maria Pia — each one a different century of the same engineering obsession.
+    </p>
+    <p>
+      Best photos of the whole trip are over in the <a href="/gallery">gallery</a>.
     </p>
   </section>
 
+  <!-- ── PHOTOS ── -->
   <section class="content-section">
     <span class="section-tag">Photos</span>
     <h2>The week in images</h2>
     <div class="photo-grid">
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week6/week06-01.webp" alt="Photo 1"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week6/week06-02.webp" alt="Photo 2"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week6/week06-03.webp" alt="Photo 3"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week6/week06-04.webp" alt="Photo 4"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week6/week06-05.webp" alt="Photo 5"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week6/week06-06.webp" alt="Photo 6"></div>
     </div>
   </section>
+
   <script>
     import '../scripts/three-week-06.ts';
   </script>
+
+  <!-- Dark São João night theme: nav, hero text, week strip, footer -->
+  <style is:global>
+    .hero-subtitle,
+    .hero-dates,
+    .scroll-hint {
+      color: rgba(255, 245, 230, 0.85);
+    }
+    .nav-home              { color: #fff4e6; }
+    .nav-home:hover        { color: #FFB02E; }
+    .nav-week, .nav-names  { color: #fff4e6; }
+    .site-nav {
+      background:   rgba(10, 6, 18, 0.55);
+      border-color: rgba(255, 176, 46, 0.2);
+    }
+    .site-nav.is-scrolled {
+      background:   rgba(10, 6, 18, 0.85);
+      border-color: rgba(255, 176, 46, 0.45);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .week-dot {
+      color:        rgba(255, 245, 230, 0.65);
+      border-color: rgba(255, 245, 230, 0.15);
+    }
+    .week-dot:hover {
+      color:        var(--dot-color);
+      border-color: var(--dot-color);
+    }
+    .week-dot.active { color: #fff; opacity: 1; }
+    .week-footer {
+      background:    #0a0612;
+      border-top-color: rgba(255, 176, 46, 0.15);
+    }
+    .week-footer-center,
+    .nav-dir,
+    .nav-link-title { color: rgba(255, 245, 230, 0.75); }
+    .week-nav-link:hover .nav-link-title { color: #FFB02E; }
+  </style>
+
+  <style>
+    .content-section { position: relative; z-index: 2; }
+
+    /* ── WARM GRADIENT TITLE (week-06 own signature) ── */
+    .glow-title {
+      background: linear-gradient(105deg, #FFE08A 0%, #FFB02E 45%, #FF5470 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 22px rgba(255, 176, 46, 0.35));
+    }
+    .glow-title span { color: transparent; }
+
+    /* ── QUADRA (traditional verse) ── */
+    .quadra {
+      margin: 2.4rem 0 0;
+      padding: 1.2rem 1.6rem;
+      border-left: 3px solid #FF5470;
+      background: rgba(255, 84, 112, 0.07);
+      border-radius: 0 0.8rem 0.8rem 0;
+    }
+    .quadra p {
+      font-style: italic;
+      font-size: 1.15rem;
+      line-height: 1.5;
+      margin: 0 0 0.6rem;
+      color: #ffe9c2;
+    }
+    .quadra-trans {
+      font-size: 0.8rem;
+      letter-spacing: 0.02em;
+      opacity: 0.6;
+    }
+
+    /* ── TRADITIONS CARDS ── */
+    .trad-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.1rem;
+      margin-top: 1.6rem;
+    }
+    @media (max-width: 880px) { .trad-cards { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 460px) { .trad-cards { grid-template-columns: 1fr; } }
+    .trad-card {
+      background: rgba(255, 176, 46, 0.08);
+      border: 1px solid rgba(255, 176, 46, 0.28);
+      border-radius: 1.2rem;
+      padding: 1.6rem 1.2rem;
+      transform: rotate(var(--rot,0deg));
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      position: relative; overflow: hidden;
+    }
+    .trad-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, #FFB02E, #FF5470);
+      transform: scaleX(0); transform-origin: left; transition: transform 0.35s ease;
+    }
+    .trad-card:hover {
+      transform: rotate(0deg) translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+    }
+    .trad-card:hover::before { transform: scaleX(1); }
+    .trad-icon {
+      font-size: 2.2rem; display: block; margin-bottom: 0.9rem;
+      animation: icon-bob 3.2s ease-in-out var(--delay,0s) infinite;
+    }
+    @keyframes icon-bob {
+      0%,100% { transform: translateY(0); }
+      50%     { transform: translateY(-5px); }
+    }
+    .trad-title {
+      font-size: 1.05rem; font-weight: 700; color: #fff4e6;
+      margin: 0 0 0.5rem;
+    }
+    .trad-text {
+      font-size: 0.86rem; line-height: 1.6;
+      color: rgba(255, 245, 230, 0.72); margin: 0;
+    }
+
+    /* ── PHOTOS ── */
+    .photo-item {
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.35s;
+    }
+    .photo-item:hover {
+      transform: scale(1.04);
+      box-shadow: 0 14px 36px rgba(255,176,46,0.25);
+      z-index: 3;
+    }
+  </style>
 </WeekLayout>

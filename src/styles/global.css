@@ -20,6 +20,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -433,7 +434,7 @@ a.party-secret {
 }
 
 .site-title {
-  font-size: clamp(5rem, 15vw, 500rem);
+  font-size: clamp(3.2rem, 15vw, 500rem);
   font-weight: 900;
   line-height: 0.82;
   letter-spacing: -0.04em;

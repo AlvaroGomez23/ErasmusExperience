@@ -16,7 +16,7 @@ export const weekMeta: Record<number, { subtitle: string; color: string }> = {
   3:  { subtitle: 'Amarante local parties',      color: '#E91E8C' },
   4:  { subtitle: 'Calm after the noise',     color: '#FFD700' },
   5:  { subtitle: 'The Tâmega River',            color: '#00BCD4' },
-  6:  { subtitle: 'Adventures around the area',  color: '#9C27B0' },
+  6:  { subtitle: 'São João in Porto',           color: '#FFB02E' },
   7:  { subtitle: 'Art and creativity',          color: '#FF4444' },
   8:  { subtitle: 'Portuguese cuisine',          color: '#FF9800' },
   9:  { subtitle: 'Nature and mountains',        color: '#4CAF50' },
