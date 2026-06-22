@@ -82,3 +82,4 @@
 [2026-06-17] — Week-05: removed cursor node-pull (parallax kept); photos no longer tilted (straight, hover scale only).
 [2026-06-17] — Week-05: replaced dot nodes with Star.glb clones (30, normalized + tinted cyan/green, gentle spin) = friendship constellation; bonds/lines + parallax kept. Added lights, GLTFLoader.
 [2026-06-17] — Week-05: "A week of good company" headline now GSAP scatter→gather (words blur in from random dirs/rotation, converge on scroll); split into .story-word spans, "good company" accent cyan.
+[2026-06-17] — Week-05: story prose color now matches other pages (dropped teal rgba(5,58,68,0.72) → opacity 0.65 over default text, like global .content-section p).
