@@ -115,3 +115,6 @@
 [2026-06-26] — Index countdown: count weeks on the Mon–Sun calendar grid (matches week-page date ranges, e.g. week-06 = 22–28 Jun) instead of raw elapsed/7. Added GRID0 = Mon 18 May (week-01 Monday); weekNo = floor((now-GRID0)/week)+1; weeks-lived = weekNo-1, weeks-left = 11-weekNo. Weeks now flip when Sunday ends.
 [2026-06-26] — Index countdown: "days to go" stat now shows 2 decimals (left/DAY).toFixed(2) e.g. 6.54 instead of ceil whole days. Cosmetic/fun.
 [2026-06-26] — Index countdown: weeks-lived and weeks-left now show 1 decimal (continuous off the GRID0 Monday anchor / time left); days-to-go dropped from 2 decimals to 1. Dropped the integer weekNo flip in favor of the live fractional value.
+[2026-06-29] — Fix convert-upload.mjs: add sharp .rotate() so EXIF orientation baked into pixels; stops photos flipping vertical/sideways in webp output.
+[2026-06-29] — party three-party.ts: load 3 new GLB props (Party_Glasses, Soda_Glass, Bass_Speakers) as side floaters — bob + drift + spin + mouse parallax, emissive lift so disco lights catch them.
+[2026-06-29] — party photos section: new three-party-photos.ts on dedicated #photos-canvas (inside .party-photos, behind .party-inner). 8 cloned GLB props (glasses/soda/speakers) scattered down both sides, bob + spin + mouse parallax + scroll-velocity kick, party point lights. Photos stay on top.

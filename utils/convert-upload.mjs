@@ -77,6 +77,7 @@ async function main() {
     const outPath = path.join(outputDir, outName);
 
     await sharp(path.join(inputDir, files[i]))
+      .rotate()
       .webp({ quality: 75 })
       .toFile(outPath);
 

@@ -1,6 +1,7 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -66,6 +67,69 @@ PARTY_COLORS.forEach(color => {
   confettiGroups.push(pts);
 });
 
+// Floating party props (GLB models drifting on the sides)
+interface Floater {
+  pivot: THREE.Group;     // bob + drift wrapper, holds the model
+  spinner: THREE.Group;   // continuous self-rotation
+  base: THREE.Vector3;
+  size: number;
+  bobAmp: number;
+  bobFreq: number;
+  driftAmp: number;
+  spin: number;
+  phase: number;
+  par: number;            // mouse-parallax strength
+}
+
+const floaters: Floater[] = [];
+
+const FLOATER_DEFS = [
+  { url: '/models/Party_Glasses.glb', pos: [-4.6,  1.6,  0.5], size: 1.9, spin:  0.45, par: 0.9 },
+  { url: '/models/Soda_Glass.glb',    pos: [ 4.7, -1.0,  1.5], size: 1.5, spin: -0.55, par: 1.2 },
+  { url: '/models/Bass_Speakers.glb', pos: [ 4.3,  2.2, -1.5], size: 2.4, spin:  0.3,  par: 0.6 },
+];
+
+const gltfLoader = new GLTFLoader();
+FLOATER_DEFS.forEach((def, i) => {
+  gltfLoader.load(def.url, (gltf) => {
+    const model = gltf.scene;
+
+    // normalize to target size on the largest dimension, then center at origin
+    const dims = new THREE.Box3().setFromObject(model).getSize(new THREE.Vector3());
+    model.scale.setScalar(def.size / (Math.max(dims.x, dims.y, dims.z) || 1));
+    const center = new THREE.Box3().setFromObject(model).getCenter(new THREE.Vector3());
+    model.position.sub(center);
+
+    // small emissive lift so the moving disco lights read on the surfaces
+    model.traverse((o) => {
+      const m = (o as THREE.Mesh).material as THREE.MeshStandardMaterial | undefined;
+      if (m && 'emissive' in m) {
+        m.emissive = new THREE.Color(0x150813);
+        m.emissiveIntensity = 0.4;
+      }
+    });
+
+    const spinner = new THREE.Group();
+    spinner.add(model);
+    const pivot = new THREE.Group();
+    pivot.add(spinner);
+    pivot.position.set(def.pos[0], def.pos[1], def.pos[2]);
+    scene.add(pivot);
+
+    floaters.push({
+      pivot, spinner,
+      base: new THREE.Vector3(def.pos[0], def.pos[1], def.pos[2]),
+      size: def.size,
+      bobAmp: 0.35 + i * 0.08,
+      bobFreq: 0.6 + i * 0.18,
+      driftAmp: 0.4,
+      spin: def.spin,
+      phase: i * 2.1,
+      par: def.par,
+    });
+  });
+});
+
 let tx = 0, ty = 0;
 window.addEventListener('mousemove', (e) => {
   tx =  (e.clientX / window.innerWidth  - 0.5) * 2.5;
@@ -94,6 +158,17 @@ const clock = new THREE.Clock();
   confettiGroups.forEach((pts, i) => {
     pts.rotation.y = t * (0.025 + i * 0.006);
     pts.rotation.x = t * (0.015 + i * 0.004);
+  });
+
+  floaters.forEach((f) => {
+    // bob up/down + lazy side drift around the base anchor
+    f.pivot.position.y = f.base.y + Math.sin(t * f.bobFreq + f.phase) * f.bobAmp;
+    f.pivot.position.x = f.base.x + Math.cos(t * f.bobFreq * 0.6 + f.phase) * f.driftAmp
+                         + tx * f.par;
+    f.pivot.position.z = f.base.z + ty * f.par * 0.5;
+    // continuous spin + gentle tilt wobble
+    f.spinner.rotation.y += f.spin * 0.01;
+    f.spinner.rotation.x = Math.sin(t * 0.5 + f.phase) * 0.2;
   });
 
   camera.position.x += (tx - camera.position.x) * 0.03;
