@@ -4,6 +4,14 @@ import { PUBLISHED_WEEKS } from '../config/routes';
 import '../styles/global.css';
 import WeekStrip from '../components/WeekStrip.astro';
 import Analytics from '@vercel/analytics/astro';
+
+const isDark = (hex: string) => {
+  const c = hex.replace('#', '');
+  const r = parseInt(c.slice(0, 2), 16);
+  const g = parseInt(c.slice(2, 4), 16);
+  const b = parseInt(c.slice(4, 6), 16);
+  return (0.299 * r + 0.587 * g + 0.114 * b) < 128;
+};
 ---
 
 <!doctype html>
@@ -110,7 +118,7 @@ import Analytics from '@vercel/analytics/astro';
           weeks.filter((w) => PUBLISHED_WEEKS.includes(w.week)).map((w, i) => (
             <a
               href={`/${w.slug}`}
-              class="week-card"
+              class={`week-card${isDark(w.bgColor) ? ' week-card--dark' : ''}`}
               style={`background-color:${w.bgColor}; border: 2px solid ${w.primaryColor}20;`}
               data-index={i}
             >
@@ -170,8 +178,10 @@ import Analytics from '@vercel/analytics/astro';
       // ── COUNTDOWN to departure (Portugal WEST = UTC+1) ──
       const START  = new Date('2026-05-20T00:00:00+01:00').getTime(); // week 01 begins
       const DEPART = new Date('2026-07-31T22:00:00+01:00').getTime(); // wheels up
+      const GRID0  = new Date('2026-05-18T00:00:00+01:00').getTime(); // Monday of week 01
       const TOTAL_WEEKS = 11;
       const DAY = 86400000;
+      const WEEK = 7 * DAY;
 
       const $ = (sel: string) => document.querySelector<HTMLElement>(sel);
       const section = $('#countdown');
@@ -227,11 +237,11 @@ import Analytics from '@vercel/analytics/astro';
         if (elFill) elFill.style.width = (prog * 100) + '%';
         if (elPct)  elPct.textContent  = pct + '%';
 
-        const elapsedDays = Math.max(0, (now - START) / DAY);
-        const wDone = Math.min(TOTAL_WEEKS, Math.floor(elapsedDays / 7));
-        if (elWDone) elWDone.textContent = String(wDone);
-        if (elWLeft) elWLeft.textContent = String(TOTAL_WEEKS - wDone);
-        if (elDLeft) elDLeft.textContent = String(Math.ceil(left / DAY));
+        // weeks counted off the Mon–Sun grid, with a live fractional part
+        const lived = Math.min(TOTAL_WEEKS, Math.max(0, (now - GRID0) / WEEK));
+        if (elWDone) elWDone.textContent = lived.toFixed(1);            // weeks lived
+        if (elWLeft) elWLeft.textContent = (left / WEEK).toFixed(1);    // weeks still ahead
+        if (elDLeft) elDLeft.textContent = (left / DAY).toFixed(1);
       }
 
       update();

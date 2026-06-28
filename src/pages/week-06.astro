@@ -26,8 +26,8 @@ if (!PUBLISHED_WEEKS.includes(6)) return Astro.redirect('/');
     <p>
       The whole north of Portugal waits all year for one night. On the 23rd of June the
       sky over the Douro fills with sky lanterns, the streets smell of grilled sardines,
-      and at midnight the city stays up until the river goes quiet. São João — the maddest,
-      warmest, loudest party of the year.
+      and at midnight the city stays up until the river goes quiet. São João the biggest,
+      warmest, loudest party of the year in Porto.
     </p>
     <p>
       The rules are simple and gloriously silly. You carry a little pot of basil
@@ -36,42 +36,20 @@ if (!PUBLISHED_WEEKS.includes(6)) return Astro.redirect('/');
       packed shoulder to shoulder, everyone watching the same lanterns climb.
     </p>
     <p>
+      There were lots of people, every corner of the city was filled with music, lights, beer stands, and people selling squeaky hammers and lanterns. We will remember this nigth forever, it was a unique experience.
+    </p>
+    <p>
       We weren't going to miss it. This week we trade the quiet of Amarante for the chaos
-      of the city — and on Sunday we finally cross the Douro into Porto itself.
+      of the city.
+    </p>
+    <p>
+      We've also went to Porto on sunday. Completly different vibe, more calm and relaxed. We walked along the river and crossed the bridges, enjoying the view of the city.
     </p>
 
     <blockquote class="quadra">
       <p>“No São João bailam todos,<br/>bailam velhos e meninos…”</p>
       <span class="quadra-trans">On São João everyone dances — the old and the young alike.</span>
     </blockquote>
-  </section>
-
-  <!-- ── TRADITIONS ── -->
-  <section class="content-section traditions-section">
-    <span class="section-tag">How it's done</span>
-    <h2>The rules of the night</h2>
-    <div class="trad-cards">
-      <div class="trad-card" style="--rot:-2deg;--delay:0.1s;">
-        <span class="trad-icon">🎈</span>
-        <h3 class="trad-title">Sky lanterns</h3>
-        <p class="trad-text">Light a paper balloon, make a wish, and let it rise over the river with a thousand others.</p>
-      </div>
-      <div class="trad-card" style="--rot:1.5deg;--delay:0.22s;">
-        <span class="trad-icon">🔨</span>
-        <h3 class="trad-title">Martelinho</h3>
-        <p class="trad-text">The squeaky plastic hammer. Bonk a stranger, get bonked back. It means good luck — honestly.</p>
-      </div>
-      <div class="trad-card" style="--rot:-1deg;--delay:0.34s;">
-        <span class="trad-icon">🐟</span>
-        <h3 class="trad-title">Sardinhas</h3>
-        <p class="trad-text">Grilled sardines on bread, eaten standing in the street. The smell is the festival itself.</p>
-      </div>
-      <div class="trad-card" style="--rot:2deg;--delay:0.46s;">
-        <span class="trad-icon">🌿</span>
-        <h3 class="trad-title">Manjerico</h3>
-        <p class="trad-text">A pot of basil with a tiny love poem stuck in it. You don't touch the leaves — you smell your hand instead.</p>
-      </div>
-    </div>
   </section>
 
   <!-- ── PORTO BRIDGES ── -->
@@ -181,53 +159,6 @@ if (!PUBLISHED_WEEKS.includes(6)) return Astro.redirect('/');
       font-size: 0.8rem;
       letter-spacing: 0.02em;
       opacity: 0.6;
-    }
-
-    /* ── TRADITIONS CARDS ── */
-    .trad-cards {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.1rem;
-      margin-top: 1.6rem;
-    }
-    @media (max-width: 880px) { .trad-cards { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 460px) { .trad-cards { grid-template-columns: 1fr; } }
-    .trad-card {
-      background: rgba(255, 176, 46, 0.08);
-      border: 1px solid rgba(255, 176, 46, 0.28);
-      border-radius: 1.2rem;
-      padding: 1.6rem 1.2rem;
-      transform: rotate(var(--rot,0deg));
-      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      position: relative; overflow: hidden;
-    }
-    .trad-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-      background: linear-gradient(90deg, #FFB02E, #FF5470);
-      transform: scaleX(0); transform-origin: left; transition: transform 0.35s ease;
-    }
-    .trad-card:hover {
-      transform: rotate(0deg) translateY(-4px);
-      box-shadow: 0 12px 32px rgba(0,0,0,0.4);
-    }
-    .trad-card:hover::before { transform: scaleX(1); }
-    .trad-icon {
-      font-size: 2.2rem; display: block; margin-bottom: 0.9rem;
-      animation: icon-bob 3.2s ease-in-out var(--delay,0s) infinite;
-    }
-    @keyframes icon-bob {
-      0%,100% { transform: translateY(0); }
-      50%     { transform: translateY(-5px); }
-    }
-    .trad-title {
-      font-size: 1.05rem; font-weight: 700; color: #fff4e6;
-      margin: 0 0 0.5rem;
-    }
-    .trad-text {
-      font-size: 0.86rem; line-height: 1.6;
-      color: rgba(255, 245, 230, 0.72); margin: 0;
     }
 
     /* ── PHOTOS ── */

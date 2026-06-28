@@ -15,7 +15,8 @@
       "WebFetch(domain:github.com)",
       "Bash(python skills/ui-ux-pro-max/scripts/search.py \"festival fireworks celebration city night immersive\" --design-system)",
       "Bash(python \"C:/Users/Alvaro/.claude/plugins/cache/ui-ux-pro-max-skill/ui-ux-pro-max/2.5.0/.claude/skills/ui-ux-pro-max/scripts/search.py\" \"festival fireworks celebration city night immersive\" --design-system)",
-      "Bash(python scripts/search.py \"festival fireworks night celebration immersive warm\" --domain color -n 3)"
+      "Bash(python scripts/search.py \"festival fireworks night celebration immersive warm\" --domain color -n 3)",
+      "Bash(node -e ' *)"
     ]
   }
 }
