@@ -20,7 +20,19 @@ const LOAD_PHOTOS = true;   // ← set true to load ALL real Supabase photos (fo
 const SINGLE_PHOTO = '';
 
 const canvas = document.getElementById('memory-canvas') as HTMLCanvasElement | null;
-if (canvas) init(canvas);
+if (canvas) {
+  // Lazy init: the cloud is the last section of the page — don't fetch a single
+  // photo or create the WebGL context until the user is within ~1.5 viewports
+  // of it. Keeps initial page load light.
+  const section = document.getElementById('memory-cloud') ?? canvas;
+  const io = new IntersectionObserver((entries) => {
+    if (entries.some((e) => e.isIntersecting)) {
+      io.disconnect();
+      init(canvas);
+    }
+  }, { rootMargin: '150% 0px' });
+  io.observe(section);
+}
 
 function readJSON<T>(id: string, fallback: T): T {
   const el = document.getElementById(id);
@@ -77,6 +89,27 @@ async function collectPhotoUrls(): Promise<string[]> {
     }
   }
   return shuffle(urls);
+}
+
+// Decode a photo and downscale it to a small texture. Full-res phone photos
+// (~4000px) uploaded straight to the GPU cost ~48MB VRAM each — 40 of them
+// grinds the whole machine. At card size, 512px is indistinguishable.
+const MAX_TEX = 512;
+async function loadSmallTexture(url: string): Promise<THREE.Texture> {
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.src = url;
+  await img.decode();   // async decode — keeps the main thread free
+  const scale = Math.min(1, MAX_TEX / Math.max(img.width, img.height));
+  const c = document.createElement('canvas');
+  c.width = Math.max(1, Math.round(img.width * scale));
+  c.height = Math.max(1, Math.round(img.height * scale));
+  c.getContext('2d')!.drawImage(img, 0, 0, c.width, c.height);
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.generateMipmaps = false;
+  tex.minFilter = THREE.LinearFilter;
+  return tex;
 }
 
 // Gradient placeholder card in a week's colour (no network needed).
@@ -155,6 +188,11 @@ async function init(canvas: HTMLCanvasElement) {
   const cards: Card[] = [];
   const R = 8;   // cloud radius
 
+  // Photo jobs are queued and loaded a few at a time — 40 parallel fetch+decode
+  // storms the main thread; a small pool trickles them in smoothly.
+  type PhotoJob = { url: string; mesh: THREE.Mesh; mat: THREE.MeshBasicMaterial };
+  const jobs: PhotoJob[] = [];
+
   function popIn(mat: THREE.MeshBasicMaterial, mesh: THREE.Mesh) {
     gsap.to(mat, { opacity: 1, duration: 1.2, ease: 'power2.out', delay: Math.random() * 0.6 });
     gsap.to(mesh.scale, { x: 1, y: 1, z: 1, duration: 1.1, ease: 'back.out(1.6)', delay: Math.random() * 0.6 });
@@ -198,20 +236,31 @@ async function init(canvas: HTMLCanvasElement) {
       mat.needsUpdate = true;
       popIn(mat, mesh);
     } else if (item.url) {
-      loader.load(item.url, (tex) => {
-        tex.colorSpace = THREE.SRGBColorSpace;
-        const img = tex.image as HTMLImageElement;
-        const aspect = img && img.width ? img.width / img.height : 1;
-        const h = 2.6, w = h * aspect;
-        mesh.geometry.dispose();
-        mesh.geometry = new THREE.PlaneGeometry(w, h);
-        mat.color.set(0xffffff);
-        mat.map = tex;
-        mat.needsUpdate = true;
-        popIn(mat, mesh);
-      });
+      jobs.push({ url: item.url, mesh, mat });
     }
   });
+
+  // Drain the photo queue with a small worker pool.
+  let nextJob = 0;
+  async function pump() {
+    while (nextJob < jobs.length) {
+      const job = jobs[nextJob++];
+      try {
+        const tex = await loadSmallTexture(job.url);
+        const img = tex.image as HTMLCanvasElement;
+        const aspect = img.width / img.height;
+        const h = 2.6, w = h * aspect;
+        job.mesh.geometry.dispose();
+        job.mesh.geometry = new THREE.PlaneGeometry(w, h);
+        job.mat.color.set(0xffffff);
+        job.mat.map = tex;
+        job.mat.needsUpdate = true;
+        popIn(job.mat, job.mesh);
+      } catch { /* failed photo — card just stays hidden */ }
+    }
+  }
+  const CONCURRENCY = 4;
+  for (let i = 0; i < CONCURRENCY; i++) pump();
 
   // Mouse parallax.
   let tx = 0, ty = 0;
@@ -263,9 +312,17 @@ async function init(canvas: HTMLCanvasElement) {
   ScrollTrigger.refresh();
   window.addEventListener('load', () => ScrollTrigger.refresh());
 
+  // Only render while the section is on (or near) screen — no reason to burn
+  // GPU on a cloud the user scrolled away from.
+  let onScreen = false;
+  new IntersectionObserver((entries) => {
+    onScreen = entries.some((e) => e.isIntersecting);
+  }, { rootMargin: '30% 0px' }).observe(canvas);
+
   const clock = new THREE.Clock();
   (function tick() {
     requestAnimationFrame(tick);
+    if (!onScreen) return;
     const t = clock.getElapsedTime();
 
     group.rotation.y = t * 0.05;

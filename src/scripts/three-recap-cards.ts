@@ -170,5 +170,14 @@ function run(slots: HTMLCanvasElement[]) {
   })();
 }
 
-// Kick off once everything above is defined.
-if (slots.length) run(slots);
+// Kick off lazily — building the scenes fetches seven GLBs, so wait until the
+// recap wall is within half a viewport instead of hitting the network at load.
+if (slots.length) {
+  const io = new IntersectionObserver((entries) => {
+    if (entries.some((e) => e.isIntersecting)) {
+      io.disconnect();
+      run(slots);
+    }
+  }, { rootMargin: '50% 0px' });
+  io.observe(slots[0]);
+}

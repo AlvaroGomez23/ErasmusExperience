@@ -383,6 +383,59 @@ const supabaseConfig = JSON.stringify({
       }
     </style>
     <style is:global>
+      /* ── NEON FILM STRIPS ─ global: these nodes are built in JS, so Astro's
+         scoped styles (which need the data-astro-cid attribute) never match. */
+      .film-strips {
+        display: flex;
+        flex-direction: column;
+        gap: 1.4rem;
+        /* Break out of .party-inner → full-bleed rows */
+        margin-inline: calc(50% - 50vw);
+      }
+      .film-row {
+        overflow: hidden;
+        padding: 0.6rem 0;   /* room for the hover lift + glow */
+        -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+        mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+      }
+      .film-track {
+        display: flex;
+        gap: 1rem;
+        width: max-content;
+        will-change: transform;
+      }
+      .film-photo {
+        flex: 0 0 auto;
+        height: 200px;
+        border-radius: 0.9rem;
+        overflow: hidden;
+        cursor: pointer;
+        border: 1px solid rgba(255, 0, 110, 0.18);
+        transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      }
+      .film-photo img {
+        height: 100%;
+        width: auto;
+        display: block;
+        max-width: none;
+      }
+      .film-photo:hover {
+        transform: translateY(-6px) scale(1.04);
+        border-color: rgba(255, 0, 110, 0.8);
+        box-shadow:
+          0 0 24px rgba(255, 0, 110, 0.55),
+          0 0 70px rgba(131, 56, 236, 0.35);
+        z-index: 2;
+        position: relative;
+      }
+      @media (max-width: 768px) {
+        .film-photo { height: 140px; }
+      }
+      /* Reduced motion: no drift — rows become swipeable strips. */
+      @media (prefers-reduced-motion: reduce) {
+        .film-row { overflow-x: auto; }
+      }
+
       .week-strip { border-color: rgba(255, 0, 110, 0.15); }
       .week-dot {
         color:        rgba(255, 255, 255, 0.65);
@@ -536,13 +589,11 @@ const supabaseConfig = JSON.stringify({
 
     <script>
       import { createClient } from '@supabase/supabase-js';
-      import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
       const config = JSON.parse(document.getElementById('sb-config')!.textContent!);
       const supabase = createClient(config.url, config.key);
       const BUCKET = 'Photos';
       const PHOTO_EXT_RE = /\.(jpe?g|webp|png)$/i;
-      const INITIAL = 9;
 
       function openLightbox(url: string, alt: string) {
         const lb  = document.getElementById('lightbox')!;
@@ -588,43 +639,103 @@ const supabaseConfig = JSON.stringify({
           supabase.storage.from(BUCKET).getPublicUrl(`party/${f.name}`).data.publicUrl
         );
 
-        gridEl.innerHTML = '';
+        buildStrips(gridEl, urls);
+      }
 
-        function renderBatch(batch: string[], offset: number) {
-          batch.forEach((url, i) => {
-            const alt = `Party · Photo ${offset + i + 1}`;
-            const item = document.createElement('div');
-            item.className = 'photo-item';
-            const img = document.createElement('img');
-            img.src = url;
-            img.alt = alt;
-            img.loading = 'lazy';
-            item.addEventListener('click', () => openLightbox(url, alt));
-            item.appendChild(img);
-            gridEl.appendChild(item);
+      // ── Neon film strips: rows of photos drifting in opposite directions,
+      // seamless loop, scroll-velocity boost + tilt, hover pause, click → lightbox.
+      function buildStrips(container: HTMLElement, urls: string[]) {
+        container.className = 'film-strips';
+        container.innerHTML = '';
+
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        // Cap how many full-res photos we decode — every strip photo loads
+        // eagerly (lazy-loading fights the marquee), so an uncapped folder
+        // means hundreds of multi-MB decodes and a frozen page.
+        const MAX_PER_ROW = 10;
+        const ROWS = Math.min(3, Math.max(1, Math.ceil(urls.length / 4)));
+        const capped = urls.slice(0, ROWS * MAX_PER_ROW);
+        const rowUrls: string[][] = Array.from({ length: ROWS }, () => []);
+        capped.forEach((u, i) => rowUrls[i % ROWS].push(u));
+
+        type Track = {
+          el: HTMLElement; dir: number; x: number; half: number; speed: number; paused: boolean;
+        };
+        const tracks: Track[] = [];
+
+        rowUrls.forEach((rowSet, r) => {
+          // Pad short rows so the loop never shows a gap.
+          let items = rowSet.slice();
+          while (items.length < 8) items = items.concat(rowSet);
+
+          const row = document.createElement('div');
+          row.className = 'film-row';
+          const track = document.createElement('div');
+          track.className = 'film-track';
+
+          // Two copies back-to-back → wrap at half-width is invisible.
+          const copies = reduced ? [items] : [items, items];
+          copies.forEach((set, c) => {
+            set.forEach((url, i) => {
+              const alt = `Party · Photo ${i + 1}`;
+              const cell = document.createElement('div');
+              cell.className = 'film-photo';
+              if (c > 0) cell.setAttribute('aria-hidden', 'true');   // duplicate copy
+              const img = document.createElement('img');
+              img.src = url;
+              img.alt = c > 0 ? '' : alt;
+              img.decoding = 'async';
+              cell.addEventListener('click', () => openLightbox(url, alt));
+              cell.appendChild(img);
+              track.appendChild(cell);
+            });
           });
-        }
 
-        renderBatch(urls.slice(0, INITIAL), 0);
+          row.appendChild(track);
+          container.appendChild(row);
 
-        if (urls.length > INITIAL) {
-          const fade = document.createElement('div');
-          fade.className = 'grid-fade';
-          fade.style.background = 'linear-gradient(to bottom, transparent, #0e0e1a)';
-          gridEl.after(fade);
+          if (reduced) return;   // static, swipeable row
 
-          const btn = document.createElement('button');
-          btn.className = 'show-more-btn';
-          btn.textContent = `↓  ${urls.length - INITIAL} more`;
-          fade.after(btn);
+          const t: Track = {
+            el: track,
+            dir: r % 2 === 0 ? -1 : 1,          // alternate directions
+            x: 0,
+            half: 0,
+            speed: 0.35 + r * 0.12,             // each row slightly different pace
+            paused: false,
+          };
+          tracks.push(t);
 
-          btn.addEventListener('click', () => {
-            renderBatch(urls.slice(INITIAL), INITIAL);
-            fade.remove();
-            btn.remove();
-            ScrollTrigger.refresh();
-          });
-        }
+          // Photos load async → track width grows; keep the wrap point fresh.
+          new ResizeObserver(() => { t.half = t.el.scrollWidth / 2; }).observe(track);
+
+          row.addEventListener('pointerenter', () => { t.paused = true; });
+          row.addEventListener('pointerleave', () => { t.paused = false; });
+        });
+
+        if (reduced || tracks.length === 0) return;
+
+        // Scroll velocity → temporary speed boost + slight tilt.
+        let lastY = window.scrollY;
+        let boost = 0;
+        window.addEventListener('scroll', () => {
+          boost = Math.min(boost + Math.abs(window.scrollY - lastY) * 0.03, 5);
+          lastY = window.scrollY;
+        }, { passive: true });
+
+        (function tick() {
+          requestAnimationFrame(tick);
+          boost *= 0.94;   // decay back to cruise speed
+          for (const t of tracks) {
+            if (t.paused || t.half === 0) continue;
+            t.x += (t.speed + boost) * t.dir;
+            if (t.x <= -t.half) t.x += t.half;
+            if (t.x > 0)        t.x -= t.half;
+            // translateX only — skew/rotate per frame re-rasterises the whole
+            // track layer and tanks the frame rate.
+            t.el.style.transform = `translateX(${t.x}px)`;
+          }
+        })();
       }
 
       const content = document.getElementById('party-content')!;
