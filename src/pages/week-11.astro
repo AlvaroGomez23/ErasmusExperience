@@ -1,7 +1,51 @@
 ---
 import WeekLayout from '../layouts/WeekLayout.astro';
 import { PUBLISHED_WEEKS } from '../config/routes';
+import { weeks } from '../data/weeks';
 if (!PUBLISHED_WEEKS.includes(11)) return Astro.redirect('/');
+
+// Reverse recap — every prior week, linked when its page is live.
+const recap = weeks.filter((w) => w.week < 11);
+
+// The 3D hero each week represents — its GLB model, or a wireframe geometry
+// (weeks 8–10, which have no GLB). Rendered small inside each recap card.
+const heroModel: Record<number, { model?: string; geo?: string }> = {
+  1:  { model: '/models/Airplane.glb' },
+  2:  { model: '/models/Sun.glb' },
+  3:  { model: '/models/Star.glb' },
+  4:  { model: '/models/Bird.glb' },
+  5:  { model: '/models/Star.glb' },
+  6:  { model: '/models/bridge.glb' },
+  7:  { model: '/models/Car.glb' },
+  8:  { geo: 'sphere' },
+  9:  { geo: 'cone' },
+  10: { geo: 'cylinder' },
+};
+
+// Supabase config for the 3D memory cloud (same bucket the gallery uses).
+const supabaseConfig = JSON.stringify({
+  url: import.meta.env.SUPABASE_URL,
+  key: import.meta.env.SUPABASE_KEY,
+});
+
+// Big sign-off, split into characters so each letter can animate in.
+const SIGNOFF = 'OBRIGADO AMARANTE';
+
+// Boarding pass — the leaving ticket. Edit before departure.
+const pass = {
+  airline:   'ERASMUS AIRLINES',
+  fromCode:  'OPO',   fromCity: 'Oporto',
+  toCode:    'BCN',   toCity:   'Barcelona',
+  passenger: 'JOSE & ÁLVARO',
+  flight:    'VY8481',
+  date:      '31 JUL',
+  gate:      '--',
+  seat:      '15F',
+  boarding:  '22:00',
+  seq:       '0011',
+};
+// Random-width bars for the barcode (widths in px, 1–3).
+const barcode = Array.from({ length: 30 }, () => 1 + Math.floor(Math.random() * 3));
 ---
 
 <WeekLayout
@@ -16,6 +60,8 @@ if (!PUBLISHED_WEEKS.includes(11)) return Astro.redirect('/');
   prevTitle="Week 10"
   nextSlug={null}
   nextTitle={null}
+  modelPath="/models/Airplane.glb"
+  glassContent
 >
   <section class="content-section">
     <span class="section-tag">Farewell</span>
@@ -25,32 +71,432 @@ if (!PUBLISHED_WEEKS.includes(11)) return Astro.redirect('/');
       and that strange feeling of leaving a place that already feels like home.
     </p>
     <p>
-      Ten weeks in Amarante. We wouldn't trade them for anything.
+      Eleven weeks in Amarante. We wouldn't trade them for anything.
     </p>
   </section>
 
+  <!-- ─── BOARDING PASS — the leaving ticket (3D-tilt on hover) ─── -->
   <section class="content-section">
-    <span class="section-tag">Reflection</span>
-    <h2>What we learned</h2>
-    <p>
-      Write the final Erasmus reflection here — what you're taking with you, what
-      changed, what you'd do again and what you wouldn't.
-    </p>
-  </section>
+    <span class="section-tag">One way</span>
+    <h2>Boarding pass</h2>
+    <div class="pass-stage">
+      <article class="pass" id="boarding-pass"
+               aria-label={`Boarding pass, ${pass.fromCity} to ${pass.toCity}, passengers ${pass.passenger}`}>
+        <div class="pass-main">
+          <header class="pass-air">
+            <span class="pass-air-name">{pass.airline}</span>
+            <span class="pass-air-mark" aria-hidden="true">✈</span>
+          </header>
 
-  <section class="content-section">
-    <span class="section-tag">Photos</span>
-    <h2>The week in images</h2>
-    <div class="photo-grid">
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
+          <div class="pass-route">
+            <div class="pass-city">
+              <span class="pass-code">{pass.fromCode}</span>
+              <span class="pass-city-name">{pass.fromCity}</span>
+            </div>
+            <div class="pass-fly" aria-hidden="true">
+              <span class="pass-fly-line"></span>
+              <span class="pass-fly-plane">✈</span>
+            </div>
+            <div class="pass-city pass-city--to">
+              <span class="pass-code">{pass.toCode}</span>
+              <span class="pass-city-name">{pass.toCity}</span>
+            </div>
+          </div>
+
+          <dl class="pass-grid">
+            <div><dt>Passenger</dt><dd>{pass.passenger}</dd></div>
+            <div><dt>Flight</dt><dd>{pass.flight}</dd></div>
+            <div><dt>Date</dt><dd>{pass.date}</dd></div>
+            <div><dt>Gate</dt><dd>{pass.gate}</dd></div>
+            <div><dt>Seat</dt><dd>{pass.seat}</dd></div>
+            <div><dt>Boarding</dt><dd>{pass.boarding}</dd></div>
+          </dl>
+        </div>
+
+        <aside class="pass-stub">
+          <span class="pass-stub-tag">Boarding pass</span>
+          <span class="pass-stub-route">{pass.fromCode} → {pass.toCode}</span>
+          <span class="pass-stub-name">{pass.passenger}</span>
+          <div class="pass-mini">
+            <span class="pass-mini-cell"><small>Seat</small><strong>{pass.seat}</strong></span>
+            <span class="pass-mini-cell"><small>Gate</small><strong>{pass.gate}</strong></span>
+          </div>
+          <div class="pass-barcode" aria-hidden="true">
+            {barcode.map((w) => <i style={`width:${w}px`}></i>)}
+          </div>
+          <span class="pass-seq">{pass.flight} · {pass.seq}</span>
+        </aside>
+
+        <div class="pass-glare" aria-hidden="true"></div>
+        <span class="pass-notch pass-notch--top" aria-hidden="true"></span>
+        <span class="pass-notch pass-notch--bottom" aria-hidden="true"></span>
+      </article>
     </div>
   </section>
+
+  <!-- ─── REVERSE RECAP WALL — each tile shows that week's 3D hero ─── -->
+  <section class="content-section">
+    <span class="section-tag">The whole journey</span>
+    <h2>Ten weeks, one story</h2>
+    <div class="recap-wall">
+      {recap.map((w) => {
+        const live = PUBLISHED_WEEKS.includes(w.week);
+        const Tag = live ? 'a' : 'div';
+        return (
+          <Tag
+            href={live ? `/${w.slug}` : undefined}
+            class={`recap-tile${live ? '' : ' is-locked'}`}
+            style={`--tile: ${w.primaryColor};`}
+          >
+            <canvas
+              class="recap-canvas"
+              data-color={w.primaryColor}
+              data-model={heroModel[w.week]?.model}
+              data-geo={heroModel[w.week]?.geo}
+              aria-hidden="true"
+            ></canvas>
+            <span class="recap-num">{String(w.week).padStart(2, '0')}</span>
+            <span class="recap-sub">{w.subtitle}</span>
+          </Tag>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- ─── TWO-PERSON LETTER ─── -->
+  <section class="content-section">
+    <span class="section-tag">To Amarante</span>
+    <h2>Two goodbyes</h2>
+    <div class="letter-grid">
+      <div class="letter">
+        <span class="letter-from">Jose</span>
+        <p>
+          Write your goodbye here — the thing you'll miss, the moment you
+          keep, what this city gave you.
+        </p>
+      </div>
+      <div class="letter">
+        <span class="letter-from">Álvaro</span>
+        <p>
+          Write your goodbye here — the thing you'll miss, the moment you
+          keep, what this city gave you.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 3D MEMORY CLOUD ─── -->
+  <section class="content-section content-section--wide">
+    <span class="section-tag">Every moment</span>
+    <h2>The whole trip, floating</h2>
+    <p>
+      Photos from all eleven weeks, drifting in space. Move your mouse to
+      look around — scroll to fly through them.
+    </p>
+  </section>
+  <section id="memory-cloud" aria-label="Photo memory cloud">
+    <canvas id="memory-canvas" aria-hidden="true"></canvas>
+    <svg class="the-end" viewBox="0 0 600 220" aria-label="The End">
+      <text x="300" y="140" text-anchor="middle">The End</text>
+    </svg>
+  </section>
+
+
+
+  <!-- Supabase config, read by the memory-cloud script. -->
+  <script id="sb-config" type="application/json" set:html={supabaseConfig}></script>
+
   <script>
     import '../scripts/three-week-11.ts';
   </script>
+  <script>
+    import '../scripts/three-week-11-cloud.ts';
+  </script>
+  <script>
+    import '../scripts/week-11-finale.ts';
+  </script>
+  <script>
+    import '../scripts/week-11-boardingpass.ts';
+  </script>
+  <script>
+    import '../scripts/three-recap-cards.ts';
+  </script>
+
+  <style>
+    /* ─── Boarding pass ─── */
+    .pass-stage {
+      margin-top: 1.6rem;
+      perspective: 1200px;
+      display: flex; justify-content: center;
+    }
+    .pass {
+      --ink: #12233b;
+      --stub: 152px;         /* stub width — the seam sits here */
+      position: relative;
+      display: flex;
+      width: min(680px, 100%);
+      min-height: 236px;
+      border-radius: 18px;
+      background: #fff;
+      border: 1.5px solid color-mix(in srgb, var(--week-primary) 40%, #cdd7e6);
+      color: var(--ink);
+      box-shadow: 0 30px 60px -26px rgba(10, 30, 60, 0.65);
+      overflow: hidden;   /* clips the outer half of the notch discs → bites */
+      transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.6s ease;
+      /* Entrance state — flips up into place when scrolled in. */
+      opacity: 0; transform: translateY(28px) rotateX(26deg);
+      will-change: transform;
+    }
+    .pass.is-in { opacity: 1; transform: none; }
+
+    /* Holographic sheen sweeping across the whole ticket, forever. */
+    .pass::after {
+      content: ''; position: absolute; inset: 0; z-index: 5;
+      pointer-events: none; border-radius: inherit;
+      background: linear-gradient(115deg,
+        transparent 34%,
+        color-mix(in srgb, var(--week-accent) 30%, transparent) 46%,
+        color-mix(in srgb, var(--week-primary) 30%, transparent) 54%,
+        transparent 66%);
+      background-size: 260% 100%;
+      animation: passSheen 6.5s linear infinite;
+      opacity: 0.55;
+    }
+    @keyframes passSheen {
+      0%   { background-position: 140% 0; }
+      100% { background-position: -140% 0; }
+    }
+    /* Pointer-tracked glare highlight. */
+    .pass-glare {
+      position: absolute; inset: 0; z-index: 6;
+      pointer-events: none; border-radius: inherit;
+      background: radial-gradient(circle at var(--mx, 50%) var(--my, 0%),
+        rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 42%);
+      mix-blend-mode: screen;
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+    .pass:hover .pass-glare { opacity: 1; }
+
+    /* Punched notches at the ends of the tear seam. Full discs centred on the
+       seam; .pass's overflow:hidden clips the outer half, leaving an outlined
+       bite. Same border as the ticket so the outline is continuous. */
+    .pass-notch {
+      position: absolute; z-index: 7;
+      left: calc(100% - var(--stub));
+      width: 22px; height: 22px; border-radius: 50%;
+      transform: translateX(-50%);
+      background: var(--week-bg);
+      border: 1.5px solid color-mix(in srgb, var(--week-primary) 40%, #cdd7e6);
+    }
+    .pass-notch--top { top: -12px; }
+    .pass-notch--bottom { bottom: -12px; }
+
+    /* ── Main body ── */
+    .pass-main {
+      flex: 1; min-width: 0; z-index: 2;
+      padding: 1.3rem 1.4rem;
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+    .pass-air {
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid rgba(18, 35, 59, 0.12);
+      padding-bottom: 0.7rem;
+    }
+    .pass-air-name {
+      font-family: var(--font-mono); font-weight: 700;
+      letter-spacing: 0.14em; font-size: 0.78rem;
+      color: var(--week-primary);
+    }
+    .pass-air-mark { font-size: 1.05rem; }
+
+    .pass-route { display: flex; align-items: center; gap: 0.8rem; }
+    .pass-city { display: flex; flex-direction: column; }
+    .pass-city--to { text-align: right; align-items: flex-end; }
+    .pass-code {
+      font-size: clamp(1.9rem, 7vw, 2.5rem); font-weight: 800;
+      line-height: 1; letter-spacing: -0.02em;
+    }
+    .pass-city-name {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: rgba(18, 35, 59, 0.55); margin-top: 0.3rem;
+    }
+    .pass-fly { flex: 1; position: relative; height: 2px; }
+    .pass-fly-line { position: absolute; inset: 0; border-top: 2px dashed rgba(18, 35, 59, 0.3); }
+    .pass-fly-plane {
+      position: absolute; top: 50%; left: 0;
+      transform: translate(-50%, -50%); font-size: 0.95rem;
+      color: var(--week-primary);
+      animation: flyAcross 5s ease-in-out infinite;
+    }
+    @keyframes flyAcross { 0%, 100% { left: 0; } 50% { left: 100%; } }
+
+    .pass-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 0.7rem 1rem; margin: 0;
+    }
+    .pass-grid div { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
+    .pass-grid dt {
+      font-family: var(--font-mono); font-size: 0.55rem;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: rgba(18, 35, 59, 0.5);
+    }
+    .pass-grid dd {
+      margin: 0; font-weight: 700; font-size: 0.92rem;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+
+    /* ── Tear-off stub ── */
+    .pass-stub {
+      flex: 0 0 var(--stub); width: var(--stub); z-index: 2;
+      padding: 1.3rem 0.9rem;
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; gap: 0.5rem;
+      border-left: 2px dashed rgba(18, 35, 59, 0.28);
+      background: color-mix(in srgb, var(--week-primary) 6%, #fff);
+    }
+    .pass-stub-tag {
+      font-family: var(--font-mono); font-size: 0.52rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--week-primary);
+    }
+    .pass-stub-route { font-weight: 800; font-size: 1.05rem; letter-spacing: 0.02em; }
+    .pass-stub-name {
+      font-family: var(--font-mono); font-size: 0.56rem;
+      letter-spacing: 0.1em; color: rgba(18, 35, 59, 0.6);
+    }
+    .pass-mini { display: flex; gap: 0.9rem; }
+    .pass-mini-cell { display: flex; flex-direction: column; }
+    .pass-mini-cell small {
+      font-family: var(--font-mono); font-size: 0.5rem;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: rgba(18, 35, 59, 0.5);
+    }
+    .pass-mini-cell strong { font-size: 0.95rem; }
+    .pass-barcode {
+      display: flex; align-items: stretch; gap: 1px;
+      height: 52px; margin-top: auto; max-width: 100%;
+    }
+    .pass-barcode i { flex: 0 0 auto; background: var(--ink); }
+    .pass-seq {
+      font-family: var(--font-mono); font-size: 0.5rem;
+      letter-spacing: 0.14em; color: rgba(18, 35, 59, 0.55);
+    }
+
+    @media (max-width: 520px) {
+      .pass-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .pass { opacity: 1; transform: none; transition: none; }
+      .pass::after, .pass-fly-plane { animation: none; }
+    }
+
+    /* ─── Reverse recap wall — each tile carries that week's 3D hero ─── */
+    .recap-wall {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);   /* 5 and 5 */
+      gap: 0.8rem;
+      margin-top: 1.6rem;
+    }
+    @media (max-width: 720px) {
+      .recap-wall { grid-template-columns: repeat(2, 1fr); }
+    }
+    .recap-tile {
+      display: flex; flex-direction: column; gap: 0.3rem;
+      padding: 0.9rem 1.2rem 1.1rem;
+      border-radius: 1rem;
+      text-decoration: none;
+      background: color-mix(in srgb, var(--tile) 9%, transparent);
+      border: 1px solid color-mix(in srgb, var(--tile) 30%, transparent);
+      border-left: 4px solid var(--tile);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .recap-canvas {
+      width: 100%; height: 120px; display: block;
+      margin-bottom: 0.4rem;
+    }
+    a.recap-tile:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px color-mix(in srgb, var(--tile) 25%, transparent);
+    }
+    .recap-tile.is-locked { opacity: 0.55; filter: grayscale(0.35); }
+    .recap-num {
+      font-family: var(--font-mono); font-weight: 700; font-size: 1.4rem;
+      color: var(--tile); line-height: 1;
+    }
+    .recap-sub {
+      font-size: 0.82rem; line-height: 1.35;
+      color: rgba(20, 40, 70, 0.78);
+    }
+
+    /* ─── Two-person letter ─── */
+    .letter-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem;
+      margin-top: 1.6rem;
+    }
+    .letter {
+      padding: 1.6rem;
+      border-radius: 1.1rem;
+      background: rgba(0, 188, 212, 0.06);
+      border: 1px solid rgba(0, 188, 212, 0.2);
+    }
+    .letter-from {
+      display: block; font-family: var(--font-mono);
+      font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--week-accent); margin-bottom: 0.7rem;
+    }
+    .letter p { margin: 0; line-height: 1.6; }
+    @media (max-width: 560px) {
+      .letter-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ─── 3D memory cloud ─── */
+    .content-section--wide { text-align: center; }
+    .content-section--wide p { margin-left: auto; margin-right: auto; }
+    #memory-cloud {
+      position: relative;
+      width: 100%;
+      height: 82vh;
+      margin: 1rem 0 0;
+      overflow: hidden;   /* clip the-end's stroke overshoot → no stray scrollbar */
+    }
+    #memory-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .memory-hint {
+      position: absolute;
+      bottom: 1.4rem; left: 50%; transform: translateX(-50%);
+      font-family: var(--font-mono); font-size: 0.62rem;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--week-primary); opacity: 0.6;
+      pointer-events: none;
+    }
+    /* Hand-drawn "The End" — stroke draws in on the final scroll of the flythrough */
+    .the-end {
+      position: absolute; inset: 0; margin: auto;
+      width: min(60vw, 520px); height: auto;
+      pointer-events: none; opacity: 0;
+      overflow: visible;
+    }
+    .the-end text {
+      font-family: 'Brush Script MT', 'Segoe Script', cursive;
+      font-size: 140px; font-style: italic;
+      fill: var(--week-primary); fill-opacity: 0;
+      stroke: var(--week-primary); stroke-width: 1.4;
+      stroke-linejoin: round; stroke-linecap: round;
+      stroke-dasharray: 2600; stroke-dashoffset: 2600;
+      paint-order: stroke;
+    }
+
+  </style>
+
+  <!-- The cloud is the last thing on the page: kill the content's trailing
+       padding AND hide the week-nav footer, so the flythrough ends on "The
+       End" with nothing sliding in underneath. -->
+  <style is:global>
+    .week-content:has(#memory-cloud) { padding-bottom: 0; }
+    .week-footer { display: none; }
+  </style>
 </WeekLayout>

@@ -7,22 +7,52 @@ if (!PUBLISHED_WEEKS.includes(7)) return Astro.redirect('/');
 <WeekLayout
   week={7}
   title="07"
-  subtitle="Art and creativity"
+  subtitle="The first goodbyes"
   dates="29 JUN - 5 JUL"
-  primaryColor="#FF4444"
-  accentColor="#FFD700"
-  bgColor="#fff0f0"
+  primaryColor="#6C8EBF"
+  accentColor="#E8B25A"
+  bgColor="#eef2f7"
   prevSlug="week-06"
   prevTitle="Week 06"
   nextSlug="week-08"
   nextTitle="Week 08"
+  modelPath="/models/Car.glb"
+  glassContent={true}
 >
+  <div class="depart-flow">
   <section class="content-section">
-    <span class="section-tag">Creativity</span>
-    <h2>Amarante and art</h2>
+    <span class="section-tag">Departures</span>
+    <h2>The first goodbyes</h2>
     <p>
-      Amadeo de Souza-Cardoso was born here. Art is in the DNA of this city.
-      This week we see everything through an artist's eyes.
+      Every mobility ends the way it started — with suitcases by the door. This
+      week the group began to thin out. One by one, friends packed up, hugged
+      everyone twice, and set off down the road back to their homes.
+    </p>
+  </section>
+
+  <section class="content-section">
+    <span class="section-tag">Leaving behind</span>
+    <h2>Empty chairs at CJ</h2>
+    <p>
+      The dinner table at Casa da Juventude felt bigger each night. Seats that
+      were loud last week sat quiet. You only notice how much someone fills a
+      room once their chair is empty.
+    </p>
+  </section>
+
+  <section class="content-section">
+    <span class="section-tag">The road</span>
+    <h2>Watching them drive off</h2>
+    <p>
+      Hard moments, but also beautiful ones. We are grateful for the time we had with them. Specially with Brandor. One of our friends that made this experience so special and we are so grateful for it. We will miss them, but for sure, we will meet again.
+    </p>
+  </section>
+
+  <section class="content-section">
+    <span class="section-tag">Home</span>
+    <h2>Carrying memories</h2>
+    <p>
+      Everyone that left, took a piece of Amarante with them. We hope meeting us was a nice experience because this memories will be something that we won't experience again. But we won't be sad because it ended, we will be happy because it happened. And we will keep these memories alive in our hearts.
     </p>
   </section>
 
@@ -30,15 +60,45 @@ if (!PUBLISHED_WEEKS.includes(7)) return Astro.redirect('/');
     <span class="section-tag">Photos</span>
     <h2>The week in images</h2>
     <div class="photo-grid">
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week7/week07-01.webp" alt="Photo 1"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week7/week07-02.webp" alt="Photo 2"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week7/week07-03.webp" alt="Photo 3"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week7/week07-04.webp" alt="Photo 4"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week7/week07-05.webp" alt="Photo 5"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week7/week07-06.webp" alt="Photo 6"></div>
     </div>
   </section>
+  </div>
   <script>
     import '../scripts/three-week-07.ts';
   </script>
+
+  <style>
+    /* Floating side cards so the road/car/house stay visible in the centre */
+    .depart-flow .content-section {
+      max-width: 460px;
+      margin: 0 0 70vh;
+    }
+    .depart-flow .content-section:nth-child(odd) {
+      margin-left: 4vw;
+      margin-right: auto;
+    }
+    .depart-flow .content-section:nth-child(even) {
+      margin-left: auto;
+      margin-right: 4vw;
+    }
+    /* Photos: full width, centred, normal spacing */
+    .depart-flow .content-section:last-child {
+      max-width: 900px;
+      margin: 6rem auto 0;
+    }
+    @media (max-width: 768px) {
+      .depart-flow .content-section,
+      .depart-flow .content-section:nth-child(odd),
+      .depart-flow .content-section:nth-child(even) {
+        max-width: 100%;
+        margin: 0 0 45vh;
+      }
+    }
+  </style>
 </WeekLayout>

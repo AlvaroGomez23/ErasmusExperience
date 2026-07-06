@@ -178,7 +178,6 @@ const isDark = (hex: string) => {
       // ── COUNTDOWN to departure (Portugal WEST = UTC+1) ──
       const START  = new Date('2026-05-20T00:00:00+01:00').getTime(); // week 01 begins
       const DEPART = new Date('2026-07-31T22:00:00+01:00').getTime(); // wheels up
-      const GRID0  = new Date('2026-05-18T00:00:00+01:00').getTime(); // Monday of week 01
       const TOTAL_WEEKS = 11;
       const DAY = 86400000;
       const WEEK = 7 * DAY;
@@ -238,7 +237,7 @@ const isDark = (hex: string) => {
         if (elPct)  elPct.textContent  = pct + '%';
 
         // weeks counted off the Mon–Sun grid, with a live fractional part
-        const lived = Math.min(TOTAL_WEEKS, Math.max(0, (now - GRID0) / WEEK));
+        const lived = Math.min(TOTAL_WEEKS, Math.max(0, (now - START) / WEEK));
         if (elWDone) elWDone.textContent = lived.toFixed(1);            // weeks lived
         if (elWLeft) elWLeft.textContent = (left / WEEK).toFixed(1);    // weeks still ahead
         if (elDLeft) elDLeft.textContent = (left / DAY).toFixed(1);

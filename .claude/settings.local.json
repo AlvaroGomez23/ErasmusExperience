@@ -16,7 +16,11 @@
       "Bash(python skills/ui-ux-pro-max/scripts/search.py \"festival fireworks celebration city night immersive\" --design-system)",
       "Bash(python \"C:/Users/Alvaro/.claude/plugins/cache/ui-ux-pro-max-skill/ui-ux-pro-max/2.5.0/.claude/skills/ui-ux-pro-max/scripts/search.py\" \"festival fireworks celebration city night immersive\" --design-system)",
       "Bash(python scripts/search.py \"festival fireworks night celebration immersive warm\" --domain color -n 3)",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "PowerShell(npm install *)",
+      "PowerShell(npm run *)",
+      "PowerShell(node \"C:\\\\Users\\\\Alvaro\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-Alvaro-Desktop-AmaranteWeb\\\\d0f59af7-83d5-41ed-86b2-8cbc9688122c\\\\scratchpad\\\\probe.mjs\")",
+      "PowerShell(Add-Content *)"
     ]
   }
 }
