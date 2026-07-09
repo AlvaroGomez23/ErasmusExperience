@@ -2,43 +2,498 @@
 import WeekLayout from '../layouts/WeekLayout.astro';
 import { PUBLISHED_WEEKS } from '../config/routes';
 if (!PUBLISHED_WEEKS.includes(8)) return Astro.redirect('/');
+
+// Countries that showed up this week — edit freely (code + note).
+const stamps = [
+  { code: 'ARM', country: 'Armenia' },
+  { code: 'MAR', country: 'Morocco' },
+  { code: 'RUS', country: 'Russia' },
+  { code: 'MEX', country: 'Mexico' },
+  { code: 'ESP', country: 'Spain' },
+];
+
+// Live clocks — the same moment, told by every homeland's timezone.
+// `home` marks the dinner table (Amarante). tz = IANA zone id.
+const clocks = [
+  { country: 'Amarante', tz: 'Europe/Lisbon', home: true },
+  { country: 'Spain', tz: 'Europe/Madrid' },
+  { country: 'Morocco', tz: 'Africa/Casablanca' },
+  { country: 'Russia', tz: 'Europe/Moscow' },
+  { country: 'Armenia', tz: 'Asia/Yerevan' },
+  { country: 'Mexico', tz: 'America/Mexico_City' },
+];
 ---
 
 <WeekLayout
   week={8}
   title="08"
-  subtitle="Portuguese cuisine"
+  subtitle="The world in one place"
   dates="6 — 12 JUL"
-  primaryColor="#FF9800"
-  accentColor="#FF6B35"
-  bgColor="#fff8f0"
+  primaryColor="#1B3A5C"
+  accentColor="#B23A2E"
+  bgColor="#e9e0cd"
   prevSlug="week-07"
   prevTitle="Week 07"
   nextSlug="week-09"
   nextTitle="Week 09"
+  modelPath="/models/arrivals2.glb"
 >
-  <section class="content-section">
-    <span class="section-tag">Gastronomy</span>
-    <h2>Eating in Portugal</h2>
-    <p>
-      Bacalhau a thousand ways, francesinha, pastel de nata, vinho verde.
-      This week we dedicate ourselves to eating well (guilt-free).
-    </p>
-  </section>
+  <div class="passport">
+    <!-- INTRO / CONTEXT -->
+    <section class="content-section">
+      <span class="section-tag">The week</span>
+      <h2>The world wrapped in one place</h2>
+      <p>
+        Last week was full of goodbyes. We had to say goodbye to the friends we've been with since our very first day of Erasmus. Most of the people who left were Spanish, so we never really needed to speak English with them.
+      </p>
+      <p>
+        This week has been the complete opposite, with lots of new people arriving from different countries such as Morocco, Russia, Armenia, and many others. Getting to know them has been a really interesting experience. Everyone has different hobbies, interests, and ways of seeing things, which makes every conversation a chance to learn something new.
+      </p>
+      <p>
+        Even though we sometimes struggle to understand each other, we always do our best to communicate. We mainly speak English with the new students, but some of them also know Spanish, which makes things a bit easier sometimes. It's nice to see how, even with different languages and cultures, we can still connect and enjoy spending time together.
+      </p>
+    </section>
 
-  <section class="content-section">
-    <span class="section-tag">Photos</span>
-    <h2>The week in images</h2>
-    <div class="photo-grid">
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-    </div>
-  </section>
+    <!-- ARRIVALS BOARD -->
+    <section class="content-section arrivals-board">
+      <div class="ab-head">
+        <span class="ab-title">Arrivals</span>
+        <span class="ab-live"><span class="ab-dot"></span>Amarante · CJ</span>
+      </div>
+      <div class="ab-grid">
+        <div class="ab-row ab-labels">
+          <span>Origin</span><span>Code</span><span>Status</span>
+        </div>
+        {stamps.map((s) => (
+          <div class="ab-row">
+            <span class="ab-from">{s.country}</span>
+            <span class="ab-code">{s.code}</span>
+            <span class="ab-status">Landed</span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- CONNECTION GLOBE -->
+    <section class="content-section globe-section">
+      <span class="section-tag">Connections</span>
+      <h2>Every line ends here</h2>
+      <p>Drag the globe. Each arc is one arrival — five countries, one table.</p>
+      <div class="globe-wrap">
+        <canvas id="globe-canvas"></canvas>
+        <span class="globe-hint">drag to spin</span>
+      </div>
+    </section>
+
+    <!-- TIMEZONE CLOCKS -->
+    <section class="content-section clocks">
+      <span class="section-tag">One moment</span>
+      <h2>The same second, six timezones</h2>
+      <p>
+        While we talk to each other in the same hours, our homelands are in different times. The clocks below represent the actual timezone of each country.
+      </p>
+      <div class="clock-grid">
+        {clocks.map((c) => (
+          <div class={`clock-card${c.home ? ' clock-home' : ''}`} data-tz={c.tz}>
+            <svg class="clock-face" viewBox="0 0 100 100" aria-hidden="true">
+              <circle class="cf-ring" cx="50" cy="50" r="46" />
+              <line class="cf-hand cf-hour" x1="50" y1="50" x2="50" y2="28" />
+              <line class="cf-hand cf-min" x1="50" y1="50" x2="50" y2="18" />
+              <line class="cf-hand cf-sec" x1="50" y1="50" x2="50" y2="14" />
+              <circle class="cf-cap" cx="50" cy="50" r="3" />
+            </svg>
+            <span class="clock-country">{c.country}</span>
+            <span class="clock-time" data-role="time">--:--</span>
+            <span class="clock-day" data-role="day"></span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="content-section">
+      <span class="section-tag">Photos</span>
+      <h2>The week in images</h2>
+      <div class="photo-grid">
+        <div class="photo-item">📸</div>
+        <div class="photo-item">📸</div>
+        <div class="photo-item">📸</div>
+        <div class="photo-item">📸</div>
+        <div class="photo-item">📸</div>
+        <div class="photo-item">📸</div>
+      </div>
+    </section>
+  </div>
+
   <script>
+    import gsap from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
     import '../scripts/three-week-08.ts';
+    import '../scripts/globe-week-08.ts';
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    // ─── Scroll text reveals ───────────────────────────────
+    // h2 stamps in word-by-word; tags + paragraphs rise and fade.
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      // headings → per-word stagger
+      document.querySelectorAll<HTMLElement>('.passport h2').forEach((h) => {
+        const words = (h.textContent ?? '').split(/(\s+)/);
+        h.textContent = '';
+        const spans: HTMLElement[] = [];
+        for (const w of words) {
+          if (/^\s+$/.test(w)) { h.appendChild(document.createTextNode(w)); continue; }
+          const s = document.createElement('span');
+          s.className = 'rv-word';
+          s.textContent = w;
+          h.appendChild(s);
+          spans.push(s);
+        }
+        gsap.set(spans, { yPercent: 120, opacity: 0 });
+        gsap.to(spans, {
+          yPercent: 0, opacity: 1, duration: 0.55, ease: 'back.out(1.6)',
+          stagger: 0.05,
+          scrollTrigger: { trigger: h, start: 'top 88%', once: true },
+        });
+      });
+
+      // tags + paragraphs → simple rise
+      document.querySelectorAll<HTMLElement>('.passport .section-tag, .passport p').forEach((el) => {
+        gsap.from(el, {
+          y: 22, opacity: 0, duration: 0.7, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 90%', once: true },
+        });
+      });
+    }
+
+    // Live timezone clocks — one tick drives every card off its IANA zone.
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('.clock-card'));
+    if (cards.length) {
+      // Read h/m/s in a card's timezone via Intl (handles DST for us).
+      const partsFor = (tz: string) => {
+        const p = new Intl.DateTimeFormat('en-GB', {
+          timeZone: tz, hour: '2-digit', minute: '2-digit', second: '2-digit',
+          weekday: 'short', hour12: false,
+        }).formatToParts(new Date());
+        const get = (t: string) => p.find((x) => x.type === t)?.value ?? '00';
+        return { h: +get('hour') % 24, m: +get('minute'), s: +get('second'), day: get('weekday') };
+      };
+
+      const tick = () => {
+        for (const card of cards) {
+          const tz = card.dataset.tz!;
+          const { h, m, s, day } = partsFor(tz);
+          const hour = card.querySelector<SVGElement>('.cf-hour');
+          const min = card.querySelector<SVGElement>('.cf-min');
+          const sec = card.querySelector<SVGElement>('.cf-sec');
+          hour?.style.setProperty('transform', `rotate(${(h % 12) * 30 + m * 0.5}deg)`);
+          min?.style.setProperty('transform', `rotate(${m * 6 + s * 0.1}deg)`);
+          sec?.style.setProperty('transform', `rotate(${s * 6}deg)`);
+
+          const time = card.querySelector<HTMLElement>('[data-role="time"]');
+          const dayEl = card.querySelector<HTMLElement>('[data-role="day"]');
+          if (time) time.textContent = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+          // awake vs asleep glyph: daytime ≈ 07:00–21:59
+          const awake = h >= 7 && h < 22;
+          if (dayEl) dayEl.textContent = `${day} · ${awake ? '☀' : '☾'}`;
+          card.classList.toggle('is-night', !awake);
+        }
+      };
+
+      tick();
+      const id = window.setInterval(tick, 1000);
+      document.addEventListener('astro:before-swap', () => clearInterval(id), { once: true });
+    }
   </script>
+
+  <style>
+    /* ─── PASSPORT THEME (week 08) ─────────────────────── */
+    .passport .content-section {
+      background: #f3ecdb;
+      border: 1px solid rgba(27, 58, 92, 0.22);
+      border-radius: 0.4rem;
+      padding: 2.6rem 2.4rem;
+      box-shadow: 0 12px 34px rgba(27, 58, 92, 0.1);
+      /* subtle paper grain */
+      background-image:
+        radial-gradient(rgba(27, 58, 92, 0.05) 1px, transparent 1px);
+      background-size: 4px 4px;
+    }
+
+    .passport .section-tag {
+      color: var(--week-accent);
+      border-bottom: 1.5px solid var(--week-accent);
+      padding-bottom: 0.2rem;
+    }
+
+    .passport h2 {
+      color: var(--week-primary);
+    }
+
+    .rv-word {
+      display: inline-block;
+      will-change: transform;
+    }
+
+    .passport p {
+      opacity: 0.78;
+    }
+
+    /* ── Arrivals board (split-flap) ── */
+    .passport .arrivals-board {
+      font-family: var(--font-mono);
+      background: #16324f;
+      border-color: #0d2136;
+      padding: 1.8rem 1.6rem 2rem;
+    }
+
+    .ab-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #e9e0cd;
+      padding: 0 0.4rem 1rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid rgba(233, 224, 205, 0.2);
+    }
+
+    .ab-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .ab-live {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+
+    .ab-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--week-accent);
+      box-shadow: 0 0 8px var(--week-accent);
+      animation: ab-blink 1.6s ease-in-out infinite;
+    }
+
+    @keyframes ab-blink {
+      0%, 100% { opacity: 1; }
+      50%      { opacity: 0.25; }
+    }
+
+    .ab-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .ab-row {
+      display: grid;
+      grid-template-columns: 1fr 0.5fr 0.6fr;
+      gap: 0.4rem;
+      align-items: center;
+    }
+
+    .ab-labels {
+      font-size: 0.58rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(233, 224, 205, 0.55);
+      padding: 0 0.7rem 0.3rem;
+    }
+
+    /* flap tiles */
+    .ab-row:not(.ab-labels) span {
+      background: #e9e0cd;
+      color: #16324f;
+      padding: 0.75rem 0.8rem;
+      border-radius: 3px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      /* seam line down the middle of each flap */
+      background-image: linear-gradient(
+        transparent calc(50% - 1px),
+        rgba(13, 33, 54, 0.28) 50%,
+        transparent calc(50% + 1px)
+      );
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transform-origin: top;
+      /* hidden until the board scrolls into view */
+      transform: rotateX(-90deg);
+      opacity: 0;
+    }
+
+    .arrivals-board.in-view .ab-row:not(.ab-labels) span {
+      animation: ab-flip 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    .ab-from { font-size: 1rem; }
+    .ab-code { text-align: center; letter-spacing: 0.12em; }
+
+    .ab-status {
+      text-align: center;
+      font-size: 0.72rem !important;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #1c6b3a !important;
+    }
+
+    /* stagger rows flipping in */
+    .arrivals-board.in-view .ab-row:nth-child(2) span { animation-delay: 0.05s; }
+    .arrivals-board.in-view .ab-row:nth-child(3) span { animation-delay: 0.12s; }
+    .arrivals-board.in-view .ab-row:nth-child(4) span { animation-delay: 0.19s; }
+    .arrivals-board.in-view .ab-row:nth-child(5) span { animation-delay: 0.26s; }
+    .arrivals-board.in-view .ab-row:nth-child(6) span { animation-delay: 0.33s; }
+
+    @keyframes ab-flip {
+      0%   { transform: rotateX(-90deg); opacity: 0; }
+      100% { transform: rotateX(0);      opacity: 1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ab-row:not(.ab-labels) span { transform: none; opacity: 1; }
+      .arrivals-board.in-view .ab-row:not(.ab-labels) span { animation: none; }
+      .ab-dot { animation: none; }
+    }
+
+    /* ── Photo frames: passport stamp borders ── */
+    .passport .photo-item {
+      background: #f3ecdb;
+      border: 2px dashed var(--week-accent);
+      border-radius: 0.3rem;
+    }
+
+    /* ── Timezone clocks ── */
+    .clock-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 1.1rem;
+      margin-top: 2rem;
+    }
+
+    .clock-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 1.3rem 0.8rem 1.1rem;
+      border: 1px solid rgba(27, 58, 92, 0.22);
+      border-radius: 0.4rem;
+      background: rgba(27, 58, 92, 0.04);
+      transition: background 0.6s ease, border-color 0.6s ease;
+    }
+
+    /* night side: card dims to a dusk navy */
+    .clock-card.is-night {
+      background: rgba(22, 50, 79, 0.9);
+      border-color: #0d2136;
+    }
+    .clock-card.is-night .clock-country,
+    .clock-card.is-night .clock-time { color: #e9e0cd; }
+    .clock-card.is-night .clock-day { color: rgba(233, 224, 205, 0.6); }
+    .clock-card.is-night .cf-ring { stroke: rgba(233, 224, 205, 0.35); }
+    .clock-card.is-night .cf-hand { stroke: #e9e0cd; }
+    .clock-card.is-night .cf-cap { fill: #e9e0cd; }
+
+    /* home table gets the accent frame */
+    .clock-home {
+      border-color: var(--week-accent);
+      box-shadow: 0 0 0 1px var(--week-accent) inset;
+    }
+
+    .clock-face {
+      width: 74px;
+      height: 74px;
+    }
+
+    .cf-ring {
+      fill: none;
+      stroke: rgba(27, 58, 92, 0.45);
+      stroke-width: 2.5;
+    }
+
+    .cf-hand {
+      stroke: var(--week-primary);
+      stroke-linecap: round;
+      /* view-box makes transform-origin use viewBox coords → pivot at centre */
+      transform-box: view-box;
+      transform-origin: 50px 50px;
+    }
+
+    .cf-hour { stroke-width: 4; }
+    .cf-min { stroke-width: 3; }
+    .cf-sec { stroke-width: 1.5; stroke: var(--week-accent); transition: none; }
+    .cf-cap { fill: var(--week-accent); }
+
+    .clock-country {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--week-primary);
+      margin-top: 0.4rem;
+    }
+
+    .clock-time {
+      font-family: var(--font-mono);
+      font-size: 1.5rem;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--week-primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .clock-day {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--week-primary);
+      opacity: 0.6;
+    }
+
+    /* ── Connection globe ── */
+    .globe-wrap {
+      position: relative;
+      width: 100%;
+      height: 420px;
+      margin-top: 1.6rem;
+    }
+
+    #globe-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: grab;
+      touch-action: pan-y;
+    }
+
+    #globe-canvas:active { cursor: grabbing; }
+
+    .globe-hint {
+      position: absolute;
+      bottom: 0.4rem;
+      right: 0.6rem;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--week-primary);
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    @media (max-width: 600px) {
+      .pid-grid { grid-template-columns: repeat(2, 1fr); }
+      .globe-wrap { height: 340px; }
+      .dist-bar { grid-template-columns: 4.5rem 1fr 3.4rem; gap: 0.5rem; }
+    }
+  </style>
 </WeekLayout>

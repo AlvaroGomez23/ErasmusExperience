@@ -20,7 +20,8 @@
       "PowerShell(npm install *)",
       "PowerShell(npm run *)",
       "PowerShell(node \"C:\\\\Users\\\\Alvaro\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-Alvaro-Desktop-AmaranteWeb\\\\d0f59af7-83d5-41ed-86b2-8cbc9688122c\\\\scratchpad\\\\probe.mjs\")",
-      "PowerShell(Add-Content *)"
+      "PowerShell(Add-Content *)",
+      "Bash(curl -sL \"https://raw.githubusercontent.com/martynafford/natural-earth-geojson/master/110m/physical/ne_110m_land.json\" -o public/data/land-110m.geojson)"
     ]
   }
 }
