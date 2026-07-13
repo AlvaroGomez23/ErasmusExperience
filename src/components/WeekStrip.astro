@@ -21,12 +21,12 @@ const { currentWeek } = Astro.props;
   ))}
   <a
     href="/gallery"
-    class={`week-dot${Astro.url?.pathname === '/gallery' ? ' active' : ''}`}
+    class={`week-dot${Astro.url?.pathname.replace(/\/$/, '') === '/gallery' ? ' active' : ''}`}
     style="--dot-color:#88CE02"
   >
     Gallery
   </a>
-  {Astro.url?.pathname === '/party' && (
+  {Astro.url?.pathname.replace(/\/$/, '') === '/party' && (
     <a href="/party" class="week-dot active" style="--dot-color:#ff006e">???</a>
   )}
 </div>
