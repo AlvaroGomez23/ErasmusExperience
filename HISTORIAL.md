@@ -190,3 +190,9 @@
 [2026-07-13] — Week-08: removed Russia from arrivals board, globe, clocks, and intro copy.
 
 [2026-07-13] — party.astro: removed 30-photo cap in buildStrips (was MAX_PER_ROW*ROWS slice); all party bucket photos now render.
+
+[2026-07-13] — Week-08: intro section redesigned as passport bio-page — corner ink stamp (circular text + week seal), drop-cap opening paragraph, inline nationality chips (Spanish/Morocco/Armenia).
+
+[2026-07-13] — Week-08: arrivals board stagger delay now generated per-row (--ab-delay inline var) instead of hardcoded nth-child(2-6); all 9 countries flip-animate, not just first 5.
+
+[2026-07-13] — Week-08: removed static drop-cap (user disliked), replaced loc-chip styling with scroll-triggered stamp-thud animation (GSAP back.out, random rotate) for actual motion.

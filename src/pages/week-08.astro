@@ -48,14 +48,21 @@ const clocks = [
 >
   <div class="passport">
     <!-- INTRO / CONTEXT -->
-    <section class="content-section">
+    <section class="content-section intro-passport">
+      <div class="week-stamp" aria-hidden="true">
+        <svg viewBox="0 0 100 100">
+          <path id="stamp-arc" d="M 10,50 A 40,40 0 1,1 90,50" fill="none" />
+          <text><textPath href="#stamp-arc" startOffset="50%" text-anchor="middle">★ MULTICULTURAL ★</textPath></text>
+        </svg>
+        <span class="week-stamp-code">WK·08</span>
+      </div>
       <span class="section-tag">The week</span>
       <h2>The world wrapped in one place</h2>
       <p>
-        Last week was full of goodbyes. We had to say goodbye to the friends we've been with since our very first day of Erasmus. Most of the people who left were Spanish, so we never really needed to speak English with them.
+        Last week was full of goodbyes. We had to say goodbye to the friends we've been with since our very first day of Erasmus. Most of the people who left were <span class="loc-chip">Spanish</span>, so we never really needed to speak English with them.
       </p>
       <p>
-        This week has been the complete opposite, with lots of new people arriving from different countries such as Morocco, Armenia, and many others. Getting to know them has been a really interesting experience. Everyone has different hobbies, interests, and ways of seeing things, which makes every conversation a chance to learn something new.
+        This week has been the complete opposite, with lots of new people arriving from different countries such as <span class="loc-chip">Morocco</span>, <span class="loc-chip">Armenia</span>, and many others. Getting to know them has been a really interesting experience. Everyone has different hobbies, interests, and ways of seeing things, which makes every conversation a chance to learn something new.
       </p>
       <p>
         Even though we sometimes struggle to understand each other, we always do our best to communicate. We mainly speak English with the new students, but some of them also know Spanish, which makes things a bit easier sometimes. It's nice to see how, even with different languages and cultures, we can still connect and enjoy spending time together.
@@ -72,8 +79,8 @@ const clocks = [
         <div class="ab-row ab-labels">
           <span>Origin</span><span>Code</span><span>Status</span>
         </div>
-        {stamps.map((s) => (
-          <div class="ab-row">
+        {stamps.map((s, i) => (
+          <div class="ab-row" style={`--ab-delay: ${(0.05 + i * 0.07).toFixed(2)}s`}>
             <span class="ab-from">{s.country}</span>
             <span class="ab-code">{s.code}</span>
             <span class="ab-status">Landed</span>
@@ -171,6 +178,15 @@ const clocks = [
           scrollTrigger: { trigger: el, start: 'top 90%', once: true },
         });
       });
+
+      // nationality chips → stamp-thud: slams down oversized + rotated, snaps to rest
+      document.querySelectorAll<HTMLElement>('.loc-chip').forEach((chip) => {
+        gsap.from(chip, {
+          scale: 2.6, opacity: 0, rotate: gsap.utils.random(-25, 25),
+          duration: 0.5, ease: 'back.out(3.2)',
+          scrollTrigger: { trigger: chip, start: 'top 92%', once: true },
+        });
+      });
     }
 
     // Live timezone clocks — one tick drives every card off its IANA zone.
@@ -240,6 +256,82 @@ const clocks = [
     .rv-word {
       display: inline-block;
       will-change: transform;
+    }
+
+    /* ── Intro: passport bio-data page treatment ── */
+    .intro-passport {
+      position: relative;
+      overflow: visible;
+    }
+
+    /* corner ink stamp — circular text ring + week code */
+    .week-stamp {
+      position: absolute;
+      top: -1.1rem;
+      right: 1.6rem;
+      width: 92px;
+      height: 92px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--week-accent);
+      opacity: 0.55;
+      transform: rotate(-9deg);
+      pointer-events: none;
+    }
+
+    .week-stamp svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      fill: currentColor;
+    }
+
+    .week-stamp svg text {
+      font-family: var(--font-mono);
+      font-size: 8.6px;
+      letter-spacing: 0.05em;
+    }
+
+    .week-stamp-code {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      border: 2px solid currentColor;
+      border-radius: 50%;
+      width: 46px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .week-stamp { top: -0.8rem; right: 0.8rem; width: 72px; height: 72px; }
+      .week-stamp-code { width: 38px; height: 38px; font-size: 0.68rem; }
+    }
+
+    /* inline country/nationality highlight — mini passport chip, stamped in via JS */
+    .loc-chip {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.85em;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      padding: 0.02em 0.5em;
+      border: 1px solid var(--week-accent);
+      border-radius: 99px;
+      color: var(--week-primary);
+      white-space: nowrap;
+      transform-origin: center;
+      will-change: transform, opacity;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .loc-chip { opacity: 1 !important; transform: none !important; }
     }
 
     .passport p {
@@ -355,12 +447,8 @@ const clocks = [
       color: #1c6b3a !important;
     }
 
-    /* stagger rows flipping in */
-    .arrivals-board.in-view .ab-row:nth-child(2) span { animation-delay: 0.05s; }
-    .arrivals-board.in-view .ab-row:nth-child(3) span { animation-delay: 0.12s; }
-    .arrivals-board.in-view .ab-row:nth-child(4) span { animation-delay: 0.19s; }
-    .arrivals-board.in-view .ab-row:nth-child(5) span { animation-delay: 0.26s; }
-    .arrivals-board.in-view .ab-row:nth-child(6) span { animation-delay: 0.33s; }
+    /* stagger rows flipping in — delay set per-row via --ab-delay (any country count) */
+    .arrivals-board.in-view .ab-row:not(.ab-labels) span { animation-delay: var(--ab-delay, 0s); }
 
     @keyframes ab-flip {
       0%   { transform: rotateX(-90deg); opacity: 0; }
