@@ -7,9 +7,13 @@ if (!PUBLISHED_WEEKS.includes(8)) return Astro.redirect('/');
 const stamps = [
   { code: 'ARM', country: 'Armenia' },
   { code: 'MAR', country: 'Morocco' },
-  { code: 'RUS', country: 'Russia' },
   { code: 'MEX', country: 'Mexico' },
   { code: 'ESP', country: 'Spain' },
+  { code: 'POL', country: 'Poland' },
+  { code: 'GEO', country: 'Georgia' },
+  { code: 'UKR', country: 'Ukraine' },
+  { code: 'HUN', country: 'Hungary' },
+  { code: 'AZE', country: 'Azerbaijan' },
 ];
 
 // Live clocks — the same moment, told by every homeland's timezone.
@@ -18,9 +22,13 @@ const clocks = [
   { country: 'Amarante', tz: 'Europe/Lisbon', home: true },
   { country: 'Spain', tz: 'Europe/Madrid' },
   { country: 'Morocco', tz: 'Africa/Casablanca' },
-  { country: 'Russia', tz: 'Europe/Moscow' },
   { country: 'Armenia', tz: 'Asia/Yerevan' },
   { country: 'Mexico', tz: 'America/Mexico_City' },
+  { country: 'Poland', tz: 'Europe/Warsaw' },
+  { country: 'Georgia', tz: 'Asia/Tbilisi' },
+  { country: 'Ukraine', tz: 'Europe/Kyiv' },
+  { country: 'Hungary', tz: 'Europe/Budapest' },
+  { country: 'Azerbaijan', tz: 'Asia/Baku' },
 ];
 ---
 
@@ -47,7 +55,7 @@ const clocks = [
         Last week was full of goodbyes. We had to say goodbye to the friends we've been with since our very first day of Erasmus. Most of the people who left were Spanish, so we never really needed to speak English with them.
       </p>
       <p>
-        This week has been the complete opposite, with lots of new people arriving from different countries such as Morocco, Russia, Armenia, and many others. Getting to know them has been a really interesting experience. Everyone has different hobbies, interests, and ways of seeing things, which makes every conversation a chance to learn something new.
+        This week has been the complete opposite, with lots of new people arriving from different countries such as Morocco, Armenia, and many others. Getting to know them has been a really interesting experience. Everyone has different hobbies, interests, and ways of seeing things, which makes every conversation a chance to learn something new.
       </p>
       <p>
         Even though we sometimes struggle to understand each other, we always do our best to communicate. We mainly speak English with the new students, but some of them also know Spanish, which makes things a bit easier sometimes. It's nice to see how, even with different languages and cultures, we can still connect and enjoy spending time together.
@@ -78,7 +86,7 @@ const clocks = [
     <section class="content-section globe-section">
       <span class="section-tag">Connections</span>
       <h2>Every line ends here</h2>
-      <p>Drag the globe. Each arc is one arrival — five countries, one table.</p>
+      <p>Drag the globe. Each line represents the distance between their homes and Amarante.</p>
       <div class="globe-wrap">
         <canvas id="globe-canvas"></canvas>
         <span class="globe-hint">drag to spin</span>
@@ -114,12 +122,12 @@ const clocks = [
       <span class="section-tag">Photos</span>
       <h2>The week in images</h2>
       <div class="photo-grid">
-        <div class="photo-item">📸</div>
-        <div class="photo-item">📸</div>
-        <div class="photo-item">📸</div>
-        <div class="photo-item">📸</div>
-        <div class="photo-item">📸</div>
-        <div class="photo-item">📸</div>
+        <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week8/week08-01.webp" alt="Photo 1"></div>
+        <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week8/week08-02.webp" alt="Photo 2"></div>
+        <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week8/week08-03.webp" alt="Photo 3"></div>
+        <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week8/week08-04.webp" alt="Photo 4"></div>
+        <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week8/week08-05.webp" alt="Photo 5"></div>
+        <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week8/week08-06.webp" alt="Photo 6"></div>
       </div>
     </section>
   </div>

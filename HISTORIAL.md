@@ -184,3 +184,9 @@
 [2026-07-09] — Week 08 reorder for narrative flow: intro prose moved to top (context first; section-tag "Arrivals"→"The week" to kill the duplicate tag), then arrivals board → connection globe → timezone clocks → photos. Escalates info→feeling. Markup-only move; no logic/CSS change. Build passes.
 [2026-07-09] — Week 08 GSAP scroll text reveals. Page script now imports gsap + ScrollTrigger: every .passport h2 is split into .rv-word inline-block spans (spaces preserved as text nodes) that stamp in per-word (yPercent 120→0, opacity, back.out(1.6), stagger 0.05) on scroll; .section-tag + p rise (y22→0, opacity, power3.out) once at top 90
 [2026-07-09] — Week 08 GSAP scroll text reveals. Page script imports gsap + ScrollTrigger: every .passport h2 split into .rv-word inline-block spans (spaces kept as text nodes) that stamp in per-word (yPercent 120->0, opacity, back.out(1.6), stagger 0.05) on scroll; .section-tag + p rise (y22->0, opacity, power3.out) once at top 90pct. prefers-reduced-motion guard skips all. Copy unchanged. Build passes.
+
+[2026-07-13] — Week-08: added Poland, Georgia, Ukraine, Hungary, Azerbaijan to arrivals board, globe pins/arcs, and timezone clocks (Armenia/Mexico already present, kept as-is).
+
+[2026-07-13] — Week-08: removed Russia from arrivals board, globe, clocks, and intro copy.
+
+[2026-07-13] — party.astro: removed 30-photo cap in buildStrips (was MAX_PER_ROW*ROWS slice); all party bucket photos now render.

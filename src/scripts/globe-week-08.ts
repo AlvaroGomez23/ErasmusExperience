@@ -22,9 +22,13 @@ if (canvas) {
   const PLACES = [
     { code: 'ESP', lat: 40.42, lon: -3.70 },
     { code: 'MAR', lat: 33.57, lon: -7.59 },
-    { code: 'RUS', lat: 55.75, lon: 37.62 },
     { code: 'ARM', lat: 40.18, lon: 44.51 },
     { code: 'MEX', lat: 19.43, lon: -99.13 },
+    { code: 'POL', lat: 52.23, lon: 21.01 },
+    { code: 'GEO', lat: 41.72, lon: 44.79 },
+    { code: 'UKR', lat: 50.45, lon: 30.52 },
+    { code: 'HUN', lat: 47.50, lon: 19.04 },
+    { code: 'AZE', lat: 40.41, lon: 49.87 },
   ];
   const AMARANTE = { lat: 41.27, lon: -8.08 };
 

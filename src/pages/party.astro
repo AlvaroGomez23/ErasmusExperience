@@ -649,14 +649,9 @@ const supabaseConfig = JSON.stringify({
         container.innerHTML = '';
 
         const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        // Cap how many full-res photos we decode — every strip photo loads
-        // eagerly (lazy-loading fights the marquee), so an uncapped folder
-        // means hundreds of multi-MB decodes and a frozen page.
-        const MAX_PER_ROW = 10;
         const ROWS = Math.min(3, Math.max(1, Math.ceil(urls.length / 4)));
-        const capped = urls.slice(0, ROWS * MAX_PER_ROW);
         const rowUrls: string[][] = Array.from({ length: ROWS }, () => []);
-        capped.forEach((u, i) => rowUrls[i % ROWS].push(u));
+        urls.forEach((u, i) => rowUrls[i % ROWS].push(u));
 
         type Track = {
           el: HTMLElement; dir: number; x: number; half: number; speed: number; paused: boolean;
