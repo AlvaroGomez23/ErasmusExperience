@@ -21,7 +21,18 @@
       "PowerShell(npm run *)",
       "PowerShell(node \"C:\\\\Users\\\\Alvaro\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-Alvaro-Desktop-AmaranteWeb\\\\d0f59af7-83d5-41ed-86b2-8cbc9688122c\\\\scratchpad\\\\probe.mjs\")",
       "PowerShell(Add-Content *)",
-      "Bash(curl -sL \"https://raw.githubusercontent.com/martynafford/natural-earth-geojson/master/110m/physical/ne_110m_land.json\" -o public/data/land-110m.geojson)"
+      "Bash(curl -sL \"https://raw.githubusercontent.com/martynafford/natural-earth-geojson/master/110m/physical/ne_110m_land.json\" -o public/data/land-110m.geojson)",
+      "Skill(artifact-design)",
+      "Artifact",
+      "Bash(npx astro *)",
+      "Bash(curl *)",
+      "PowerShell($h = Get-Content dist/week-11/index.html -Raw; $i = $h.IndexOf\\('flight-svg'\\); $h.Substring\\($i-200, 2600\\))",
+      "PowerShell(npm ls *)",
+      "PowerShell(Select-String -Path dist/week-11/index.html -Pattern '<script' -AllMatches | ForEach-Object { $_.Line -split '<script' | Where-Object { $_ -match 'src=' } | ForEach-Object { \\($_ -split '\"'\\)[1] } })",
+      "PowerShell(try { $r = Invoke-WebRequest 'http://localhost:4322/src/pages/week-11.astro?astro&type=script&index=6&lang.ts' -UseBasicParsing; \"STATUS: $\\($r.StatusCode\\)\"; $r.Content.Substring\\(0, [Math]::Min\\(400, $r.Content.Length\\)\\) } catch { \"FAILED: $\\($_.Exception.Message\\)\" })",
+      "PowerShell(foreach \\($i in 0..7\\) { try { $r = Invoke-WebRequest \\(\"http://localhost:4322/src/pages/week-11.astro?astro\" + [char]38 + \"type=script\" + [char]38 + \"index=$i\" + [char]38 + \"lang.ts\"\\) -UseBasicParsing; $first = \\($r.Content -split \"`n\"\\)[0]; \"index ${i}: $first\" } catch { \"index ${i}: FAILED $\\($_.Exception.Message\\)\" } })",
+      "PowerShell(try { $r = Invoke-WebRequest 'http://localhost:4322/src/scripts/week-11-flightpath.ts' -UseBasicParsing; \"STATUS: $\\($r.StatusCode\\), LEN: $\\($r.Content.Length\\)\"; $r.Content.Substring\\(0,600\\) } catch { \"FAILED: $\\($_.Exception.Message\\)\" })",
+      "PowerShell(Remove-Item *)"
     ]
   }
 }

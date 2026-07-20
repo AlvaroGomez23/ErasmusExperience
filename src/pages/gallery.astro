@@ -10,7 +10,8 @@ const supabaseConfig = JSON.stringify({
   key: import.meta.env.SUPABASE_KEY,
 });
 
-const weeks = PUBLISHED_WEEKS.map((num) => ({
+// Week 11 has no photos of its own — it's a recap of the earlier weeks.
+const weeks = PUBLISHED_WEEKS.filter((num) => num !== 11).map((num) => ({
   num,
   numStr: String(num).padStart(2, '0'),
   ...weekMeta[num],
@@ -149,7 +150,7 @@ const weeks = PUBLISHED_WEEKS.map((num) => ({
 
   <body>
     <script id="sb-config" type="application/json" set:html={supabaseConfig}></script>
-    <script id="published-weeks" type="application/json" set:html={JSON.stringify(PUBLISHED_WEEKS)}></script>
+    <script id="gallery-weeks" type="application/json" set:html={JSON.stringify(weeks.map((w) => w.num))}></script>
 
     <!-- THREE.JS CANVAS -->
     <canvas id="three-canvas" aria-hidden="true"></canvas>
@@ -344,8 +345,8 @@ const weeks = PUBLISHED_WEEKS.map((num) => ({
         }
       }
 
-      const published: number[] = JSON.parse(document.getElementById('published-weeks')!.textContent!);
-      await Promise.all(published.map(loadWeek));
+      const galleryWeeks: number[] = JSON.parse(document.getElementById('gallery-weeks')!.textContent!);
+      await Promise.all(galleryWeeks.map(loadWeek));
       ScrollTrigger.refresh();
     </script>
 

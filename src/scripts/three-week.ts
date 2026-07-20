@@ -32,7 +32,7 @@ if (!modelPath) {
       case 6:  return new THREE.IcosahedronGeometry(2, 1);
       case 7:  return new THREE.DodecahedronGeometry(1.9);
       case 8:  return new THREE.SphereGeometry(2, 8, 5);
-      case 9:  return new THREE.ConeGeometry(1.5, 3.5, 5);
+      case 9:  return new THREE.SphereGeometry(2, 12, 8);
       case 10: return new THREE.CylinderGeometry(1.5, 1.8, 3.2, 6);
       default: return new THREE.IcosahedronGeometry(2, 0);
     }
@@ -44,20 +44,24 @@ if (!modelPath) {
   );
   scene.add(centralMesh);
 
-  const PARTICLE_COUNT = 1800;
-  const positions = new Float32Array(PARTICLE_COUNT * 3);
-  for (let i = 0; i < PARTICLE_COUNT; i++) {
-    const r     = 4 + Math.random() * 8;
-    const theta = Math.random() * Math.PI * 2;
-    const phi   = Math.acos(2 * Math.random() - 1);
-    positions[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
-    positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-    positions[i * 3 + 2] = r * Math.cos(phi);
+  // week 9 skips the particle field (FIFA background provides its own backdrop)
+  let particles: THREE.Points | null = null;
+  if (weekNum !== 9) {
+    const PARTICLE_COUNT = 1800;
+    const positions = new Float32Array(PARTICLE_COUNT * 3);
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      const r     = 4 + Math.random() * 8;
+      const theta = Math.random() * Math.PI * 2;
+      const phi   = Math.acos(2 * Math.random() - 1);
+      positions[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
+      positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      positions[i * 3 + 2] = r * Math.cos(phi);
+    }
+    const pGeo = new THREE.BufferGeometry();
+    pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    particles = new THREE.Points(pGeo, new THREE.PointsMaterial({ size: 0.035, color, transparent: true, opacity: 0.55 }));
+    scene.add(particles);
   }
-  const pGeo = new THREE.BufferGeometry();
-  pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  const particles = new THREE.Points(pGeo, new THREE.PointsMaterial({ size: 0.035, color, transparent: true, opacity: 0.55 }));
-  scene.add(particles);
 
   let targetX = 0, targetY = 0;
   window.addEventListener('mousemove', (e) => {
@@ -71,8 +75,10 @@ if (!modelPath) {
     const t = clock.getElapsedTime();
     centralMesh.rotation.x = t * 0.12;
     centralMesh.rotation.y = t * 0.18;
-    particles.rotation.y   = t * 0.04;
-    particles.rotation.x   = t * 0.02;
+    if (particles) {
+      particles.rotation.y = t * 0.04;
+      particles.rotation.x = t * 0.02;
+    }
     camera.position.x += (targetX - camera.position.x) * 0.05;
     camera.position.y += (targetY - camera.position.y) * 0.05;
     camera.lookAt(0, 0, 0);

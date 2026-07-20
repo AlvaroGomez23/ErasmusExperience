@@ -2,33 +2,156 @@
 import WeekLayout from '../layouts/WeekLayout.astro';
 import { PUBLISHED_WEEKS } from '../config/routes';
 if (!PUBLISHED_WEEKS.includes(10)) return Astro.redirect('/');
+
+const flight = [
+  {
+    name: 'White',
+    pt: 'Branco',
+    wine: '#C9A050',
+    serve: 'Chilled, 8 °C',
+    note: 'Dry, citrus, almost nothing like what you expect Port to be. The locals drink it long, over ice with tonic and a strip of lemon.',
+    pair: 'Almonds, olives',
+  },
+  {
+    name: 'Rosé',
+    pt: 'Rosado',
+    wine: '#D2657E',
+    serve: 'Cold, 6 °C',
+    note: 'Invented in 2008 and still argued about. Strawberry, light, unserious in the best way.',
+    pair: 'Ice and a terrace',
+  },
+  {
+    name: 'Ruby',
+    pt: 'Ruby',
+    wine: '#7A0C2E',
+    serve: 'Cool, 14 °C',
+    note: 'Young and opaque. Aged in steel instead of wood, so it never oxidises and never loses that purple-red.',
+    pair: 'Blue cheese',
+  },
+  {
+    name: 'LBV',
+    pt: 'Late Bottled Vintage',
+    wine: '#5E1128',
+    serve: 'Cool, 16 °C',
+    note: 'One single harvest, four to six years in wood. Vintage character without the Vintage price or the waiting.',
+    pair: 'Dark chocolate',
+  },
+  {
+    name: 'Tawny 10',
+    pt: 'Tawny 10 anos',
+    wine: '#A8481B',
+    serve: 'Cool, 14 °C',
+    note: 'Oxidised deliberately, for a decade. Caramel, walnut, dried fig — and it goes amber at the rim as it ages.',
+    pair: 'Crème brûlée',
+  },
+  {
+    name: 'Vintage',
+    pt: 'Vintage',
+    wine: '#3D0A1B',
+    serve: 'Room, 18 °C',
+    note: 'One exceptional harvest, declared maybe three times a decade. Decant it hours ahead. Then stop talking.',
+    pair: 'Nothing. Just sit.',
+  },
+];
 ---
 
 <WeekLayout
   week={10}
   title="10"
-  subtitle="Almost there"
-  dates="20 - 26 JUL"
-  primaryColor="#7C3AED"
-  accentColor="#A78BFA"
-  bgColor="#f5f0ff"
+  subtitle="The wrong side of the river"
+  dates="20 — 26 JUL"
+  primaryColor="#5E2333"
+  accentColor="#7E8C4F"
+  bgColor="#E7E3D5"
   prevSlug="week-09"
   prevTitle="Week 09"
   nextSlug="week-11"
   nextTitle="Week 11"
+  modelPath="skip"
+  glassContent
 >
+  <!-- ── GAIA ── -->
   <section class="content-section">
-    <span class="section-tag">Week 10</span>
-    <h2>Almost there</h2>
+    <span class="section-tag">Vila Nova de Gaia</span>
+    <h2>The wine crosses<br/>the river</h2>
     <p>
-      The penultimate week. Savoring every moment before the final stretch.
+      Port isn't made in Porto. It's made eighty kilometres inland, up the Douro, on
+      terraces cut into schist so steep the vines are farmed by hand. Then it comes
+      downriver and stops — on the <em>other</em> bank, in Vila Nova de Gaia, where the
+      lodges have been ageing it in cool dark sheds for three hundred years.
+    </p>
+    <p>
+      That's the whole trick, and it's geography. Gaia faces north, gets no sun, and sits
+      in the damp coming off the Atlantic. The wine ages slowly there. Cross the bridge to
+      Porto and it would cook.
+    </p>
+    <p>
+      At the end of this week we cross the Douro and go find out what the fuss is about.
     </p>
   </section>
 
+  <!-- ── THE RITUAL ── -->
+  <section class="content-section">
+    <span class="section-tag">The ritual</span>
+    <h2>How to taste it<br/>without looking lost</h2>
+    <p>
+      Four steps, in order, and none of them are optional if you want the guide to nod at
+      you instead of at the person next to you.
+    </p>
+    <ol class="ritual">
+      <li>
+        <h3>Look</h3>
+        <p>Tilt the glass against something white. The colour at the rim tells you the age — purple means young, amber means it has been in wood a long time.</p>
+      </li>
+      <li>
+        <h3>Swirl</h3>
+        <p>Once, slowly, on the table. You're pushing air into it. The streaks that run back down the glass are the "legs", and thick slow ones mean sugar and alcohol.</p>
+      </li>
+      <li>
+        <h3>Smell</h3>
+        <p>Nose in, mouth slightly open, two short sniffs. This is most of what you think tasting is. The tongue only does five things; the nose does the rest.</p>
+      </li>
+      <li>
+        <h3>Sip</h3>
+        <p>Small. Hold it. Port is roughly twenty percent alcohol because they stop the fermentation with grape spirit while the sugar is still in there — that's why it's sweet and why it hits.</p>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ── THE FLIGHT ── -->
+  <section class="content-section flight-section">
+    <span class="section-tag">The flight</span>
+    <h2>Six glasses,<br/>lightest first</h2>
+    <p>
+      A tasting runs in one direction: pale and cold at the start, dark and sweet at the
+      end, because anything heavy ruins whatever follows it. This is the order we're
+      ordering in.
+    </p>
+
+    <div class="flight-stage">
+      <div class="flight">
+        {flight.map((w, i) => (
+          <article class="wine-card" style={`--wine:${w.wine}`}>
+            <span class="wine-order">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{w.name}</h3>
+            <span class="wine-pt">{w.pt}</span>
+            <span class="wine-serve">{w.serve}</span>
+            <p>{w.note}</p>
+            <span class="wine-pair">{w.pair}</span>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PHOTOS ── -->
   <section class="content-section">
     <span class="section-tag">Photos</span>
     <h2>The week in images</h2>
     <div class="photo-grid">
+      <!-- When photos are uploaded to Supabase (Photos/week10/), replace each
+           placeholder with:
+           <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week10/week10-01.webp" loading="lazy" decoding="async" alt="Photo 1"></div> -->
       <div class="photo-item">📸</div>
       <div class="photo-item">📸</div>
       <div class="photo-item">📸</div>
@@ -37,7 +160,162 @@ if (!PUBLISHED_WEEKS.includes(10)) return Astro.redirect('/');
       <div class="photo-item">📸</div>
     </div>
   </section>
+
   <script>
     import '../scripts/three-week-10.ts';
   </script>
+
+  <!-- Xisto palette: schist ground, bordeaux type, vine accent -->
+  <style is:global>
+    /* Warm the glass cards toward the schist ground (defaults are pure white).
+       Stain-aware: once the flood submerges it, every section card takes a
+       light bordeaux wash and a wine outline (--stain driven by GSAP). */
+    .week-content--glass .content-section {
+      background: color-mix(in srgb, #5E2333 calc(var(--stain, 0) * 16%), rgba(251, 249, 243, 0.86));
+      border: 1.5px solid color-mix(in srgb, #5E2333 calc(var(--stain, 0) * 75%), rgba(94, 35, 51, 0.1));
+    }
+    .hero-subtitle,
+    .hero-dates,
+    .scroll-hint { color: #2A2320; }
+    .site-nav {
+      background:   rgba(231, 227, 213, 0.55);
+      border-color: rgba(94, 35, 51, 0.18);
+    }
+    .site-nav.is-scrolled {
+      background:   rgba(231, 227, 213, 0.9);
+      border-color: rgba(94, 35, 51, 0.35);
+    }
+    .week-footer {
+      background: #E7E3D5;
+      border-top-color: rgba(94, 35, 51, 0.18);
+    }
+    .week-nav-link:hover .nav-link-title { color: #5E2333; }
+  </style>
+
+  <style>
+    /* Registered so the browser can interpolate the stain instead of snapping. */
+    @property --stain {
+      syntax: '<number>';
+      initial-value: 0;
+      inherits: false;
+    }
+
+    .content-section h2 { color: #2A2320; }
+
+    /* ── RITUAL (numbered: it's a real sequence, you can't smell before you swirl) ── */
+    .ritual {
+      list-style: none;
+      padding: 0;
+      margin: 2.5rem 0 0;
+      counter-reset: step;
+      display: grid;
+      gap: 1.6rem;
+    }
+    .ritual li {
+      counter-increment: step;
+      display: grid;
+      grid-template-columns: 3rem 1fr;
+      gap: 0.4rem 1rem;
+      align-items: baseline;
+    }
+    .ritual li::before {
+      content: counter(step, decimal-leading-zero);
+      grid-row: span 2;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      color: #7E8C4F;
+      padding-top: 0.35rem;
+    }
+    .ritual h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #5E2333;
+      margin: 0;
+    }
+    .ritual p { margin: 0; }
+
+    /* ── THE FLOOD ──
+       The wine itself is a fullscreen WebGL canvas built at runtime by
+       three-week-10.ts (rises from the bottom, holds, drains). Only the
+       stain variables live in CSS. */
+    .flight-stage {
+      margin-top: 2.5rem;
+    }
+
+    /* ── WINE CARDS ── */
+    .flight {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1rem;
+    }
+
+    .wine-card {
+      --stain: 0;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      padding: 1.6rem 1.4rem;
+      border-radius: 1.2rem;
+      background: color-mix(in srgb, var(--wine) calc(var(--stain) * 26%), #FBF9F3);
+      border: 2px solid color-mix(in srgb, var(--wine) calc(var(--stain) * 100%), rgba(42, 35, 32, 0.12));
+    }
+
+    .wine-order {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      color: color-mix(in srgb, var(--wine) calc(var(--stain) * 100%), rgba(42, 35, 32, 0.4));
+    }
+
+    .wine-card h3 {
+      font-size: 1.5rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      line-height: 1;
+      margin: 0;
+      color: color-mix(in srgb, var(--wine) calc(var(--stain) * 100%), #2A2320);
+    }
+
+    .wine-pt {
+      font-size: 0.82rem;
+      font-style: italic;
+      opacity: 0.5;
+    }
+
+    .wine-serve {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #7E8C4F;
+      margin-top: 0.3rem;
+    }
+
+    .wine-card p {
+      font-size: 0.92rem;
+      line-height: 1.6;
+      opacity: 0.7;
+      margin: 0.4rem 0 0;
+    }
+
+    .wine-pair {
+      margin-top: auto;
+      padding-top: 0.9rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.02em;
+      color: color-mix(in srgb, var(--wine) calc(var(--stain) * 85%), rgba(42, 35, 32, 0.55));
+    }
+
+    /* ── PHOTOS ── */
+    .photo-item {
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s;
+    }
+    .photo-item:hover {
+      transform: scale(1.04);
+      box-shadow: 0 14px 36px rgba(94, 35, 51, 0.18);
+    }
+  </style>
 </WeekLayout>

@@ -17,9 +17,9 @@ const heroModel: Record<number, { model?: string; geo?: string }> = {
   5:  { model: '/models/Star.glb' },
   6:  { model: '/models/bridge.glb' },
   7:  { model: '/models/Car.glb' },
-  8:  { geo: 'sphere' },
-  9:  { geo: 'cone' },
-  10: { geo: 'cylinder' },
+  8:  { model: '/models/arrivals2.glb' },
+  9:  { model: '/models/worldcup.glb' },
+  10: { model: '/models/Barrel.glb' },
 };
 
 // Supabase config for the 3D memory cloud (same bucket the gallery uses).
@@ -46,6 +46,19 @@ const pass = {
 };
 // Random-width bars for the barcode (widths in px, 1–3).
 const barcode = Array.from({ length: 30 }, () => 1 + Math.floor(Math.random() * 3));
+
+// Departure board — one split-flap row per week, plus the real flight out.
+const boardRows = [
+  ...weeks.map((w) => ({
+    flight: `AM${String(w.week).padStart(2, '0')}`,
+    dest: w.subtitle.toUpperCase(),
+    status: w.week < 11 ? 'DEPARTED' : 'BOARDING',
+    kind: w.week < 11 ? 'ok' : 'now',
+    final: false,
+  })),
+  { flight: pass.flight, dest: pass.toCity.toUpperCase(), status: 'FINAL CALL', kind: 'call', final: true },
+];
+
 ---
 
 <WeekLayout
@@ -63,16 +76,75 @@ const barcode = Array.from({ length: 30 }, () => 1 + Math.floor(Math.random() * 
   modelPath="/models/Airplane.glb"
   glassContent
 >
+  <!-- ─── SUNSET SKY — day → dusk → starry night as you scroll to The End ─── -->
+  <div id="sky" aria-hidden="true">
+    <div class="sky-layer sky-sunset"></div>
+    <div class="sky-layer sky-night">
+      <div class="sky-stars sky-stars--a"></div>
+      <div class="sky-stars sky-stars--b"></div>
+      <div class="sky-moon"></div>
+    </div>
+  </div>
+
   <section class="content-section">
     <span class="section-tag">Farewell</span>
     <h2>All things end</h2>
     <p>
-      The last week always comes too soon. Bags packed, goodbyes,
-      and that strange feeling of leaving a place that already feels like home.
+      I guess every experience eventually comes to an end, and this is the end of our two-and-a-half-month adventure. A journey that has changed us, shaped us, and left a mark on our lives that we'll carry forever.
     </p>
     <p>
-      Eleven weeks in Amarante. We wouldn't trade them for anything.
+      Bags packed, endless goodbyes, and that strange feeling of leaving a place that somehow became home without us even realizing it.
     </p>
+    <p>
+      Eleven weeks in Amarante. Eleven weeks of new friendships, unforgettable memories, laughter, challenges, and moments we'll remember for the rest of our lives.
+    </p>
+  </section>
+
+  <!-- ─── REVERSE RECAP WALL — each tile shows that week's 3D hero ─── -->
+  <section class="content-section">
+    <span class="section-tag">The whole journey</span>
+    <h2>Ten weeks, one story</h2>
+    <div class="recap-wall">
+      {recap.map((w) => {
+        const live = PUBLISHED_WEEKS.includes(w.week);
+        const Tag = live ? 'a' : 'div';
+        return (
+          <Tag
+            href={live ? `/${w.slug}` : undefined}
+            class={`recap-tile${live ? '' : ' is-locked'}${w.week === 9 ? ' recap-tile--rainbow' : ''}`}
+            style={`--tile: ${w.primaryColor};`}
+          >
+            <canvas
+              class="recap-canvas"
+              data-color={w.primaryColor}
+              data-model={heroModel[w.week]?.model}
+              data-geo={heroModel[w.week]?.geo}
+              aria-hidden="true"
+            ></canvas>
+            <span class="recap-num">{String(w.week).padStart(2, '0')}</span>
+            <span class="recap-sub">{w.subtitle}</span>
+          </Tag>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- ─── DEPARTURE BOARD — split-flap rows, one per week ─── -->
+  <section class="content-section">
+    <span class="section-tag">Now departing</span>
+    <h2>Departures</h2>
+    <div class="dep-board" id="dep-board" aria-label="Departures board">
+      <div class="dep-head" aria-hidden="true">
+        <span>Flight</span><span>Destination</span><span>Status</span>
+      </div>
+      {boardRows.map((r) => (
+        <div class={`dep-row${r.final ? ' dep-row--final' : ''}`}>
+          <span class="dep-cell dep-flight">{r.flight}</span>
+          <span class="dep-cell dep-dest">{r.dest}</span>
+          <span class={`dep-cell dep-status dep-status--${r.kind}`}>{r.status}</span>
+        </div>
+      ))}
+    </div>
   </section>
 
   <!-- ─── BOARDING PASS — the leaving ticket (3D-tilt on hover) ─── -->
@@ -134,35 +206,6 @@ const barcode = Array.from({ length: 30 }, () => 1 + Math.floor(Math.random() * 
     </div>
   </section>
 
-  <!-- ─── REVERSE RECAP WALL — each tile shows that week's 3D hero ─── -->
-  <section class="content-section">
-    <span class="section-tag">The whole journey</span>
-    <h2>Ten weeks, one story</h2>
-    <div class="recap-wall">
-      {recap.map((w) => {
-        const live = PUBLISHED_WEEKS.includes(w.week);
-        const Tag = live ? 'a' : 'div';
-        return (
-          <Tag
-            href={live ? `/${w.slug}` : undefined}
-            class={`recap-tile${live ? '' : ' is-locked'}`}
-            style={`--tile: ${w.primaryColor};`}
-          >
-            <canvas
-              class="recap-canvas"
-              data-color={w.primaryColor}
-              data-model={heroModel[w.week]?.model}
-              data-geo={heroModel[w.week]?.geo}
-              aria-hidden="true"
-            ></canvas>
-            <span class="recap-num">{String(w.week).padStart(2, '0')}</span>
-            <span class="recap-sub">{w.subtitle}</span>
-          </Tag>
-        );
-      })}
-    </div>
-  </section>
-
   <!-- ─── TWO-PERSON LETTER ─── -->
   <section class="content-section">
     <span class="section-tag">To Amarante</span>
@@ -178,8 +221,19 @@ const barcode = Array.from({ length: 30 }, () => 1 + Math.floor(Math.random() * 
       <div class="letter">
         <span class="letter-from">Álvaro</span>
         <p>
-          Write your goodbye here — the thing you'll miss, the moment you
-          keep, what this city gave you.
+          This experience is something I will never forget. During this time, we met incredible people, each with their own story, culture, and way of seeing the world. Some of them will remain part of our lives, while others we may never see again. Even so, every single one of them has left a mark and made this experience far more special than I ever imagined.
+        </p>
+        <br>
+        <p>
+          If there's one thing I can honestly say, it's that I've truly enjoyed this experience with the vast majority of you. Thank you for every trip, every party, every conversation, every meal we shared, every laugh, and every moment we supported each other. These are memories I will carry with me forever.
+        </p>
+        <br>
+        <p>
+          Now it's time to say goodbye. I'm grateful that we've shared something truly unique. Erasmus is about much more than studying in another country, it's about growing as a person, stepping outside your comfort zone, and discovering that people from completely different places can make you feel at home.
+        </p>
+        <br>
+        <p>
+          I hope all of you achieve everything you dream of, and that even if our paths go in different directions, we'll meet again somewhere in the world. Thank you for being part of this adventure and for making these months unforgettable.
         </p>
       </div>
     </div>
@@ -188,10 +242,10 @@ const barcode = Array.from({ length: 30 }, () => 1 + Math.floor(Math.random() * 
   <!-- ─── 3D MEMORY CLOUD ─── -->
   <section class="content-section content-section--wide">
     <span class="section-tag">Every moment</span>
-    <h2>The whole trip, floating</h2>
+    <h2>This is our journey</h2>
     <p>
       Photos from all eleven weeks, drifting in space. Move your mouse to
-      look around — scroll to fly through them.
+      look around, scroll to fly through them.
     </p>
   </section>
   <section id="memory-cloud" aria-label="Photo memory cloud">
@@ -220,6 +274,12 @@ const barcode = Array.from({ length: 30 }, () => 1 + Math.floor(Math.random() * 
   </script>
   <script>
     import '../scripts/three-recap-cards.ts';
+  </script>
+  <script>
+    import '../scripts/week-11-departures.ts';
+  </script>
+  <script>
+    import '../scripts/week-11-sky.ts';
   </script>
 
   <style>
@@ -391,6 +451,95 @@ const barcode = Array.from({ length: 30 }, () => 1 + Math.floor(Math.random() * 
       .pass::after, .pass-fly-plane { animation: none; }
     }
 
+    /* ─── Sunset sky — fixed layers behind the 3D canvas, scrubbed by scroll ── */
+    #sky, .sky-layer, .sky-stars {
+      position: fixed; inset: 0; pointer-events: none;
+    }
+    #sky { z-index: -1; }   /* above body bg, below #three-canvas (z 0) */
+    .sky-layer { opacity: 0; will-change: opacity; }
+    .sky-sunset {
+      background: linear-gradient(180deg,
+        #35406e 0%, #7d4a72 30%, #d96a5a 60%, #ffb35c 85%, #ffd9a0 100%);
+    }
+    .sky-night {
+      background: linear-gradient(180deg, #060b1f 0%, #0d1633 55%, #1b2a52 100%);
+    }
+    .sky-stars {
+      background-image:
+        radial-gradient(1.2px 1.2px at 22px 34px,  rgba(255,255,255,0.95), transparent 60%),
+        radial-gradient(1px   1px   at 118px 76px, rgba(255,255,255,0.7),  transparent 60%),
+        radial-gradient(1.4px 1.4px at 187px 149px,rgba(255,255,255,0.85), transparent 60%),
+        radial-gradient(1px   1px   at 66px 187px, rgba(255,255,255,0.6),  transparent 60%),
+        radial-gradient(1.1px 1.1px at 205px 41px, rgba(255,255,255,0.8),  transparent 60%);
+      background-size: 240px 240px;
+    }
+    .sky-stars--b {
+      background-position: 120px 80px;
+      animation: skyTwinkle 3.4s ease-in-out infinite alternate;
+    }
+    @keyframes skyTwinkle { from { opacity: 0.25; } to { opacity: 1; } }
+    .sky-moon {
+      position: absolute; top: 9%; right: 11%;
+      width: 74px; height: 74px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #fdfbf4, #e8e4d5 60%, #cfcaba);
+      box-shadow: 0 0 46px 10px rgba(255, 250, 230, 0.25);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .sky-stars--b { animation: none; }
+    }
+
+    /* ─── Departure board — split-flap ─── */
+    .dep-board {
+      margin-top: 1.6rem;
+      background: #0c1526;
+      border-radius: 1rem;
+      padding: 1rem 1.1rem 1.2rem;
+      overflow-x: auto;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+                  0 24px 48px -24px rgba(6, 15, 32, 0.8);
+      font-family: var(--font-mono);
+    }
+    .dep-head, .dep-row {
+      display: grid;
+      grid-template-columns: 5.5rem 1fr 8.5rem;
+      gap: 1rem;
+      align-items: center;
+      min-width: 560px;
+    }
+    .dep-head {
+      font-size: 0.55rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.4);
+      padding: 0.3rem 0.2rem 0.6rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .dep-row {
+      padding: 0.45rem 0.2rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .dep-row:last-child { border-bottom: 0; }
+    .dep-cell {
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em;
+      color: #e8eefc; white-space: nowrap;
+    }
+    /* Each character becomes a little flap tile (spans injected by JS). */
+    .dep-cell .flap {
+      display: inline-block;
+      min-width: 1ch; text-align: center;
+      padding: 0.14em 0.06em;
+      margin-right: 1.5px;
+      border-radius: 2.5px;
+      background: linear-gradient(180deg, #1d2c49 0%, #1d2c49 47%, #101d35 53%, #101d35 100%);
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+    }
+    .dep-status--ok   { color: #8fe14f; }
+    .dep-status--now  { color: #ffb02e; }
+    .dep-status--call { color: #ff5460; }
+    .dep-row--final .dep-status .flap { animation: depBlink 1.1s steps(2, start) infinite; }
+    @keyframes depBlink { to { opacity: 0.25; } }
+    @media (prefers-reduced-motion: reduce) {
+      .dep-row--final .dep-status .flap { animation: none; }
+    }
+
     /* ─── Reverse recap wall — each tile carries that week's 3D hero ─── */
     .recap-wall {
       display: grid;
@@ -427,6 +576,28 @@ const barcode = Array.from({ length: 30 }, () => 1 + Math.floor(Math.random() * 
     .recap-sub {
       font-size: 0.82rem; line-height: 1.35;
       color: rgba(20, 40, 70, 0.78);
+    }
+
+    /* FIFA-26 rainbow tile (week 09, matches its page theme) */
+    .recap-tile--rainbow {
+      background-image: linear-gradient(
+        125deg,
+        #6A2CB0, #1E5BE6, #12B6A6, #8CD612,
+        #FFC200, #FF6A13, #E8112D, #FF3D9A, #6A2CB0
+      );
+      background-size: 300% 300%;
+      border-color: rgba(255,255,255,0.4);
+      border-left-color: #fff;
+      animation: rainbowShift 9s ease-in-out infinite;
+    }
+    @keyframes rainbowShift {
+      0%, 100% { background-position: 0% 50%; }
+      50%      { background-position: 100% 50%; }
+    }
+    .recap-tile--rainbow .recap-num { color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.45); }
+    .recap-tile--rainbow .recap-sub { color: rgba(255,255,255,0.92); text-shadow: 0 1px 6px rgba(0,0,0,0.4); }
+    @media (prefers-reduced-motion: reduce) {
+      .recap-tile--rainbow { animation: none; }
     }
 
     /* ─── Two-person letter ─── */

@@ -198,3 +198,129 @@
 [2026-07-13] — Week-08: removed static drop-cap (user disliked), replaced loc-chip styling with scroll-triggered stamp-thud animation (GSAP back.out, random rotate) for actual motion.
 
 [2026-07-13] — WeekStrip.astro: fixed ??? party dot (and Gallery active-state) not showing on Vercel — static builds prerender /party/ with trailing slash, strict === check never matched in production, only in dev.
+
+[2026-07-13] — Week-09 retheme "Nature and mountains" → "World Cup Final" (dates 13-19 JUL match real 2026 final week). New palette: pitch green primary #1E8449, gold accent #FFD700, dark stadium-night bg #0a1612 (weeks.ts + gallery.ts + week-09.astro synced). Content rebuilt: semifinals highlight-cards (France vs Spain — pick Spain; England vs Argentina — no pick yet), final placeholder (TBD vs TBD, score TBD), watch-party section (Bar CJ with friends) — all placeholder copy to fill in once matches happen. three-week.ts case 9 wireframe geometry swapped ConeGeometry → SphereGeometry (ball-like placeholder) pending a real soccer-ball/trophy GLB model.
+
+[2026-07-13] — Week-09 restyle to FIFA 2026 poster vibe (user: dark green was dull, wanted vivid/high-contrast retro). Ditched dark stadium look. New palette red #E8112D / yellow #FFC200 / deep violet bg #1B1036 (weeks.ts + gallery.ts synced). Added fixed retro RAINBOW BACKGROUND: inline SVG of 13 concentric filled rounded-rects cycling the vivid palette (red/orange/yellow/lime/teal/blue/purple/pink), slow-spinning (60s) + breathing (scale 9s). Hid #three-canvas on this page (CSS bg replaces it). Content cards now solid white w/ dark border + red drop-shadow offset (chunky poster style), pill section-tags. Bracket match cards = solid vivid color blocks (semi1 blue, semi2 purple, final red+yellow ring), white team rows, bigger flag emojis, white score pills; winner row solid yellow + scale + ring-pulse. Champion card gold→orange gradient. Funnel connectors now thick yellow. Nav/hero/footer overrides for legibility on rainbow (white text + shadows, frosted nav). reduced-motion disables spin/pulse/float. Build passes.
+
+[2026-07-13] — Week-09 full rebuild for attractiveness: dark stadium theme. Added page-scoped `is:global` block (ships only with week-09) theming nav/hero/footer/week-strip dark + transparent main so the green pitch canvas shows through; sections became dark glass cards (rgba(13,28,22,.72), green border, gold section-tags, gold-glow h2). New TOURNAMENT BRACKET (funnel layout): two semifinal match cards (grid 2-col) → CSS connector funnel (f-left/f-right/f-bar/f-down absolute lines) → final card (gold-bordered, glow) → single vertical connector → champion badge (floating 🏆, gold gradient name). Each team row = flag + name + mono score box; winner row (Spain) gets green gradient bg + gold inset bar + perpetual winGlow pulse. Bracket data lives in astro frontmatter (semi1/semi2/final/champion, edit score+win as results land). Rewrote three-week-09.ts: GSAP ScrollTrigger timeline (once) — match cards stagger up, then connectors draw (scaleY/scaleX 0→1 in bracket order), then champion pops (back.out); prefers-reduced-motion + no-bracket guards. Mobile <640px stacks semis to 1 col, hides horizontal funnel bars, keeps single vertical line. Build passes.
+
+[2026-07-13] — Week-09 background rebuilt to mimic FIFA 26 key visual (no trademarks): mirrored-kaleidoscope SVG — three concentric squircle band stacks (center red/lilac/blue/orange + rainbow stacks hugging left/right edges), duplicated top/bottom via <use> with 20px seam offset so the horizontal cut line mismatches like the poster. Animated: per-band staggered ripple pulse (scale wave travels outward, 7s) + top/bottom halves drifting horizontally in opposite phase (18s living seam). Hero title restyled as poster-style white squircle card with red numerals (align-self start, no text-shadow). reduced-motion disables all bg animation. Build passes.
+
+[2026-07-13] — Week-09 bg fix (user: bands overlapping/color-switching, hero header vanished). Removed ALL per-band animation (staggered ripple scale + will-change on 68 rects — bands scaled over neighbours causing colour swap flicker + GPU layer overload) and the opposite-phase half-slide. Bands now fully static; only remaining motion = one gentle scale breath on whole svg (bgBreath 12s, 1→1.03) so nothing can overlap. Hero-title reverted to plain white text + dark shadow (dropped white-card restyle: align-self/background/padding). Cleaned orphans: .band class, --i vars, .half wrappers, band() index param. Build passes.
+
+[2026-07-13] — Week-09: removed `#three-canvas { display:none }` override so layout 3D model canvas shows behind hero again (user: hero header/models disappeared). Hero number badge already present via WeekLayout. Surgical, nothing else touched.
+
+[2026-07-13] — Week-09: real fix for missing header. Root cause: `.fifa-bg` (position:fixed, z-index:-1) lived inside `main.week-content` which has position:relative+z-index:10, forming a stacking context that trapped fifa-bg and painted it OVER the hero (z10) and the #three-canvas model (z0). Added `position:static; z-index:auto` to the week-09 `main.week-content` override so fifa-bg drops to root behind everything. Header (week badge/number/title/subtitle) + 3D model now visible again over the fifa backdrop. Build passes.
+
+[2026-07-13] — Week-09 bg: removed top/bottom mirror (clipPaths + <use> + flip) — mirror seam showed as visible middle line during bgBreath scale. Now single seamless drawing: three full concentric squircle stacks (center + left/right edge) centered at y=450, breathing animation unchanged. Build passes.
+
+[2026-07-14] — Week-09: removed hardcoded `.site-nav`/`.nav-*`/`.week-dot` overrides from is:global block. Navbar now inherits global.css default (dark text, --week-primary accents) matching all other week pages.
+
+[2026-07-14] — Week-09: added worldcup.glb as hero model. Set modelPath prop (three-week.ts skips wireframe) + GLB loader in three-week-09.ts: fit/center, gold-tuned lighting (warm key/cool fill/white rim), idle slow spin + float, mouse parallax, hero-triggered fade-in entrance, astro:before-swap cleanup. Build passes.
+
+[2026-07-14] — Week-09 trophy lighting: was dark (gold is metallic → reflects env, not diffuse). Added PMREM RoomEnvironment env-map + ACES tone mapping (exposure 1.35) + boosted key/fill/rim/ambient/hemisphere intensities. Gold now vivid. Build passes.
+
+[2026-07-14] — Week-09 trophy lighting: halved all light intensities + exposure back to 1.0 (prev step too bright). Env-map reflections kept. Build passes.
+
+[2026-07-14] — Week-09 trophy: gold was flat/washed — env-map flooded metal uniformly. Cut exposure to 0.7, added scene.environmentIntensity=0.35, dropped ambient 0.18 + hemisphere 0.25 so directional key carries shading/contrast. Build passes.
+
+[2026-07-14] — Week-09 bracket funnel: semi-row gap 2.2rem shifts real match centers to 25%-0.55rem / 75%+0.55rem; f-bar at 25%-75% fell short of right match. Moved legs to true centers + widened bar to 50%+1.1rem. Build passes.
+
+[2026-07-14] — Index: week-09 card gets FIFA rainbow theme. Added week-card--rainbow class (w.week===9) + animated multi-color band gradient (page palette), white text/shadow for readability. Also earlier: wc09 photo-grid forced to 3 cols (2 on mobile). Build passes.
+
+[2026-07-14] — Week-09 interactive add-ons: (1) penalty shootout minigame (new penalty-week09.ts 2D canvas — drag-aim, keeper dives random third, 5-shot score); (2) floating soccer-ball sprites drifting in hero three-scene; (3) champion card click -> DOM confetti burst + trophy pop. New Minigame section + styles + confetti CSS in week-09.astro. Build passes.
+
+[2026-07-14] — Week-09 penalty minigame reworked harder: two-stage timing shot — sweeping direction arrow (click/space to lock), then pulsing power ring (click/space to shoot). Real misses added (wide / over-the-bar / too-soft); top corners unreachable by keeper. Ball now drawn with the same emoji sprite. Keeper redrawn detailed (kit + number 1, gloves, animated dive lean). New is-miss msg color. Build passes.
+
+[2026-07-14] — Fix week-09 penalty crash: geo() sMax referenced sibling prop goalR (undefined in own object literal). Replaced with goalL + goalW*1.06 (equivalent). Build passes.
+
+[2026-07-14] — Week-09 penalty logic reworked for clarity/fairness: removed phantom soft-save (power<0.12). New transparent rules — direction must stop between posts (else WIDE), power ring yellow=low/green=top-corner(beats keeper)/red=over-the-bar. Green ring now guarantees a goal when on frame; misses only from your own wide/over timing. Keeper only saves low shots to his guessed third. Added colored direction track + green/red reference rings + clearer hints & copy. Build passes.
+
+[2026-07-14] — Week-09 penalty keeper replaced with sprite frames (public/photos/keeper/{idle,charge,dive,down}.png). Phase-driven: idle=waiting, charge=aim-pow/anticipation, dive=airborne, down=landed. Mirrors per side (idle/charge/down face left, dive faces right). Uniform scale off idle height, anchored at goal line. Removed old vector keeper + keeperLean. Build passes.
+
+[2026-07-14] — Week-09 penalty: keeper charge frame now mirrors randomly (chargeFlip set on direction lock) as a feint — facing no longer hints the real dive side. Build passes.
+
+[2026-07-14] — Week-09: removed floating ⚽ sprites from hero model canvas (sprite creation + tick drift). Build passes.
+
+[2026-07-14] — Week-09 filled with post-final retrospective sections (page publishes after full time): Final recap scoreline card (flags/score/venue/date/MOTM), goal timeline (data-driven, graceful empty state), head-to-head dueling stat bars (possession/shots/on-target/xG, scale to bigger side), tournament awards trio (Golden Boot/Ball/Glove). All editable consts in frontmatter + GSAP scroll-reveal (recap pop, goals slide, bars grow from 0, awards back-ease). Mobile rules + styles added. Build passes.
+
+[2026-07-14] — Week-09 reworked for real value: removed boring TBD stat filler (head-to-head bars, awards, goal timeline). Shrank final recap to a small real scoreline card. Added "Amarante, unlocked" — a curated local guide with real spots (São Gonçalo bridge/church/saint, doces de São Gonçalo, Amadeo museum, Tâmega, Festas de São Gonçalo, Serra do Marão), filterable See/Eat/Do chips with pop animation, category tags + local tips. New reusable src/data/amarante.ts (AMARANTE_SPOTS). GSAP scroll-reveal for cards + vanilla filter logic in three-week-09.ts. Build passes.
+
+[2026-07-14] — Week-09 reverted "fill the page" work: removed final recap card + Amarante guide section (styles, mobile rules, reveal/filter JS) and deleted src/data/amarante.ts. Page back to bracket + penalty minigame + Bar CJ + photos. Build passes.
+
+[2026-07-14] — Week-09 penalty: replaced plain "Goals X/Y" counter with TV-style shootout scoreboard — dark gradient pill, glowing gold goal count + row of 5 dots that fill green (goal) / red (miss) with pop animation per shot. JS builds dots from MAX_SHOTS, colors dots[shots-1] in land(), clears on reset (dropped pk-shots element). Build passes.
+
+[2026-07-14] — Fix week-09 penalty dots invisible: dots created in JS get no Astro scope attr, so scoped .pk-dot CSS never matched. Moved .pk-dot rules + pkDotPop keyframes into the is:global style block. Build passes.
+
+[2026-07-15] — Week-09 champion podium: rebuilt the flat champ card into a celebration — spinning conic-gradient ray burst, sheen sweep across the card, bigger glowing trophy, 2-star row, flag + big country name, "World Champions" wordmark, tap hint. GSAP reveal sequence (card lift → rays → trophy bounce-drop → stars pop → letters stagger) fires an automatic confetti fountain on scroll-in; click still re-triggers it. Fixed .champ-name CSS that was dead (markup used .tname); trophy split into GSAP wrapper + floating inner <i> so the CSS animation no longer overrides GSAP's inline transform; rays tween limited to opacity for the same reason.
+
+[2026-07-15] — Gallery: dropped the week-11 section — that week is a recap of earlier weeks, so it has no photos of its own. Filtered 11 out of the weeks list in gallery.astro (PUBLISHED_WEEKS itself untouched, so the week-11 page stays live). The inlined week list the loader reads now comes from the filtered gallery weeks instead of PUBLISHED_WEEKS (renamed #published-weeks → #gallery-weeks), so no pointless Supabase list call for a week11 folder.
+
+[2026-07-15] — Week-09 section order: swapped Minigame and Match day. Page now reads Knockouts (bracket) → Match day (Bar CJ) → Minigame (penalty) → Photos. Bracket stays on top since the World Cup is the week's theme and the Match day text follows on from it; the minigame drops to a play-it-yourself send-off before the photos. Pure markup move — no style, script or id changes.
+
+[2026-07-15] — Week-10 rethemed to a Port wine tasting guide ("Six glasses down the Douro"). New Xisto palette in weeks.ts + page: schist ground #E7E3D5, bordeaux #5E2333, vine accent #7E8C4F — light on purpose, since the week's hook is a wine stain and a stain needs a pale ground to read. Content is written forward-looking (the trip hasn't happened yet): Gaia/geography intro, a 4-step tasting ritual, and the six-wine flight. The flight is the hook — a bordeaux sheet (mix-blend-mode: multiply) floods the cards on scrub, each row takes its stain as the leading edge passes, then the wine fades and leaves every card dyed the colour of its own wine (@property --stain + color-mix, so bg/border/heading/pairing all shift together). three-week-10.ts now owns #three-canvas (modelPath="skip"): loads /models/rabelo.glb for the hero, falls back to a lathed pipa (bulged profile + iron hoops) built from primitives while that model doesn't exist yet. Photo placeholders left as-is.
+
+[2026-07-15] — Week-10 spill v2 + card content. Content sections now use the site's glass card mode (glassContent prop, cards warmed to rgba(251,249,243,.86) with a bordeaux hairline so they sit on the schist ground instead of pure white). Spill rebuilt as a full-viewport wine wave: fixed 100vw sheet with wavy SVG leading/trailing edges + droplets, swept left→right (xPercent −115→115) while the flight section is pinned (ScrollTrigger pin, scrub, +170%); cards take --stain while hidden under the wine so the trailing edge uncovers them already dyed (column stagger, left first), then a held beat before unpin so the dyed flight is read standing still. Script re-parents .spill to <body> because position:fixed breaks inside the pinned (transformed) section; removed on astro:before-swap. Reduced motion: no pin, no sheet, stains pre-applied.
+
+[2026-07-15] — Week-10 spill v3 per feedback: every card on the page now dyes, not just the flight — .content-section glass cards are stain-aware (8% bordeaux wash + 60% wine outline via color-mix on --stain, tweened by the same timeline). Wine-card fill lightened (20%→11% mix) and outline strengthened (1.5px, 90% wine). Pin triggers earlier (top 25% instead of top 10%) and runs shorter (+130%). Fixed the wine never fully leaving: sweep was ±115% but the wave edges overhang the 100vw sheet, so on narrow screens the trailing wave stayed parked on-screen — now ±130%.
+
+[2026-07-15] — Week-10 spill v4: killed the pin+scrub approach — scrubbed sweep stranded mid-cover (wine permanently over the screen) when the page ran out of scroll before the timeline finished. Sweep is now time-driven: ScrollTrigger (top 55%, once) only fires it, then it plays out on its own clock (2.5s power1.inOut sweep, stains land under the wine from 0.9s, all sections dyed by ~1.7s), so it can never strand. Defensive autoAlpha:0 on complete kills the sheet even if edge geometry misbehaves. No more page pinning.
+
+[2026-07-15] — Week-10 spill fix: wave ended parked over the viewport then blinked out — GSAP parsed the CSS translateX(-130%) fallback as a px `x` offset that cancelled the final xPercent; now x:0 is set explicitly and travel widened to ±140. Sweep also fires much earlier (top bottom instead of top 75%).
+
+[2026-07-15] — Week-10 spill trigger moved to 2nd content-section ("The ritual", top 75%) — wave launches one section before the flight so it sweeps in early.
+
+[2026-07-15] — Week-10 hero model: swapped MODEL_PATH from the never-existing /models/rabelo.glb to /models/Barrel.glb, rotated it 90° on Z so the cask lies horizontal (matching the procedural pipa fallback), and fit to 2.6 height after the rotation so the box is measured in its final orientation.
+
+[2026-07-15] — Index weeks grid: 11 cards never fill the last 3-column row, so grid packed weeks 10 and 11 to one side with a hole beside them. Swapped .weeks-grid from grid auto-fill to flex-wrap + justify-content:center, and gave .week-card flex:1 1 290px with a max-width equal to its old 3-track width, so full rows still span the full 1200px and only the leftover row centres.
+
+[2026-07-15] — Index week cards: the small top label now shows the date range ("20 — 26 JUL") instead of "Week 10" — the week number is already the big title right below it, so the label was redundant. Required fixing weeks.ts, whose `dates` field was stale for weeks 1-5, 7 and 11 (it still said "Week N"); copied the real ranges from each page's `dates` prop and normalised the mixed -/–/— dashes to a single em dash. `weeks.dates` had no consumers before this, which is how it drifted.
+
+[2026-07-15] — Index countdown: added a dev-only `/?finished` preview flag so the landed state (plane, "Home.", 100% bar, celebrate glow) can be seen before we actually depart on Jul 31. Forces `left = 0` in update() so it runs the real finish() path rather than a mock-up. Gated behind import.meta.env.DEV, so the flag compiles out of the production build and does nothing on Netlify.
+
+[2026-07-15] — Index countdown preview, take 2: `?finished` alone only rendered the end state, so you never saw the arrival. The flag now takes an optional seconds value — `?finished=15` fakes departure 15s from now and the start 100s before it, so the bar climbs from 90% to 100%, the clock ticks to zero and finish() fires live, on the real code path. Bare `?finished` still jumps straight to the landed state. update() now reads the derived `start`/`depart` instead of the START/DEPART constants.
+
+[2026-07-16] — Week 10: replaced the left→right wine sheet with a fullscreen WebGL flood. A lazily-built second Three.js canvas (fixed, z-90) runs a shader tide that rises from the bottom of the viewport — sine-layered surface, meniscus glow, rising bubbles — holds 0.7s fully submerged, then drains. Cards/sections still dye geometry-driven, now vertically: each stains the frame the surface passes its midpoint. Old .spill markup/CSS removed from week-10.astro; reduced-motion path unchanged (instant stain, no flood).
+
+[2026-07-16] — Week 10 flood tuning: total runtime 5.4s → 4.3s (rise 2.0s, hold 0.6s, drain 1.7s) and card dye now lags 0.4s behind the surface so the stain reads as soaking in rather than snapping on contact.
+
+[2026-07-16] — Week 10 flood: dropped the per-card geometry-driven dye (surface-tracking onUpdate loop, dyed flags, safety net). All cards and sections now stain in a single gsap.set at the top of the hold, while the screen is fully covered — the drain reveals the whole page already dyed, viewport position irrelevant.
+
+[2026-07-16] — Week 10 flood: bubbles 12 → 22, and the stain is now a 1.6s tween instead of an instant set — starts at full cover, still deepening while the drain reveals the page (drain overlaps the soak by 1.0s), so the colour fades in instead of visibly switching. Total runtime unchanged at 4.3s.
+
+[2026-07-16] — Week 10 flood: Grapes.glb + Wine_bottle.glb now ride the tide. Preloaded at page load; drawn in a second scene with a perspective camera, rendered after the wine quad with the depth buffer cleared (same-scene draw would blend them under the transparent quad). While riding they track the exact shader surface (same three sines re-computed in JS) with rocking + slow spin; when the drain starts they detach and drift to the bottom corners, where they stay bobbing indefinitely. Flood canvas therefore outlives the timeline now — the quad just goes invisible, full teardown only on astro:before-swap. Late-loading models park directly.
+
+[2026-07-16] — Week 10 floaters, mobile: once the flood finishes, on ≤768px the flood canvas drops to z-index 2 — behind .week-content (z-10), above the layout canvases (0/1) — so the parked grapes/bottle sit behind the cards instead of over the text. Desktop stays z-90 (on top). Live matchMedia change listener, so rotating a phone across the breakpoint re-applies; flood itself always plays at z-90.
+
+[2026-07-16] — Week 10 drips (final shape): only the four glass content sections drip, not the wine cards (drops fell across their own text). Proper teardrop now — inline SVG path with pointed top, round bulb and a gloss highlight, bordeaux #5E2333. Faster pace: first drop 0.2–1.7s after the flood, then every 0.9–3.5s per section; swell 0.55s, fall 70–130px with a slight vertical stretch, fade. startDrips() still fires from the flood timeline's onComplete; timers cleared on astro:before-swap; reduced-motion never reaches it.
+
+[2026-07-16] — Week 10 drips: pace cranked. Per section: first drop 0.1–0.5s, then every 0.25–0.95s (~1.7 drops/s per section, ~7/s page-wide). It rains wine now.
+
+[2026-07-16] — Week 11 finale additions (nothing removed): (1) Departures board — split-flap Solari board, one row per week (AM01..AM11) plus VY8481 BARCELONA FINAL CALL blinking; chars shuffle and settle on scroll-in (week-11-departures.ts). (2) Flight path — OPO→BCN SVG arc draws in with scroll scrub, plane rides the path, 11 week-coloured waypoint dots pop as it passes (week-11-flightpath.ts). (3) Sunset sky — fixed gradient layers behind the 3D canvas crossfade day→sunset→starry night+moon across total page scroll, so The End lands under stars (week-11-sky.ts; #sky re-parented to <body> because .week-content is a z-10 stacking context). All three honour prefers-reduced-motion.
+
+[2026-07-16] — Week 11: page reordered into farewell narrative — intro → recap wall → flight path → letters → departures board → boarding pass → memory cloud/The End (memories by day, airport at dusk, flythrough at night — matches the sunset scroll). Flight path fix: prefers-reduced-motion static branch removed (it rendered the path fully drawn with no animation — scroll-scrubbed motion is user-driven so it stays on); scrub now drives a real GSAP tween with invalidateOnRefresh + refresh on load. Memory cloud set to debug: LOAD_PHOTOS=false (zero Supabase requests, colour placeholder cards) — flip to true before publishing.
+
+[2026-07-16] — Week 11: flight path section ("The route home") removed entirely (markup, CSS, frontmatter, script import, week-11-flightpath.ts deleted). Final order per request: intro → recap wall → departures board → boarding pass → two goodbyes → memory cloud/The End.
+
+[2026-07-16] — Week 11: goodbye-letter typewriter ~4x faster (0.03s→0.008s per char, min duration 1.2s→0.4s) in week-11-finale.ts.
+
+[2026-07-16] — Week 11: typewriter speed-up reverted — back to 0.03s/char, min 1.2s.
+
+[2026-07-16] — Week 10: floaters ride flood at final park x (parkX) — drain only settles them down, no horizontal drift; xFrac removed (three-week-10.ts).
+
+[2026-07-16] — Week 10: floaters now ride draining wine surface down and beach when it passes park height — before, separate park tween sank them faster than wine (three-week-10.ts).
+
+[2026-07-16] — Week 11: sky scrub anchored to elements (dep-board→boarding-pass sunset, letter-grid→memory-cloud night) instead of page-max progress — lazy pin init no longer steps sunset backwards at goodbyes (week-11-sky.ts).
+
+[2026-07-17] — Index countdown: pct usa Math.floor en vez de Math.round — 100% solo aparece al final real (31 jul 22:00), no 8h45 antes por redondeo (index.astro).
+
+[2026-07-17] — Added themed 404 page (404.astro, English, plane drift + gradient 404) and loading="lazy" decoding="async" on all 48 static photos in week-01…08. Gallery already lazy; party film strip left eager on purpose (infinite marquee).
+
+[2026-07-17] — Weeks 9-10: added HTML comment template (Supabase URL + loading=lazy) next to 📸 placeholders for when photos arrive. Week 11 memory cloud + gallery load from bucket dynamically — nothing needed.
+
+[2026-07-20] — Week 9: replaced final match-day paragraph with a bold "¡CAMPEONES DEL MUNDO!" celebration block (red/gold card, rotating stadium light beams, waving Spain flag, glowing pulse title, twinkling stars, pulsing crowd chant). No confetti. Full mobile + reduced-motion handling.
+
+[2026-07-20] — Week 9 cheer block fixes: swapped CSS gradient flag for real flag-icons flag (fi fi-es, same as bracket); border-radius now on the animated element with perspective baked into keyframes so rounded corners follow the wave (removed overflow-clipped inner <b>).
+
+[2026-07-20] — Week 9 cheer block: removed flag wave animation (static flag-icons flag now); dropped flagWave keyframes and reduced-motion entry.

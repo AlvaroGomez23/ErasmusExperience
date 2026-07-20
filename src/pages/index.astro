@@ -118,11 +118,11 @@ const isDark = (hex: string) => {
           weeks.filter((w) => PUBLISHED_WEEKS.includes(w.week)).map((w, i) => (
             <a
               href={`/${w.slug}`}
-              class={`week-card${isDark(w.bgColor) ? ' week-card--dark' : ''}`}
+              class={`week-card${isDark(w.bgColor) ? ' week-card--dark' : ''}${w.week === 9 ? ' week-card--rainbow' : ''}`}
               style={`background-color:${w.bgColor}; border: 2px solid ${w.primaryColor}20;`}
               data-index={i}
             >
-              <span class="card-num">Week {String(w.week).padStart(2, '0')}</span>
+              <span class="card-num">{w.dates}</span>
               <div>
                 <div
                   class="card-week-title"
@@ -175,12 +175,28 @@ const isDark = (hex: string) => {
       }, { passive: true });
     </script>
     <script>
+      import gsap from 'gsap';
+
       // ── COUNTDOWN to departure (Portugal WEST = UTC+1) ──
       const START  = new Date('2026-05-20T00:00:00+01:00').getTime(); // week 01 begins
       const DEPART = new Date('2026-07-31T22:00:00+01:00').getTime(); // wheels up
       const TOTAL_WEEKS = 11;
       const DAY = 86400000;
       const WEEK = 7 * DAY;
+
+      // Preview the landing before we actually land.
+      //   /?finished     → jump straight to the landed state
+      //   /?finished=15  → land 15s from now, so you watch it arrive live
+      // Dev-only: import.meta.env.DEV compiles to false in the build, so the
+      // flag is dead code on the deployed site.
+      const previewArg = import.meta.env.DEV
+        ? new URLSearchParams(location.search).get('finished')
+        : null;
+      // Fake departure = now + N seconds, and fake start = 100s before that, so
+      // the bar is at 90% with 10s left and visibly climbs the rest of the way.
+      const previewDepart = Date.now() + (Number(previewArg) || 0) * 1000;
+      const depart = previewArg === null ? DEPART : previewDepart;
+      const start  = previewArg === null ? START  : previewDepart - 100000;
 
       const $ = (sel: string) => document.querySelector<HTMLElement>(sel);
       const section = $('#countdown');
@@ -199,13 +215,12 @@ const isDark = (hex: string) => {
       const elDLeft = $('[data-days-left]');
       const pad = (n: number) => String(n).padStart(2, '0');
 
-      let timer = 0;
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      function finish() {
-        if (section?.classList.contains('is-complete')) return;
-        section?.classList.add('is-complete');
-        elClock?.setAttribute('hidden', '');
-        elDone?.removeAttribute('hidden');
+      let timer = 0;
+      let done = false;
+
+      function setLanded() {
         if (elSub)  elSub.textContent  = 'July 31 · 22:00 — we made it home.';
         if (elMeta) elMeta.textContent = 'adventure complete';
         if (elFill) elFill.style.width = '100%';
@@ -213,12 +228,72 @@ const isDark = (hex: string) => {
         if (elWDone) elWDone.textContent = String(TOTAL_WEEKS);
         if (elWLeft) elWLeft.textContent = '0';
         if (elDLeft) elDLeft.textContent = '0';
+      }
+
+      // Paper bits thrown from the middle of the card: burst out, then fall.
+      function confetti() {
+        const COLORS = ['#88CE02', '#4CAF50', '#FFD700', '#2e7d12'];
+        for (let i = 0; i < 26; i++) {
+          const bit = document.createElement('span');
+          bit.className = 'cd-confetti';
+          bit.style.background = COLORS[i % COLORS.length];
+          section?.appendChild(bit);
+          gsap.timeline({ onComplete: () => bit.remove() })
+            .fromTo(bit,
+              { x: 0, y: 0, opacity: 1, scale: gsap.utils.random(0.6, 1.3) },
+              { x: gsap.utils.random(-280, 280), y: gsap.utils.random(-210, -90),
+                rotation: gsap.utils.random(-180, 180), duration: 0.55, ease: 'power2.out' })
+            .to(bit, { y: '+=360', rotation: `+=${gsap.utils.random(-220, 220)}`,
+                       duration: 1.25, ease: 'power1.in' }, '>-0.1')
+            .to(bit, { opacity: 0, duration: 0.45 }, '<0.75');
+        }
+      }
+
+      function finish() {
+        if (done) return;
+        done = true;
         clearInterval(timer);
+        setLanded();
+
+        if (reduce) {
+          elClock?.setAttribute('hidden', '');
+          elDone?.removeAttribute('hidden');
+          section?.classList.add('is-complete');
+          return;
+        }
+
+        // is-complete lands last, on purpose: it starts the idle bob and the
+        // glow pulse, and those CSS animations would fight the entrance
+        // tweens for the same transform if they were running during it.
+        gsap.timeline({ onComplete: () => section?.classList.add('is-complete') })
+          // nothing left to count — the clock collapses
+          .to('.cd-unit', { y: -14, opacity: 0, scale: 0.92, duration: 0.35,
+                            stagger: 0.05, ease: 'power2.in' })
+          .add(() => {
+            elClock?.setAttribute('hidden', '');
+            elDone?.removeAttribute('hidden');
+            // unhiding alone would flash it at full opacity until its own
+            // tween starts, so park it invisible for those few frames
+            gsap.set(elDone, { opacity: 0 });
+          }, 0.5)
+          // the little plane on the bar takes off ...
+          .fromTo('.cd-plane', { yPercent: -50, y: 0, rotation: 0 },
+            { y: -70, x: 50, rotation: -25, opacity: 0, duration: 0.6, ease: 'power2.in' }, 0.5)
+          // ... and comes back down as the big one
+          .fromTo(elDone, { opacity: 0, scale: 0.7 },
+            { opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.7)' }, 0.75)
+          .fromTo('.cd-done-icon', { y: -90, rotation: 14, opacity: 0 },
+            { y: 0, rotation: 0, opacity: 1, duration: 0.9, ease: 'bounce.out' }, 0.8)
+          .add(confetti, 1.1)
+          .fromTo('.cd-done-line', { y: 24, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.5, ease: 'power3.out' }, 1.15)
+          .fromTo('.cd-done-sub', { y: 14, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.4 }, 1.3);
       }
 
       function update() {
         const now = Date.now();
-        const left = Math.max(0, DEPART - now);
+        const left = Math.max(0, depart - now);
 
         if (left <= 0) { finish(); return; }
 
@@ -231,8 +306,8 @@ const isDark = (hex: string) => {
         if (elMin)  elMin.textContent  = pad(m);
         if (elSec)  elSec.textContent  = pad(s);
 
-        const prog = Math.min(1, Math.max(0, (now - START) / (DEPART - START)));
-        const pct = Math.round(prog * 100);
+        const prog = Math.min(1, Math.max(0, (now - start) / (depart - start)));
+        const pct = Math.floor(prog * 100);
         if (elFill) elFill.style.width = (prog * 100) + '%';
         if (elPct)  elPct.textContent  = pct + '%';
 
@@ -244,7 +319,9 @@ const isDark = (hex: string) => {
       }
 
       update();
-      timer = window.setInterval(update, 1000);
+      // guard: if that first update already landed us, finish() cleared a timer
+      // that did not exist yet — starting one now would tick forever doing nothing
+      if (!done) timer = window.setInterval(update, 1000);
     </script>
     <Analytics />
 
@@ -351,14 +428,23 @@ const isDark = (hex: string) => {
 
       /* ── FINISHED STATE ── */
       .cd-clock[hidden], .cd-done[hidden] { display: none; }
+      .cd-confetti {
+        position: absolute; top: 42%; left: 50%;
+        width: 8px; height: 14px; border-radius: 2px;
+        pointer-events: none; z-index: 3;
+      }
       .cd-done {
         display: flex; flex-direction: column; align-items: center;
         margin-bottom: 2.6rem;
       }
       .cd-done-icon {
         font-size: clamp(2.6rem, 7vw, 3.6rem); line-height: 1;
-        animation: cd-land 3s ease-in-out infinite;
         filter: drop-shadow(0 3px 6px rgba(40,80,0,0.3));
+      }
+      /* Only once the landing tweens are done — a running CSS animation beats
+         inline styles, so this would hijack the transform mid-entrance. */
+      .is-complete .cd-done-icon {
+        animation: cd-land 3s ease-in-out infinite;
       }
       @keyframes cd-land {
         0%, 100% { transform: translateY(0) rotate(-4deg); }
@@ -379,6 +465,34 @@ const isDark = (hex: string) => {
       @keyframes cd-celebrate {
         0%, 100% { box-shadow: 0 18px 50px rgba(30,50,10,0.12); }
         50%      { box-shadow: 0 18px 60px rgba(136,206,2,0.35); }
+      }
+
+      /* ── FIFA-26 RAINBOW CARD (week 09, matches its page theme) ── */
+      .week-card--rainbow {
+        background-image: linear-gradient(
+          125deg,
+          #6A2CB0, #1E5BE6, #12B6A6, #8CD612,
+          #FFC200, #FF6A13, #E8112D, #FF3D9A, #6A2CB0
+        );
+        background-size: 300% 300%;
+        border-color: rgba(255,255,255,0.4) !important;
+        animation: rainbowShift 9s ease-in-out infinite;
+      }
+      @keyframes rainbowShift {
+        0%, 100% { background-position: 0% 50%; }
+        50%      { background-position: 100% 50%; }
+      }
+      .week-card--rainbow .card-num,
+      .week-card--rainbow .card-dates {
+        color: #fff;
+        text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+      }
+      .week-card--rainbow .card-week-title {
+        color: #fff !important;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.45);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .week-card--rainbow { animation: none; }
       }
     </style>
   </body>

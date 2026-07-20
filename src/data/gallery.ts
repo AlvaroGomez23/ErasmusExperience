@@ -19,7 +19,7 @@ export const weekMeta: Record<number, { subtitle: string; color: string }> = {
   6:  { subtitle: 'São João in Porto',           color: '#FFB02E' },
   7:  { subtitle: 'The first goodbyes',          color: '#6C8EBF' },
   8:  { subtitle: 'The world in one place',      color: '#1B3A5C' },
-  9:  { subtitle: 'Nature and mountains',        color: '#4CAF50' },
-  10: { subtitle: 'Almost there',                color: '#7C3AED' },
+  9:  { subtitle: 'World Cup Final',             color: '#E8112D' },
+  10: { subtitle: 'The wrong side of the river', color: '#5E2333' },
   11: { subtitle: 'Last days, eternal memories', color: '#2196F3' },
 };

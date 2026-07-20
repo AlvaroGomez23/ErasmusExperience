@@ -1,0 +1,86 @@
+---
+import '../styles/global.css';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/webp" href="/photos/Flag_of_Europe.svg.webp" />
+    <meta name="robots" content="noindex" />
+    <title>404 — Lost in Amarante</title>
+    <style>
+      :root {
+        --week-primary: #88CE02;
+        --week-bg: #f0f7e6;
+      }
+      body { background-color: #f8f5ee; }
+    </style>
+  </head>
+
+  <body>
+    <main class="lost">
+      <span class="lost-plane" aria-hidden="true">✈</span>
+      <p class="lost-code">404</p>
+      <h1 class="lost-title">Lost in Amarante</h1>
+      <p class="lost-sub">
+        This page wandered off the map. Maybe it crossed the São Gonçalo
+        bridge and never came back.
+      </p>
+      <a href="/" class="lost-home">← Back to the journey</a>
+    </main>
+
+    <style>
+      .lost {
+        min-height: 100svh;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        text-align: center; padding: 2rem;
+      }
+      .lost-plane {
+        font-size: clamp(2.4rem, 6vw, 3.4rem); line-height: 1;
+        display: block;
+        filter: drop-shadow(0 3px 6px rgba(40,80,0,0.25));
+        animation: lost-drift 4s ease-in-out infinite;
+      }
+      @keyframes lost-drift {
+        0%, 100% { transform: translate(0, 0) rotate(-6deg); }
+        50%      { transform: translate(14px, -12px) rotate(6deg); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .lost-plane { animation: none; }
+      }
+      .lost-code {
+        font-family: var(--font-mono); font-weight: 700;
+        font-size: clamp(4.5rem, 16vw, 8rem); line-height: 1;
+        margin: 1rem 0 0;
+        background: linear-gradient(120deg, #88CE02, #4CAF50);
+        -webkit-background-clip: text; background-clip: text; color: transparent;
+      }
+      .lost-title {
+        font-size: clamp(1.6rem, 4.5vw, 2.4rem); font-weight: 600;
+        color: #1f2a12; margin: 0.6rem 0 0;
+      }
+      .lost-sub {
+        font-family: var(--font-mono); font-size: 0.82rem;
+        letter-spacing: 0.04em; color: rgba(40,60,20,0.7);
+        max-width: 42ch; margin: 1.2rem 0 0;
+      }
+      .lost-home {
+        display: inline-block; margin-top: 2.4rem;
+        font-family: var(--font-mono); font-size: 0.8rem;
+        letter-spacing: 0.08em; text-transform: uppercase;
+        color: #2e7d12; text-decoration: none;
+        border: 1px solid rgba(136,206,2,0.4);
+        border-radius: 999px; padding: 0.8rem 1.6rem;
+        background: rgba(136,206,2,0.08);
+        transition: background 0.25s ease, transform 0.25s ease;
+      }
+      .lost-home:hover {
+        background: rgba(136,206,2,0.18);
+        transform: translateY(-2px);
+      }
+    </style>
+  </body>
+</html>

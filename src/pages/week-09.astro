@@ -1,44 +1,781 @@
 ---
 import WeekLayout from '../layouts/WeekLayout.astro';
 import { PUBLISHED_WEEKS } from '../config/routes';
+import "flag-icons/css/flag-icons.min.css";
 if (!PUBLISHED_WEEKS.includes(9)) return Astro.redirect('/');
+
+// ── Bracket data (edit as results come in) ──
+// score: '' = not played yet (renders as —). win: 'a' | 'b' | null
+const semi1 = { a: { flag: 'fr', name: 'France',    score: '0' },
+                b: { flag: 'es', name: 'Spain',     score: '2' }, win: 'b' };
+const semi2 = { a: { flag: 'gb', name: 'England',   score: '1' },
+                b: { flag: 'ar', name: 'Argentina', score: '2' }, win: 'b' };
+const final = { a: { flag: 'es', name: 'Spain',     score: '1' },
+                b: { flag: 'ar', name: 'Argentina', score: '0' }, win: 'a' }; // 'un' sirve para bandera de la ONU/desconocida en flag-icons
+const champion = { flag: 'es', name: 'Spain' }; // update after final
+
+const cell = (t: { flag: string; name: string; score: string }) =>
+  ({ flag: t.flag, name: t.name, score: t.score === '' ? '—' : t.score });
+
+// ── FIFA-26-poster bands: three concentric squircle stacks ──
+// (center + one hugging each screen edge)
+const centerStack = [
+  { s: 2400, c: '#6A2CB0' }, { s: 2150, c: '#1E5BE6' }, { s: 1900, c: '#C9B8F0' },
+  { s: 1660, c: '#FF6A13' }, { s: 1440, c: '#E8112D' }, { s: 1230, c: '#9E1B32' },
+  { s: 1040, c: '#C9B8F0' }, { s: 860,  c: '#1E5BE6' }, { s: 700,  c: '#9E1B32' },
+  { s: 560,  c: '#E8112D' },
+];
+const leftStack = [
+  { s: 1150, c: '#0B3B3C' }, { s: 1060, c: '#8CD612' }, { s: 970, c: '#FFC200' },
+  { s: 880,  c: '#FF6A13' }, { s: 790,  c: '#E8112D' }, { s: 700, c: '#FF3D9A' },
+  { s: 610,  c: '#C9B8F0' }, { s: 520,  c: '#6A2CB0' }, { s: 430, c: '#1E5BE6' },
+  { s: 340,  c: '#12B6A6' }, { s: 250,  c: '#8CD612' }, { s: 160, c: '#FFC200' },
+];
+const rightStack = [
+  { s: 1150, c: '#8CD612' }, { s: 1060, c: '#0B3B3C' }, { s: 970, c: '#12B6A6' },
+  { s: 880,  c: '#1E5BE6' }, { s: 790,  c: '#6A2CB0' }, { s: 700, c: '#C9B8F0' },
+  { s: 610,  c: '#E8112D' }, { s: 520,  c: '#FF6A13' }, { s: 430, c: '#FFC200' },
+  { s: 340,  c: '#FF3D9A' }, { s: 250,  c: '#1E5BE6' }, { s: 160, c: '#12B6A6' },
+];
+const CY = 450;
+const band = (r: { s: number; c: string }, cx: number) =>
+  ({ x: cx - r.s / 2, y: CY - r.s / 2, s: r.s, rx: r.s * 0.32, c: r.c });
 ---
 
 <WeekLayout
   week={9}
   title="09"
-  subtitle="Nature and mountains"
+  subtitle="World Cup Final"
   dates="13 - 19 JUL"
-  primaryColor="#4CAF50"
-  accentColor="#88CE02"
-  bgColor="#f0fff4"
+  primaryColor="#E8112D"
+  accentColor="#FFC200"
+  bgColor="#1B1036"
   prevSlug="week-08"
   prevTitle="Week 08"
   nextSlug="week-10"
   nextTitle="Week 10"
+  modelPath="/models/worldcup.glb"
 >
-  <section class="content-section">
-    <span class="section-tag">Land</span>
-    <h2>The green north</h2>
+  <!-- ── FIFA-26 BAND BACKGROUND ── -->
+  <div class="fifa-bg" aria-hidden="true">
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+      <rect x="0" y="0" width="1600" height="900" fill="#1B1036" />
+      <g>
+        {centerStack.map((r) => { const b = band(r, 800); return (
+          <rect x={b.x} y={b.y} width={b.s} height={b.s} rx={b.rx} fill={b.c} />
+        ); })}
+      </g>
+      <g>
+        {leftStack.map((r) => { const b = band(r, -80); return (
+          <rect x={b.x} y={b.y} width={b.s} height={b.s} rx={b.rx} fill={b.c} />
+        ); })}
+      </g>
+      <g>
+        {rightStack.map((r) => { const b = band(r, 1680); return (
+          <rect x={b.x} y={b.y} width={b.s} height={b.s} rx={b.rx} fill={b.c} />
+        ); })}
+      </g>
+    </svg>
+  </div>
+
+  <section class="content-section wc09">
+    <span class="section-tag">Knockouts</span>
+    <h2>Road to the cup</h2>
     <p>
-      Northern Portugal is green and wild. This week we get lost in
-      nature — trails, waterfalls, and views you never forget.
+      Last 4 teams, only one cup. It has been an amazing tournament, and Spain earns the final victory after a tense match against Argentina. We are very proud of them and the second star is home!
     </p>
+
+    <div class="bracket">
+      <div class="round round--semis">
+        <span class="round-label">Semifinals</span>
+        <div class="semi-row">
+          <div class="match match--blue" data-round="semi">
+            <div class:list={['team', { 'is-win': semi1.win === 'a' }]}>
+              <span class={`flag fi fi-${cell(semi1.a).flag}`}></span>
+              <span class="tname">{cell(semi1.a).name}</span>
+              <span class="score">{cell(semi1.a).score}</span>
+            </div>
+            <div class:list={['team', { 'is-win': semi1.win === 'b' }]}>
+              <span class={`flag fi fi-${cell(semi1.b).flag}`}></span>
+              <span class="tname">{cell(semi1.b).name}</span>
+              <span class="score">{cell(semi1.b).score}</span>
+            </div>
+          </div>
+          <div class="match match--purple" data-round="semi">
+            <div class:list={['team', { 'is-win': semi2.win === 'a' }]}>
+              <span class={`flag fi fi-${cell(semi2.a).flag}`}></span>
+              <span class="tname">{cell(semi2.a).name}</span>
+              <span class="score">{cell(semi2.a).score}</span>
+            </div>
+            <div class:list={['team', { 'is-win': semi2.win === 'b' }]}>
+              <span class={`flag fi fi-${cell(semi2.b).flag}`}></span>
+              <span class="tname">{cell(semi2.b).name}</span>
+              <span class="score">{cell(semi2.b).score}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="funnel" aria-hidden="true">
+        <span class="f-left"></span>
+        <span class="f-right"></span>
+        <span class="f-bar"></span>
+        <span class="f-down"></span>
+      </div>
+
+      <div class="round round--final">
+        <span class="round-label">Final · 19 Jul</span>
+        <div class="match match--final" data-round="final">
+          <div class:list={['team', { 'is-win': final.win === 'a' }]}>
+            <span class={`flag fi fi-${cell(final.a).flag}`}></span>
+            <span class="tname">{cell(final.a).name}</span>
+            <span class="score">{cell(final.a).score}</span>
+          </div>
+          <div class:list={['team', { 'is-win': final.win === 'b' }]}>
+            <span class={`flag fi fi-${cell(final.b).flag}`}></span>
+            <span class="tname">{cell(final.b).name}</span>
+            <span class="score">{cell(final.b).score}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="funnel funnel--single" aria-hidden="true">
+        <span class="f-down"></span>
+      </div>
+
+      <div class="round round--champ">
+        <div class="champ">
+          <span class="champ-rays" aria-hidden="true"></span>
+          <span class="champ-trophy"><i>🏆</i></span>
+          <span class="champ-stars" aria-hidden="true"><i>★</i><i>★</i></span>
+          <span class="champ-label">Champion</span>
+          <div class="champ-team">
+            <span class={`flag fi fi-${champion.flag}`}></span>
+            <span class="champ-name">{champion.name}</span>
+          </div>
+          <span class="champ-title">World Champions</span>
+          <span class="champ-hint">tap to celebrate</span>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <section class="content-section">
+  <section class="content-section wc09">
+    <span class="section-tag">Match day</span>
+    <h2>Live at Bar CJ</h2>
+    <p>
+      The nights were filled with tension, excitement, and unforgettable emotions as everyone gathered to watch Spain fight their way through the tournament and earn a place in the finals. Every match became a special occasion at CJ's Bar, where students, friends, and football fans came together to support the Spanish national team.
+    </p>
+    <p>
+      The bar quickly became the meeting point for everyone. Residents, along with many locals, would spend their evenings there, united by their love for football. Although people came from different countries and backgrounds, the atmosphere was one of friendship, respect, and shared excitement. For ninety minutes, everyone forgot about their differences and simply enjoyed the beautiful game together.
+    </p>
+    <p>
+      As the matches became more intense, so did the emotions. Every attack created hope, every save brought relief, and every goal was celebrated as if it were the winning goal in the final itself. The cheers, applause, and celebrations echoed throughout the bar, creating memories that everyone present would remember long after the tournament had ended.
+    </p>
+    <p>
+      Watching Spain's incredible journey to the finals surrounded by such an enthusiastic crowd made every match even more special. It was not only about football, but also about sharing unforgettable moments with friends.
+    </p>
+    <div class="cheer" role="group" aria-label="Spain crowned world champions">
+      <span class="cheer-beams" aria-hidden="true"></span>
+      <span class="cheer-kicker">Full time · 19 Jul · 1–0</span>
+      <span class="cheer-flag fi fi-es" aria-hidden="true"></span>
+      <h3 class="cheer-title"><span>¡CAMPEONES</span><span>DEL MUNDO!</span></h3>
+      <span class="cheer-stars" aria-hidden="true"><i>★</i><i>★</i></span>
+      <p class="cheer-text">
+        And then came the moment we had all been dreaming of. After an unforgettable tournament, Spain were crowned FIFA World Cup champions with a dramatic 1–0 victory over Argentina after extra time. The final whistle sparked incredible celebrations throughout Bar CJ as everyone cheered, sang, and celebrated together. As proud Spaniards, there could not have been a more perfect ending to our Erasmus experience.
+      </p>
+      <span class="cheer-chant">¡Vamos España!<br/>Campeones del Mundo, una vez más!</span>
+    </div>
+  </section>
+
+  <section class="content-section wc09 wc09-game">
+    <span class="section-tag">Minigame</span>
+    <h2>Take the penalty</h2>
+    <p>
+      Two taps. First stop the sweeping arrow between the posts (green = on
+      target, red = wide). Then stop the pulsing power ring: reach the
+      <b>green ring</b> and you bury it in the top corner — but overshoot into the
+      red and it flies over the bar. Stay below green and the keeper saves it if
+      he dives your way. Five shots — go score.
+    </p>
+    <div class="pk-wrap">
+      <canvas id="pk-canvas"></canvas>
+      <div class="pk-hud">
+        <div class="pk-scoreboard">
+          <div class="pk-count">
+            <b id="pk-goals">0</b>
+            <span class="pk-count-label">Goals</span>
+          </div>
+          <div id="pk-track" class="pk-track"></div>
+        </div>
+        <button id="pk-reset" class="pk-btn" type="button">Reset</button>
+      </div>
+      <div id="pk-msg" class="pk-msg"></div>
+    </div>
+  </section>
+
+  <section class="content-section wc09">
     <span class="section-tag">Photos</span>
     <h2>The week in images</h2>
     <div class="photo-grid">
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
+      <!-- When photos are uploaded to Supabase (Photos/week9/), replace each
+           placeholder with:
+           <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week9/week09-01.webp" loading="lazy" decoding="async" alt="Photo 1"></div> -->
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week9/week09-19.webp" loading="lazy" decoding="async" alt="Photo 1"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week9/week09-18.webp" loading="lazy" decoding="async" alt="Photo 2"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week9/week09-17.webp" loading="lazy" decoding="async" alt="Photo 3"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week9/week09-16.webp" loading="lazy" decoding="async" alt="Photo 4"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week9/week09-15.webp" loading="lazy" decoding="async" alt="Photo 5"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week9/week09-14.webp" loading="lazy" decoding="async" alt="Photo 6"></div>
     </div>
   </section>
+
+  <!-- ── FIFA 26 THEME OVERRIDES (week-09 only) ── -->
+  <style is:global>
+    .hero-title {
+      color: #fff;
+      text-shadow: 0 6px 34px rgba(0,0,0,0.55), 0 2px 6px rgba(0,0,0,0.4);
+    }
+    .hero-subtitle {
+      color: #fff;
+      font-weight: 700;
+      text-shadow: 0 2px 18px rgba(0,0,0,0.55);
+    }
+    .hero-dates, .scroll-hint { color: #fff; text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
+    .week-badge { background: #E8112D; color: #fff; }
+
+    .week-footer { background: #1B1036; border-top-color: rgba(255,194,0,0.35); }
+    .week-footer-center, .nav-dir, .nav-link-title { color: rgba(255,255,255,0.82); }
+    .week-nav-link:hover .nav-link-title { color: #FFC200; }
+
+    main.week-content { background: transparent; box-shadow: none; position: static; z-index: auto; }
+
+    /* penalty shootout dots — created in JS, so styled globally */
+    .pk-dot {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.07);
+      border: 2px solid rgba(255,255,255,0.28);
+      transition: transform 0.12s;
+    }
+    .pk-dot.is-goal {
+      background: #22c55e;
+      border-color: #22c55e;
+      box-shadow: 0 0 10px rgba(34,197,94,0.8), inset 0 0 4px rgba(255,255,255,0.5);
+      animation: pkDotPop 0.35s ease-out;
+    }
+    .pk-dot.is-miss {
+      background: #ef2b3d;
+      border-color: #ef2b3d;
+      box-shadow: 0 0 10px rgba(239,43,61,0.75), inset 0 0 4px rgba(255,255,255,0.4);
+      animation: pkDotPop 0.35s ease-out;
+    }
+    @keyframes pkDotPop {
+      0%   { transform: scale(0.2); }
+      60%  { transform: scale(1.35); }
+      100% { transform: scale(1); }
+    }
+  </style>
+
+  <style>
+    /* ── FIFA-26 MIRRORED BAND BACKGROUND ── */
+    .fifa-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: #1B1036;
+      overflow: hidden;
+    }
+    /* single gentle breath on the whole artwork — bands never move
+       relative to each other, so no overlap/color-switch artifacts */
+    .fifa-bg svg {
+      width: 100%; height: 100%; display: block;
+      transform-origin: center;
+      animation: bgBreath 12s ease-in-out infinite;
+    }
+    @keyframes bgBreath {
+      0%, 100% { transform: scale(1); }
+      50%      { transform: scale(1.03); }
+    }
+
+    /* ── VIVID CONTENT CARDS ── */
+    .wc09 {
+      position: relative;
+      z-index: 2;
+      background: #ffffff;
+      border-radius: 2rem;
+      padding: 3rem 2.6rem;
+      border: 3px solid #1B1036;
+      box-shadow: 0 26px 0 -10px rgba(232,17,45,0.55), 0 30px 70px rgba(0,0,0,0.4);
+    }
+    .wc09 .section-tag {
+      color: #fff;
+      background: #E8112D;
+      padding: 0.4em 0.9em;
+      border-radius: 99px;
+      letter-spacing: 0.16em;
+    }
+    .wc09 h2 { color: #12092e; }
+    .wc09 p  { color: rgba(20, 10, 45, 0.72); }
+    .wc09 .photo-grid { grid-template-columns: repeat(3, 1fr); }
+    .wc09 .photo-item {
+      background: #f3f0ff;
+      border-color: #6A2CB0;
+      color: #6A2CB0;
+    }
+
+    /* ── BRACKET ── */
+    .bracket { margin-top: 2.8rem; display: flex; flex-direction: column; align-items: center; }
+    .round { width: 100%; display: flex; flex-direction: column; align-items: center; }
+    .round-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
+      color: #E8112D;
+      margin-bottom: 1.1rem;
+    }
+    .semi-row { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 2.2rem; }
+
+    .match {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      border-radius: 1.3rem;
+      padding: 8px;
+      border: 3px solid #12092e;
+      box-shadow: 0 12px 0 -4px rgba(18,9,46,0.25);
+    }
+    .match--blue   { background: #1E5BE6; }
+    .match--purple { background: #6A2CB0; }
+    .match--final  {
+      width: min(360px, 100%);
+      background: #E8112D;
+      box-shadow: 0 0 0 4px #FFC200, 0 16px 0 -4px rgba(18,9,46,0.3);
+    }
+
+    .team {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.75rem 0.9rem;
+      border-radius: 0.85rem;
+      background: rgba(255,255,255,0.12);
+      transition: background 0.25s, transform 0.2s;
+    }
+    .team .flag { font-size: 1.7rem; line-height: 1; }
+    .team .tname {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.06rem;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .team .score {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 1.1rem;
+      min-width: 2.2rem;
+      text-align: center;
+      padding: 0.18em 0;
+      border-radius: 0.5rem;
+      background: rgba(255,255,255,0.9);
+      color: #12092e;
+    }
+    .team.is-win {
+      background: #FFC200;
+      transform: scale(1.03);
+      animation: winPulse 1.8s ease-in-out infinite;
+    }
+    .team.is-win .tname { color: #12092e; }
+    .team.is-win .score { background: #12092e; color: #FFC200; }
+    @keyframes winPulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(255,194,0,0.6); }
+      50%     { box-shadow: 0 0 0 8px rgba(255,194,0,0); }
+    }
+
+    /* ── FUNNEL CONNECTORS ── */
+    .funnel { position: relative; width: 100%; height: 46px; }
+    .funnel span { position: absolute; background: #FFC200; border-radius: 2px; }
+    .f-left  { left: calc(25% - 0.55rem); top: 0; width: 4px; height: 50%; transform-origin: top; }
+    .f-right { left: calc(75% + 0.55rem); top: 0; width: 4px; height: 50%; transform-origin: top; }
+    .f-bar   { left: calc(25% - 0.55rem); top: calc(50% - 2px); width: calc(50.5% + 1.1rem); height: 4px; transform-origin: center; }
+    .f-down  { left: calc(50% - 2px); top: 50%; width: 4px; height: 50%; transform-origin: top; }
+    .funnel--single { height: 34px; }
+    .funnel--single .f-down { top: 0; height: 100%; }
+
+    /* ── CHAMPION PODIUM ── */
+    .champ {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 2.4rem 3.4rem 1.9rem;
+      border-radius: 1.6rem;
+      background: linear-gradient(135deg, #FFC200, #FF6A13);
+      border: 3px solid #12092e;
+      box-shadow: 0 18px 0 -4px rgba(18,9,46,0.3), 0 0 60px rgba(255,194,0,0.45);
+    }
+    .champ > *:not(.champ-rays) { position: relative; z-index: 1; }
+
+    /* spinning stadium-light rays behind the trophy */
+    .champ-rays {
+      position: absolute;
+      z-index: 0;
+      top: 50%; left: 50%;
+      width: 190%; aspect-ratio: 1;
+      transform: translate(-50%, -50%);
+      background: repeating-conic-gradient(
+        from 0deg,
+        rgba(255,255,255,0.42) 0deg 7deg,
+        transparent 7deg 20deg
+      );
+      -webkit-mask-image: radial-gradient(closest-side, #000 12%, transparent 72%);
+      mask-image: radial-gradient(closest-side, #000 12%, transparent 72%);
+      animation: raysSpin 26s linear infinite;
+    }
+    @keyframes raysSpin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+    /* light band sweeping across the whole card */
+    .champ::after {
+      content: '';
+      position: absolute;
+      z-index: 2;
+      top: -60%; bottom: -60%;
+      left: -40%;
+      width: 28%;
+      pointer-events: none;
+      transform: rotate(18deg);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
+      animation: champSheen 4.6s ease-in-out infinite;
+    }
+    @keyframes champSheen {
+      0%, 62%  { left: -40%; }
+      100%     { left: 130%; }
+    }
+
+    /* outer span is GSAP's transform target; the inner <i> keeps the ambient
+       float, so the CSS animation never fights an inline transform */
+    .champ-trophy {
+      font-size: 4.4rem;
+      line-height: 1;
+      filter: drop-shadow(0 8px 14px rgba(0,0,0,0.35)) drop-shadow(0 0 18px rgba(255,255,255,0.6));
+    }
+    .champ-trophy i {
+      display: inline-block;
+      font-style: normal;
+      animation: trophyFloat 3.4s ease-in-out infinite;
+    }
+    @keyframes trophyFloat {
+      0%,100% { transform: translateY(0) rotate(-4deg); }
+      50%     { transform: translateY(-9px) rotate(4deg); }
+    }
+    .champ-stars { display: flex; gap: 0.35rem; }
+    .champ-stars i {
+      font-style: normal;
+      font-size: 1.05rem;
+      color: #fff;
+      text-shadow: 0 0 8px rgba(255,255,255,0.9), 0 2px 0 rgba(18,9,46,0.35);
+    }
+    .champ-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.28em;
+      color: #12092e;
+    }
+    .champ-team { display: flex; align-items: center; gap: 0.9rem; }
+    .champ-team .flag {
+      font-size: 2.4rem;
+      line-height: 1;
+      border-radius: 4px;
+      box-shadow: 0 0 0 2px #12092e;
+    }
+    .champ-name {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 2.6rem;
+      line-height: 1;
+      color: #12092e;
+    }
+    .champ-title {
+      display: flex;
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 1.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #fff;
+      text-shadow: 0 2px 0 rgba(18,9,46,0.55), 0 0 22px rgba(255,255,255,0.55);
+    }
+    .champ-title .ch { white-space: pre; }
+    .champ-hint {
+      margin-top: 0.35rem;
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: rgba(18,9,46,0.55);
+    }
+
+    /* ── CHAMPIONS CHEER (final match-day beat) ── */
+    .cheer {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      margin-top: 2.4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.85rem;
+      padding: 3rem 2.4rem 2.6rem;
+      border-radius: 1.6rem;
+      border: 3px solid #12092e;
+      background:
+        radial-gradient(120% 90% at 50% -10%, #FF3b52 0%, #E8112D 42%, #9E1B32 100%);
+      box-shadow: 0 20px 0 -6px rgba(18,9,46,0.4),
+                  0 0 70px rgba(232,17,45,0.55),
+                  inset 0 0 0 4px rgba(255,194,0,0.55);
+    }
+    .cheer > *:not(.cheer-beams) { position: relative; z-index: 1; }
+
+    /* rotating stadium-light rays */
+    .cheer-beams {
+      position: absolute;
+      z-index: 0;
+      top: -20%; left: 50%;
+      width: 220%; aspect-ratio: 1;
+      transform: translateX(-50%);
+      background: repeating-conic-gradient(
+        from 0deg,
+        rgba(255,255,255,0.30) 0deg 5deg,
+        transparent 5deg 17deg,
+        rgba(255,194,0,0.28) 17deg 22deg,
+        transparent 22deg 34deg
+      );
+      -webkit-mask-image: radial-gradient(closest-side, #000 8%, transparent 74%);
+      mask-image: radial-gradient(closest-side, #000 8%, transparent 74%);
+      animation: cheerSpin 30s linear infinite;
+    }
+    @keyframes cheerSpin { to { transform: translateX(-50%) rotate(360deg); } }
+
+    .cheer-kicker {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      color: #12092e;
+      background: #FFC200;
+      padding: 0.42em 1em;
+      border-radius: 99px;
+      box-shadow: 0 3px 0 -1px rgba(18,9,46,0.4);
+    }
+
+    /* Spain flag (real flag-icons svg, same as bracket) */
+    .cheer-flag {
+      display: inline-block;
+      width: 140px; height: 92px;
+      border-radius: 6px;
+      background-size: cover !important;
+      background-position: center !important;
+      box-shadow: 0 0 0 3px #12092e, 0 12px 26px rgba(0,0,0,0.4);
+    }
+
+    .cheer-title {
+      display: flex;
+      flex-direction: column;
+      font-family: var(--font-display);
+      font-weight: 900;
+      line-height: 0.94;
+      letter-spacing: 0.01em;
+      font-size: clamp(2.3rem, 7vw, 4rem);
+      color: #fff;
+      text-shadow: 0 3px 0 rgba(18,9,46,0.6),
+                   0 0 30px rgba(255,194,0,0.7),
+                   0 0 60px rgba(255,255,255,0.4);
+      animation: cheerGlow 1.9s ease-in-out infinite;
+    }
+    .cheer-title span:last-child { color: #FFC200; }
+    @keyframes cheerGlow {
+      0%,100% { text-shadow: 0 3px 0 rgba(18,9,46,0.6), 0 0 22px rgba(255,194,0,0.55), 0 0 46px rgba(255,255,255,0.28); transform: scale(1); }
+      50%     { text-shadow: 0 3px 0 rgba(18,9,46,0.6), 0 0 40px rgba(255,194,0,0.95), 0 0 80px rgba(255,255,255,0.55); transform: scale(1.02); }
+    }
+
+    .cheer-stars { display: flex; gap: 0.6rem; }
+    .cheer-stars i {
+      font-style: normal;
+      font-size: 1.6rem;
+      color: #FFC200;
+      text-shadow: 0 0 12px rgba(255,194,0,0.95), 0 2px 0 rgba(18,9,46,0.4);
+      animation: starTwinkle 1.6s ease-in-out infinite;
+    }
+    .cheer-stars i:last-child { animation-delay: 0.4s; }
+    @keyframes starTwinkle {
+      0%,100% { transform: scale(1) rotate(0deg); opacity: 0.85; }
+      50%     { transform: scale(1.25) rotate(10deg); opacity: 1; }
+    }
+
+    .cheer-text {
+      max-width: 60ch;
+      color: rgba(255,255,255,0.94) !important;
+      font-size: 1.02rem;
+      line-height: 1.7;
+    }
+
+    .cheer-chant {
+      margin-top: 0.4rem;
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: clamp(1.15rem, 3.4vw, 1.7rem);
+      line-height: 1.2;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #FFC200;
+      text-shadow: 0 2px 0 rgba(18,9,46,0.6), 0 0 22px rgba(255,194,0,0.6);
+      animation: chantPulse 1.15s ease-in-out infinite;
+    }
+    @keyframes chantPulse {
+      0%,100% { transform: scale(1); }
+      50%     { transform: scale(1.05); }
+    }
+
+    /* ── PENALTY MINIGAME ── */
+    .pk-wrap { margin-top: 2rem; }
+    #pk-canvas {
+      width: 100%;
+      display: block;
+      border-radius: 1.2rem;
+      border: 3px solid #12092e;
+      box-shadow: 0 14px 0 -6px rgba(18,9,46,0.28);
+      touch-action: none;
+      cursor: crosshair;
+    }
+    .pk-hud {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    /* TV-style scoreboard: goal count + dot track */
+    .pk-scoreboard {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      padding: 0.5rem 0.9rem 0.5rem 0.6rem;
+      background: linear-gradient(145deg, #1B1036, #2a1a55);
+      border: 2px solid #12092e;
+      border-radius: 99px;
+      box-shadow: 0 6px 0 -2px rgba(18,9,46,0.4), inset 0 0 0 1px rgba(255,255,255,0.06);
+    }
+    .pk-count {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1;
+      padding: 0 0.7rem 0 0.5rem;
+      border-right: 1px solid rgba(255,255,255,0.14);
+    }
+    .pk-count b {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 1.7rem;
+      color: #FFC200;
+      text-shadow: 0 0 14px rgba(255,194,0,0.5);
+    }
+    .pk-count-label {
+      font-family: var(--font-mono);
+      font-size: 0.52rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
+      color: rgba(255,255,255,0.6);
+      margin-top: 2px;
+    }
+    .pk-track { display: flex; gap: 0.5rem; }
+    /* .pk-dot styles are global (dots are created in JS) — see is:global block */
+    .pk-btn {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.72rem;
+      color: #fff;
+      background: #6A2CB0;
+      border: 3px solid #12092e;
+      border-radius: 99px;
+      padding: 0.5em 1.2em;
+      cursor: pointer;
+      box-shadow: 0 5px 0 -1px rgba(18,9,46,0.35);
+      transition: transform 0.12s;
+    }
+    .pk-btn:hover { transform: translateY(-2px); }
+    .pk-btn:active { transform: translateY(1px); }
+    .pk-msg {
+      min-height: 1.6em;
+      margin-top: 0.7rem;
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 1.25rem;
+      letter-spacing: 0.02em;
+    }
+    .pk-msg.is-goal { color: #E8112D; }
+    .pk-msg.is-save { color: #1E5BE6; }
+    .pk-msg.is-miss { color: #9E1B32; }
+    .pk-msg.is-full { color: #6A2CB0; }
+
+    /* confetti particles are appended to <body> */
+    :global(.pk-confetti) {
+      position: fixed;
+      width: 9px;
+      height: 14px;
+      border-radius: 2px;
+      z-index: 9999;
+      pointer-events: none;
+      will-change: transform, opacity;
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 640px) {
+      .wc09 { padding: 2.2rem 1.3rem; }
+      .wc09 .photo-grid { grid-template-columns: repeat(2, 1fr); }
+      .semi-row { grid-template-columns: 1fr; gap: 1.6rem; }
+      .champ { padding: 2rem 1.4rem 1.6rem; }
+      .champ-trophy { font-size: 3.4rem; }
+      .champ-name { font-size: 2rem; }
+      .champ-title { font-size: 1.05rem; }
+      .funnel { height: 30px; }
+      .f-left, .f-right, .f-bar { display: none; }
+      .f-down { top: 0; height: 100%; }
+      .cheer { padding: 2.3rem 1.3rem 2rem; }
+      .cheer-flag { width: 112px; height: 74px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fifa-bg svg, .team.is-win, .champ-trophy i,
+      .champ-rays, .champ::after,
+      .cheer-beams, .cheer-title,
+      .cheer-stars i, .cheer-chant { animation: none; }
+      .champ::after { display: none; }
+    }
+  </style>
+
   <script>
     import '../scripts/three-week-09.ts';
+  </script>
+  <script>
+    import '../scripts/penalty-week09.ts';
   </script>
 </WeekLayout>
