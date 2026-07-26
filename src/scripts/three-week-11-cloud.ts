@@ -12,7 +12,7 @@ import { weeks } from '../data/weeks';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const LOAD_PHOTOS = false;   // ← set true to load ALL real Supabase photos (folder listing)
+const LOAD_PHOTOS = true;   // ← set true to load ALL real Supabase photos (folder listing)
 
 // Load exactly ONE photo (a single public-object GET) and reuse it across
 // every card in the cloud. Set to '' to fall back to colour placeholders.

@@ -9,48 +9,24 @@ const flight = [
     pt: 'Branco',
     wine: '#C9A050',
     serve: 'Chilled, 8 °C',
-    note: 'Dry, citrus, almost nothing like what you expect Port to be. The locals drink it long, over ice with tonic and a strip of lemon.',
-    pair: 'Almonds, olives',
-  },
-  {
-    name: 'Rosé',
-    pt: 'Rosado',
-    wine: '#D2657E',
-    serve: 'Cold, 6 °C',
-    note: 'Invented in 2008 and still argued about. Strawberry, light, unserious in the best way.',
-    pair: 'Ice and a terrace',
+    note: 'Fresh and citrusy, with a dry finish. It\'s quite different from the rich, sweet style most people expect from port, and is often served over ice with tonic and a slice of lemon.',
+    pair: 'Citrus, green apple, honey',
   },
   {
     name: 'Ruby',
     pt: 'Ruby',
     wine: '#7A0C2E',
     serve: 'Cool, 14 °C',
-    note: 'Young and opaque. Aged in steel instead of wood, so it never oxidises and never loses that purple-red.',
-    pair: 'Blue cheese',
+    note: 'A young, fruity port with deep red colour and fresh berry flavours. It\'s aged in large vats to preserve its vibrant character rather than developing nutty notes.',
+    pair: 'Blackberry, cherry, plum',
   },
   {
-    name: 'LBV',
-    pt: 'Late Bottled Vintage',
-    wine: '#5E1128',
-    serve: 'Cool, 16 °C',
-    note: 'One single harvest, four to six years in wood. Vintage character without the Vintage price or the waiting.',
-    pair: 'Dark chocolate',
-  },
-  {
-    name: 'Tawny 10',
-    pt: 'Tawny 10 anos',
+    name: 'Tawny',
+    pt: 'Tawny',
     wine: '#A8481B',
     serve: 'Cool, 14 °C',
-    note: 'Oxidised deliberately, for a decade. Caramel, walnut, dried fig — and it goes amber at the rim as it ages.',
-    pair: 'Crème brûlée',
-  },
-  {
-    name: 'Vintage',
-    pt: 'Vintage',
-    wine: '#3D0A1B',
-    serve: 'Room, 18 °C',
-    note: 'One exceptional harvest, declared maybe three times a decade. Decant it hours ahead. Then stop talking.',
-    pair: 'Nothing. Just sit.',
+    note: 'Aged in oak for around ten years, giving it flavours of caramel, toasted nuts and dried fruit. The extended ageing also gives it its distinctive amber colour.',
+    pair: 'Caramel, walnut, dried fig',
   },
 ];
 ---
@@ -74,20 +50,17 @@ const flight = [
   <section class="content-section">
     <span class="section-tag">Vila Nova de Gaia</span>
     <h2>The wine crosses<br/>the river</h2>
-    <p>
-      Port isn't made in Porto. It's made eighty kilometres inland, up the Douro, on
-      terraces cut into schist so steep the vines are farmed by hand. Then it comes
-      downriver and stops — on the <em>other</em> bank, in Vila Nova de Gaia, where the
-      lodges have been ageing it in cool dark sheds for three hundred years.
-    </p>
-    <p>
-      That's the whole trick, and it's geography. Gaia faces north, gets no sun, and sits
-      in the damp coming off the Atlantic. The wine ages slowly there. Cross the bridge to
-      Porto and it would cook.
-    </p>
-    <p>
-      At the end of this week we cross the Douro and go find out what the fuss is about.
-    </p>
+      <p>
+        Port isn't actually made in Porto. It's produced about eighty kilometres up the Douro Valley, where the vineyards cling to steep schist terraces that are still worked by hand. Once the wine is made, it's brought downriver to Vila Nova de Gaia, across the river from Porto, where it's traditionally aged in cool, dark lodges.
+      </p>
+
+      <p>
+        That location wasn't chosen by accident. Gaia faces north, stays cooler, and catches the damp Atlantic air, giving the wine the steady conditions it needs to mature. On the Porto side of the river, the warmer temperatures would have made ageing much more difficult.
+      </p>
+
+      <p>
+        At the end of this week, we'll cross the Douro and see that history for ourselves.
+      </p>
   </section>
 
   <!-- ── THE RITUAL ── -->
@@ -95,25 +68,24 @@ const flight = [
     <span class="section-tag">The ritual</span>
     <h2>How to taste it<br/>without looking lost</h2>
     <p>
-      Four steps, in order, and none of them are optional if you want the guide to nod at
-      you instead of at the person next to you.
+      There are four simple steps to tasting port properly. They're easy enough, and they'll help you get much more out of the experience.
     </p>
     <ol class="ritual">
       <li>
         <h3>Look</h3>
-        <p>Tilt the glass against something white. The colour at the rim tells you the age — purple means young, amber means it has been in wood a long time.</p>
+        <p>Hold the glass against a white background and check the colour. Younger ports tend to have deep purple tones, while older ports become lighter, with amber or tawny colours after spending years in wood.</p>
       </li>
       <li>
         <h3>Swirl</h3>
-        <p>Once, slowly, on the table. You're pushing air into it. The streaks that run back down the glass are the "legs", and thick slow ones mean sugar and alcohol.</p>
+        <p>Give the glass a gentle swirl to release the aromas. You'll also notice the "legs" running down the inside of the glass. Slower, thicker legs usually mean higher alcohol and sugar.</p>
       </li>
       <li>
         <h3>Smell</h3>
-        <p>Nose in, mouth slightly open, two short sniffs. This is most of what you think tasting is. The tongue only does five things; the nose does the rest.</p>
+        <p>Bring the glass to your nose and take a couple of short sniffs. Most of what we think of as flavour actually comes from smell, which is why this step is so important.</p>
       </li>
       <li>
         <h3>Sip</h3>
-        <p>Small. Hold it. Port is roughly twenty percent alcohol because they stop the fermentation with grape spirit while the sugar is still in there — that's why it's sweet and why it hits.</p>
+        <p>Take a small sip and let it sit for a moment. Port is usually around 20% alcohol because fermentation is stopped early by adding grape spirit. That leaves some of the natural sugar behind, giving port its sweetness and higher alcohol content.</p>
       </li>
     </ol>
   </section>
@@ -121,7 +93,7 @@ const flight = [
   <!-- ── THE FLIGHT ── -->
   <section class="content-section flight-section">
     <span class="section-tag">The flight</span>
-    <h2>Six glasses,<br/>lightest first</h2>
+    <h2>Three glasses,<br/>three flavours</h2>
     <p>
       A tasting runs in one direction: pale and cold at the start, dark and sweet at the
       end, because anything heavy ruins whatever follows it. This is the order we're
@@ -149,15 +121,12 @@ const flight = [
     <span class="section-tag">Photos</span>
     <h2>The week in images</h2>
     <div class="photo-grid">
-      <!-- When photos are uploaded to Supabase (Photos/week10/), replace each
-           placeholder with:
-           <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week10/week10-01.webp" loading="lazy" decoding="async" alt="Photo 1"></div> -->
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
-      <div class="photo-item">📸</div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week10/week10-07.webp" loading="lazy" decoding="async" alt="Photo 1"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week10/week10-02.webp" loading="lazy" decoding="async" alt="Photo 2"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week10/week10-03.webp" loading="lazy" decoding="async" alt="Photo 3"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week10/week10-04.webp" loading="lazy" decoding="async" alt="Photo 4"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week10/week10-05.webp" loading="lazy" decoding="async" alt="Photo 5"></div>
+      <div class="photo-item"><img src="https://uuphxemcxhlezcvehagp.supabase.co/storage/v1/object/public/Photos/week10/week10-06.webp" loading="lazy" decoding="async" alt="Photo 6"></div>
     </div>
   </section>
 

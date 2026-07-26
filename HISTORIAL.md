@@ -324,3 +324,5 @@
 [2026-07-20] — Week 9 cheer block fixes: swapped CSS gradient flag for real flag-icons flag (fi fi-es, same as bracket); border-radius now on the animated element with perspective baked into keyframes so rounded corners follow the wave (removed overflow-clipped inner <b>).
 
 [2026-07-20] — Week 9 cheer block: removed flag wave animation (static flag-icons flag now); dropped flagWave keyframes and reduced-motion entry.
+
+[2026-07-22] — Week 10: flight cut from 6 wines to 3 (kept White, Ruby, Tawny 10; removed Rosé, LBV, Vintage). Heading "Six glasses" → "Three glasses".
