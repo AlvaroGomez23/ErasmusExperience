@@ -10,5 +10,5 @@ export const PUBLISHED_WEEKS: number[] = [
   8,
   9,
   10,
-  // 11,
+  11,
 ];
